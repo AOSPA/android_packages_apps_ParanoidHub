@@ -1,52 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Copyright 2014 ParanoidAndroid Project
-
-  This file is part of Paranoid OTA.
-
-  Paranoid OTA is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-  Paranoid OTA is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with Paranoid OTA.  If not, see <http://www.gnu.org/licenses/>.
--->
-
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="header_image_size">198dp</dimen>
+    <dimen name="header_title_size">72dp</dimen>
+    <dimen name="header_total_size">270dp</dimen>
+    <dimen name="header_text_size">19sp</dimen>
+    <dimen name="header_padding">24dp</dimen>
+    <dimen name="header_elevation">4dp</dimen>
 
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="activity_divider_padding">16dip</dimen>
+    <dimen name="text_size">14sp</dimen>
+    <dimen name="text_padding">24dp</dimen>
+    <dimen name="text_line_spacing">16dp</dimen>
+    <dimen name="text_extra_line_spacing">40dp</dimen>
 
-    <dimen name="drawer_width">240dp</dimen>
-    <dimen name="drawer_item_padding_left">20dp</dimen>
-    <dimen name="drawer_item_padding_top">25dp</dimen>
-    <dimen name="drawer_item_padding_top_small">15dp</dimen>
-
-    <dimen name="header_text_size">32sp</dimen>
-    <dimen name="header_underline_size">2dp</dimen>
-    <dimen name="header_underline_top_margin">3dp</dimen>
-    <dimen name="header_underline_bottom_margin">15dp</dimen>
-
-    <dimen name="card_horizontal_margin">16dp</dimen>
-    <dimen name="card_vertical_margin">16dp</dimen>
-    <dimen name="card_vertical_bottom_margin">6dp</dimen>
-    <dimen name="card_title_text_size">25sp</dimen>
-    <dimen name="card_large_text_size">25sp</dimen>
-    <dimen name="card_medium_text_size">18sp</dimen>
-    <dimen name="card_small_text_size">14sp</dimen>
-    <dimen name="card_header_padding">10dp</dimen>
-    <dimen name="card_separator_height">1dp</dimen>
-    <dimen name="card_separator_padding">10dp</dimen>
-
-    <dimen name="item_padding">10dp</dimen>
-
-    <integer name="anim_duration">400</integer>
-
+    <dimen name="fab_padding">16dp</dimen>
+    <dimen name="fab_elevation">4dp</dimen>
 </resources>

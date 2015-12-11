@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SystemActivityTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimary</item>
+    </style>
+
+    <style name="ActionBarStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@color/colorTitle</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/header_text_size</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+</resources>

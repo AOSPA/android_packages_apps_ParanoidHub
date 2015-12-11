@@ -1,24 +1,33 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES += $(call all-java-files-under, src)
-
-LOCAL_STATIC_JAVA_LIBRARIES := \
-    android-support-v4_13 \
-    volley
-
-LOCAL_PACKAGE_NAME := ParanoidOTA
+LOCAL_SDK_VERSION := current
+LOCAL_PACKAGE_NAME := ParanoidHub
 LOCAL_CERTIFICATE := platform
 LOCAL_PRIVILEGED_MODULE := true
 
-LOCAL_SDK_VERSION := 21
+LOCAL_STATIC_JAVA_LIBRARIES := \
+    android-common \
+    android-support-v4 \
+    android-support-design \
+    android-support-v7-appcompat \
+    countly \
+    volley
+
+LOCAL_SRC_FILES += $(call all-java-files-under, src)
+
+LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/res
+LOCAL_RESOURCE_DIR += prebuilts/sdk/current/support/v7/appcompat/res
+LOCAL_RESOURCE_DIR += prebuilts/sdk/current/support/design/res
+
+LOCAL_AAPT_FLAGS := --auto-add-overlay
+LOCAL_AAPT_FLAGS += --extra-packages android.support.v4:android.support.v7.appcompat:android.support.design
 
 include $(BUILD_PACKAGE)
 
-# Support library v4
 include $(CLEAR_VARS)
 
 LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := \
-    android-support-v4_13:/libs/android-support-v4.jar
+    countly:/libs/countly.jar
 
 include $(BUILD_MULTI_PREBUILT)

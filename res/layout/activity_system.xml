@@ -1,60 +1,77 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Copyright 2014 ParanoidAndroid Project
+<?xml version="1.0" encoding="UTF-8"?><!--
+  Copyright 2015 Paranoid Android Project
 
-  This file is part of Paranoid OTA.
+  This file is part of Paranoid Hub.
 
-  Paranoid OTA is free software: you can redistribute it and/or modify
+  Paranoid Hub is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  Paranoid OTA is distributed in the hope that it will be useful,
+  Paranoid Hub is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with Paranoid OTA.  If not, see <http://www.gnu.org/licenses/>.
+  along with Paranoid Hub.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainlayout"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground"
-    android:orientation="vertical"
-    android:padding="40dp" >
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="40sp" />
-
-    <View
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/darker_gray" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/message"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_total_size"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/ic_header"
+            android:elevation="4dp"
+            android:fitsSystemWindows="true">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/header_title_size"
+                android:layout_marginTop="@dimen/header_image_size"
+                android:background="@drawable/ic_title_bar"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:titleMargins="@dimen/header_padding"
+                app:titleTextAppearance="@style/ActionBarStyle" />
+        </android.support.design.widget.AppBarLayout>
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/app_bar_layout"
+            android:fontFamily="sans-serif"
+            android:lineSpacingExtra="@dimen/text_line_spacing"
+            android:padding="@dimen/text_padding"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/text_size" />
+
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_margin="@dimen/fab_padding"
+        app:backgroundTint="@color/colorPrimary"
+        app:borderWidth="0dp"
+        app:elevation="@dimen/fab_elevation"
+        app:layout_anchor="@id/coordinatorLayout"
+        app:layout_anchorGravity="bottom|right|end"
+        app:pressedTranslationZ="16dp"
+        app:rippleColor="@android:color/white" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="@string/check_for_updates_long" />
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
