@@ -40,23 +40,24 @@ import ly.count.android.sdk.Countly;
 public class SystemActivity extends AppCompatActivity implements FloatingActionButton.OnClickListener,
         UpdaterListener, DownloadHelper.DownloadCallback {
 
+    private int mState;
     private static final int STATE_CHECK = 0;
     private static final int STATE_FOUND = 1;
     private static final int STATE_DOWNLOADING = 2;
     private static final int STATE_INSTALL = 3;
     private static final int STATE_ERROR = 4;
-    private int mState;
+
     private RomUpdater mRomUpdater;
     private RebootHelper mRebootHelper;
 
     private PackageInfo mRom;
     private List<File> mFiles = new ArrayList<>();
+
     private NotificationUtils.NotificationInfo mNotificationInfo;
 
+    private CoordinatorLayout mCoordinatorLayout;
     private TextView mMessage;
     private FloatingActionButton mButton;
-
-    private CoordinatorLayout mCoordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,29 +66,33 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
-        setSupportActionBar(toolbar);
-
-        DownloadHelper.init(this, this);
-        mRebootHelper = new RebootHelper(new RecoveryHelper(SystemActivity.this));
-        mRom = null;
-
         mMessage = (TextView) findViewById(R.id.message);
         mButton = (FloatingActionButton) findViewById(R.id.fab);
-        mButton.setOnClickListener(this);
 
+        setSupportActionBar(toolbar);
+        // TODO: Add back button
+        //getSupportActionBar().setHomeButtonEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mRom = null;
+        DownloadHelper.init(this, this);
         mRomUpdater = new RomUpdater(this, true);
+        mRebootHelper = new RebootHelper(new RecoveryHelper(SystemActivity.this));
+
+        mButton.setOnClickListener(this);
         mRomUpdater.addUpdaterListener(this);
 
+        // Check for M permission to write on external
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
 
         if (mNotificationInfo != null) {
-            if (mNotificationInfo.mNotificationId != NotificationUtils.NOTIFICATION_ID) {
-                mRomUpdater.check(true);
-            } else {
+            if (mNotificationInfo.mNotificationId == NotificationUtils.NOTIFICATION_ID) {
                 mRomUpdater.setLastUpdates(mNotificationInfo.mPackageInfosRom);
+            } else {
+                mRomUpdater.check(true);
             }
         } else if (DownloadHelper.isDownloading()) {
             mState = STATE_DOWNLOADING;
@@ -98,8 +103,33 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        mNotificationInfo = null;
+        if (intent != null && intent.getExtras() != null) {
+            mNotificationInfo = (NotificationUtils.NotificationInfo) intent.getSerializableExtra(NotificationUtils.FILES_INFO);
+            if (intent.getBooleanExtra(DownloadReceiver.CHECK_DOWNLOADS_FINISHED, false)) {
+                DownloadHelper.checkDownloadFinished(this,
+                        intent.getLongExtra(DownloadReceiver.CHECK_DOWNLOADS_ID, -1L));
+            }
+        }
+    }
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DownloadHelper.registerCallback(this);
+    }
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DownloadHelper.unregisterCallback();
+    }
+
+    @Override
     public void startChecking() {
-        PreferenceUtils.setPreference(SystemActivity.this, PreferenceUtils.PROPERTY_LAST_CHECK, DeviceInfoUtils.getDate());
         mState = STATE_CHECK;
         updateMessages(mRom);
     }
@@ -108,10 +138,6 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
     public void versionFound(PackageInfo[] info) {
         mState = STATE_FOUND;
         updateMessages(info);
-    }
-
-    @Override
-    public void checkError(String cause) {
     }
 
     private void updateMessages(PackageInfo[] info) {
@@ -160,6 +186,47 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
     }
 
     @Override
+    public void onClick(View v) {
+        switch (mState) {
+            default:
+            case STATE_CHECK:
+                mState = STATE_CHECK;
+                mRomUpdater.check(true);
+                break;
+            case STATE_FOUND:
+                if (!mRomUpdater.isScanning() && mRom != null) {
+                    mState = STATE_DOWNLOADING;
+                    DownloadHelper.registerCallback(SystemActivity.this);
+                    DownloadHelper.downloadFile(mRom.getPath(),
+                            mRom.getFilename(), mRom.getMd5());
+                    updateMessages(mRom);
+                    HashMap<String, String> segmentation = new HashMap<>();
+                    segmentation.put("device", DeviceInfoUtils.getDevice());
+                    segmentation.put("file", mRom.getFilename());
+                    Countly.sharedInstance().recordEvent("fileDownload", segmentation, 1);
+                }
+                break;
+            case STATE_DOWNLOADING:
+                mState = STATE_CHECK;
+                DownloadHelper.clearDownloads();
+                updateMessages((PackageInfo) null);
+                break;
+            case STATE_ERROR:
+                mState = STATE_CHECK;
+                mRomUpdater.check(true);
+                break;
+            case STATE_INSTALL:
+                String[] items = new String[mFiles.size()];
+                for (int i = 0; i < mFiles.size(); i++) {
+                    File file = mFiles.get(i);
+                    items[i] = file.getAbsolutePath();
+                }
+                mRebootHelper.showRebootDialog(SystemActivity.this, items);
+                break;
+        }
+    }
+
+    @Override
     public void onDownloadStarted() {
         mState = STATE_DOWNLOADING;
         onDownloadProgress(-1);
@@ -167,8 +234,8 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
 
     @Override
     public void onDownloadError(String reason) {
-        mState = STATE_CHECK;
-        mRomUpdater.check(true);
+        mState = STATE_ERROR;
+        updateMessages((PackageInfo) null);
     }
 
     @Override
@@ -188,32 +255,6 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
             mState = STATE_CHECK;
             mRomUpdater.check(true);
         }
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        mNotificationInfo = null;
-        if (intent != null && intent.getExtras() != null) {
-            mNotificationInfo = (NotificationUtils.NotificationInfo) intent.getSerializableExtra(NotificationUtils.FILES_INFO);
-            if (intent.getBooleanExtra(DownloadReceiver.CHECK_DOWNLOADS_FINISHED, false)) {
-                DownloadHelper.checkDownloadFinished(this,
-                        intent.getLongExtra(DownloadReceiver.CHECK_DOWNLOADS_ID, -1L));
-            }
-        }
-    }
-
-    @SuppressLint("MissingSuperCall")
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DownloadHelper.registerCallback(this);
-    }
-
-    @SuppressLint("MissingSuperCall")
-    @Override
-    protected void onPause() {
-        super.onPause();
-        DownloadHelper.unregisterCallback();
     }
 
     public void addFile(Uri uri, final String md5) {
@@ -264,37 +305,6 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
     }
 
     @Override
-    public void onClick(View v) {
-        switch (mState) {
-            default:
-            case STATE_CHECK:
-            case STATE_ERROR:
-                mRomUpdater.check(true);
-                break;
-            case STATE_FOUND:
-                mState = STATE_DOWNLOADING;
-                DownloadHelper.registerCallback(SystemActivity.this);
-                DownloadHelper.downloadFile(mRom.getPath(),
-                        mRom.getFilename(), mRom.getMd5());
-                updateMessages(mRom);
-                HashMap<String, String> segmentation = new HashMap<>();
-                segmentation.put("device", DeviceInfoUtils.getDevice());
-                segmentation.put("file", mRom.getFilename());
-                Countly.sharedInstance().recordEvent("fileDownload", segmentation, 1);
-                break;
-            case STATE_DOWNLOADING:
-                mState = STATE_CHECK;
-                DownloadHelper.clearDownloads();
-                updateMessages((PackageInfo) null);
-                break;
-            case STATE_INSTALL:
-                String[] items = new String[mFiles.size()];
-                for (int i = 0; i < mFiles.size(); i++) {
-                    File file = mFiles.get(i);
-                    items[i] = file.getAbsolutePath();
-                }
-                mRebootHelper.showRebootDialog(SystemActivity.this, items);
-                break;
-        }
+    public void checkError(String cause) {
     }
 }
