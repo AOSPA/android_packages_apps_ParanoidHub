@@ -5,6 +5,7 @@ LOCAL_SDK_VERSION := current
 LOCAL_PACKAGE_NAME := ParanoidHub
 LOCAL_CERTIFICATE := platform
 LOCAL_PRIVILEGED_MODULE := true
+LOCAL_PROGUARD_ENABLED := disabled
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
     android-common \
