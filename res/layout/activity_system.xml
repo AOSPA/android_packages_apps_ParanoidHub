@@ -31,18 +31,21 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/header_total_size"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:background="@drawable/ic_header"
             android:elevation="4dp"
             android:fitsSystemWindows="true">
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/header_title_size"
-                android:layout_marginTop="@dimen/header_image_size"
-                android:background="@android:color/transparent"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:titleMargins="@dimen/header_padding"
                 app:titleTextAppearance="@style/ActionBarStyle" />

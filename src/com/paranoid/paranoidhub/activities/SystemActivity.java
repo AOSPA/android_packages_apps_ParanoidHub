@@ -4,6 +4,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -68,6 +72,12 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mMessage = (TextView) findViewById(R.id.message);
         mButton = (FloatingActionButton) findViewById(R.id.fab);
+        
+        // Toolbar tile background (#BlameArz)
+        Bitmap tileBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.title_head_tile);
+        BitmapDrawable bitmapDrawable = new BitmapDrawable(tileBitmap);
+        bitmapDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.CLAMP);
+        toolbar.setBackgroundDrawable(bitmapDrawable);
 
         setSupportActionBar(toolbar);
         // TODO: Add back button
