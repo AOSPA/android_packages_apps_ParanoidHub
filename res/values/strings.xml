@@ -1,6 +1,6 @@
 <resources>
     <!-- GENERAL -->
-    <string name="app_name">Paranoid Hub</string>
+    <string name="app_name">Paranoid Android Updates</string>
 
     <!-- Up To Date -->
     <string name="no_updates_title">Paranoid Android Updates</string>
