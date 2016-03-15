@@ -18,11 +18,13 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
 LOCAL_SRC_FILES += $(call all-java-files-under, src)
 
 LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/res
-LOCAL_RESOURCE_DIR += prebuilts/sdk/current/support/v7/appcompat/res
-LOCAL_RESOURCE_DIR += prebuilts/sdk/current/support/design/res
+LOCAL_RESOURCE_DIR += frameworks/support/v7/appcompat/res
+LOCAL_RESOURCE_DIR += frameworks/support/design/res
 
 LOCAL_AAPT_FLAGS := --auto-add-overlay
-LOCAL_AAPT_FLAGS += --extra-packages android.support.v4:android.support.v7.appcompat:android.support.design
+LOCAL_AAPT_FLAGS += --extra-packages android.support.v4
+LOCAL_AAPT_FLAGS += --extra-packages android.support.v7.appcompat
+LOCAL_AAPT_FLAGS += --extra-packages android.support.design
 
 include $(BUILD_PACKAGE)
 
