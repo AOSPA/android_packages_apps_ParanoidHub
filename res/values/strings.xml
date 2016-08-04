@@ -9,7 +9,7 @@
 
     <!-- Update available -->
     <string name="update_found_title">Update available</string>
-    <string name="update_found_text">Paranoid Android %1$s is available.\nTap on the button below to begin downloading. Downloading updates over a mobile network or while roaming may incur additional charges.\nThe update requires a restart.\n\nUpdate size: %2$s</string>
+    <string name="update_found_text">Paranoid Android %1$s is available.\n\nTap on the button below to begin downloading. Downloading updates over a mobile network or while roaming may incur additional charges.\nThe update requires a restart.\n\nUpdate size: %2$s</string>
 
     <!-- Downloading update -->
     <string name="downloading_title">Downloading update…</string>
