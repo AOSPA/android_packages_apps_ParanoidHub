@@ -1,6 +1,7 @@
 <resources>
     <!-- GENERAL -->
     <string name="app_name">Paranoid Android Updates</string>
+    <string name="rom_name">Paranoid Android</string>
 
     <!-- Up To Date -->
     <string name="no_updates_title">Paranoid Android Updates</string>
@@ -8,7 +9,7 @@
 
     <!-- Update available -->
     <string name="update_found_title">Update available</string>
-    <string name="update_found_text">Paranoid Android v6.x update is available.\nTap on the button below to begin downloading. Download updates over a mobile network or while roaming may cause additional charges.\nThe update requires a restart.\n\nUpdate size: %1$s</string>
+    <string name="update_found_text">Paranoid Android %1$s is available.\nTap on the button below to begin downloading. Downloading updates over a mobile network or while roaming may incur additional charges.\nThe update requires a restart.\n\nUpdate size: %2$s</string>
 
     <!-- Downloading update -->
     <string name="downloading_title">Downloading update…</string>

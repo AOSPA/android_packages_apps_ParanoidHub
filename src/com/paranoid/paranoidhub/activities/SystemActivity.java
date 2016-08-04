@@ -52,7 +52,7 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
     private RomUpdater mRomUpdater;
     private RebootHelper mRebootHelper;
 
-    private PackageInfo mRom;
+    private PackageInfo mUpdatePackage;
     private List<File> mFiles = new ArrayList<>();
 
     private NotificationUtils.NotificationInfo mNotificationInfo;
@@ -72,7 +72,7 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
         mMessage = (TextView) findViewById(R.id.message);
         mButton = (FloatingActionButton) findViewById(R.id.fab);
 
-        mRom = null;
+        mUpdatePackage = null;
         DownloadHelper.init(this, this);
         mRomUpdater = new RomUpdater(this, true);
         mRebootHelper = new RebootHelper(new RecoveryHelper(SystemActivity.this));
@@ -129,7 +129,7 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
     @Override
     public void startChecking() {
         mState = STATE_CHECK;
-        updateMessages(mRom);
+        updateMessages(mUpdatePackage);
     }
 
     @Override
@@ -145,23 +145,23 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
     }
 
     private void updateMessages(PackageInfo info) {
-        mRom = info;
+        mUpdatePackage = info;
         switch (mState) {
             default:
             case STATE_CHECK:
-                if (mRom == null) {
+                if (mUpdatePackage == null) {
                     mToolbar.setText(R.string.no_updates_title);
                     mMessage.setText(R.string.no_updates_text);
                     mButton.setImageResource(R.drawable.ic_check_update);
                 }
                 break;
             case STATE_FOUND:
-                if (!mRomUpdater.isScanning() && mRom != null) {
+                if (!mRomUpdater.isScanning() && mUpdatePackage != null) {
                     mToolbar.setText(R.string.update_found_title);
-                    mMessage.setText(getResources().getString(R.string.update_found_text,
-                            new Object[]{
-                                    Formatter.formatShortFileSize(this, Long.decode(mRom.getSize()))
-                            }));
+                    mMessage.setText(String.format(
+                            getResources().getString(R.string.update_found_text),
+                            mUpdatePackage.getVersion(),
+                            Formatter.formatShortFileSize(this, Long.decode(mUpdatePackage.getSize()))));
                     mButton.setImageResource(R.drawable.ic_download_update);
                 }
                 break;
@@ -193,15 +193,15 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
                 mRomUpdater.check(true);
                 break;
             case STATE_FOUND:
-                if (!mRomUpdater.isScanning() && mRom != null) {
+                if (!mRomUpdater.isScanning() && mUpdatePackage != null) {
                     mState = STATE_DOWNLOADING;
                     DownloadHelper.registerCallback(SystemActivity.this);
-                    DownloadHelper.downloadFile(mRom.getPath(),
-                            mRom.getFilename(), mRom.getMd5());
-                    updateMessages(mRom);
+                    DownloadHelper.downloadFile(mUpdatePackage.getPath(),
+                            mUpdatePackage.getFilename(), mUpdatePackage.getMd5());
+                    updateMessages(mUpdatePackage);
                     HashMap<String, String> segmentation = new HashMap<>();
                     segmentation.put("device", DeviceInfoUtils.getDevice());
-                    segmentation.put("file", mRom.getFilename());
+                    segmentation.put("file", mUpdatePackage.getFilename());
                     Countly.sharedInstance().recordEvent("fileDownload", segmentation, 1);
                 }
                 break;
