@@ -94,7 +94,7 @@ public abstract class Updater implements Response.Listener<JSONObject>, Response
         nextServerCheck();
     }
 
-    protected void nextServerCheck() {
+    private void nextServerCheck() {
         mScanning = true;
         mCurrentServer++;
         mServer = mServers[mCurrentServer];
@@ -135,7 +135,6 @@ public abstract class Updater implements Response.Listener<JSONObject>, Response
             setLastUpdates(lastUpdates);
             fireCheckCompleted(lastUpdates);
         } catch (Exception ex) {
-            System.out.println(response.toString());
             ex.printStackTrace();
             versionError(null);
         }

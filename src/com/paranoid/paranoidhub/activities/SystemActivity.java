@@ -12,8 +12,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -25,10 +25,10 @@ import com.paranoid.paranoidhub.receivers.DownloadReceiver;
 import com.paranoid.paranoidhub.updater.RomUpdater;
 import com.paranoid.paranoidhub.updater.Updater.PackageInfo;
 import com.paranoid.paranoidhub.updater.Updater.UpdaterListener;
+import com.paranoid.paranoidhub.utils.Constants;
 import com.paranoid.paranoidhub.utils.DeviceInfoUtils;
 import com.paranoid.paranoidhub.utils.FileUtils;
 import com.paranoid.paranoidhub.utils.NotificationUtils;
-import com.paranoid.paranoidhub.utils.PreferenceUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,6 +39,8 @@ import ly.count.android.sdk.Countly;
 
 public class SystemActivity extends AppCompatActivity implements FloatingActionButton.OnClickListener,
         UpdaterListener, DownloadHelper.DownloadCallback {
+
+    private static final String TAG = Constants.BASE_TAG + "Activity";
 
     private int mState;
     private static final int STATE_CHECK = 0;
@@ -183,6 +185,7 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
 
     @Override
     public void onClick(View v) {
+        if (Constants.DEBUG) Log.d(TAG, "Fab clicked. mState = " + mState);
         switch (mState) {
             default:
             case STATE_CHECK:

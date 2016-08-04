@@ -19,9 +19,11 @@
 
 package com.paranoid.paranoidhub.updater.server;
 
+import android.util.Log;
 import com.paranoid.paranoidhub.updater.Server;
 import com.paranoid.paranoidhub.updater.UpdatePackage;
 import com.paranoid.paranoidhub.updater.Updater;
+import com.paranoid.paranoidhub.utils.Constants;
 import com.paranoid.paranoidhub.utils.Version;
 
 import org.json.JSONArray;
@@ -33,6 +35,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class PaServer implements Server {
+
+    private static final String TAG = Constants.BASE_TAG + "PaServer";
 
     private static final String URL = "http://api.aospa.co/updates/%s";
 
@@ -56,17 +60,16 @@ public class PaServer implements Server {
             JSONArray updates = response.getJSONArray("updates");
             for (int i = updates.length() - 1; i >= 0; i--) {
                 JSONObject file = updates.getJSONObject(i);
-                String filename = file.optString("name");
-                String stripped = filename.replace(".zip", "");
-                String[] parts = stripped.split("-");
-                boolean isNew = parts[parts.length - 1].matches("[-+]?\\d*\\.?\\d+");
-                if (!isNew) {
-                    continue;
-                }
-                Version version = new Version(filename);
+                String filename = file.getString("name");
+                String versionString  = file.getString("version");
+                String dateString     = file.getString("build");
+
+                Log.d(TAG, "version from server " + versionString + " " + dateString);
+                Version version = new Version(versionString, dateString);
                 if (Version.compare(mVersion, version) < 0) {
                     list.add(new UpdatePackage(mDevice, filename, version, file.getString("size"),
-                            file.getString("url"), file.getString("md5"), false));
+                            file.getString("url"), file.getString("md5")));
+                    Log.d(TAG, "found new version!");
                 }
             }
         }

@@ -25,7 +25,7 @@ public class DeviceInfoUtils {
     }
 
     public static String getVersionString() {
-        return "pa_" + getDevice() + "-" + UpdateUtils.getProp(MOD_VERSION);
+        return UpdateUtils.getProp(MOD_VERSION);
     }
 
     public static String getReadableDate(String fileDate) {

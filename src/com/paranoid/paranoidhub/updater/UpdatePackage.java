@@ -39,13 +39,13 @@ public class UpdatePackage implements PackageInfo, Serializable {
     private boolean mIsDelta = false;
 
     public UpdatePackage(String device, String name, Version version, long size, String url,
-                         String md5, boolean gapps) {
+                         String md5) {
         this(device, name, version,
-                FileUtils.humanReadableByteCount(size, false), url, md5, gapps);
+                FileUtils.humanReadableByteCount(size, false), url, md5);
     }
 
     public UpdatePackage(String device, String name, Version version, String size, String url,
-                         String md5, boolean gapps) {
+                         String md5) {
         this.mFilename = name;
         this.mVersion = version;
         this.mSize = size;
