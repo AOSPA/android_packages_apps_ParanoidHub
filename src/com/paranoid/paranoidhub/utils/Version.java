@@ -46,7 +46,7 @@ public class Version implements Serializable {
                 mMaintenance = Integer.parseInt(parts[2]);
             }
             mDate = date;
-            if (Constants.DEBUG) Log.d(TAG, "got version M: " + mMajor + "m: " + mMinor + "maint: " + mMaintenance);
+            if (Constants.DEBUG) Log.d(TAG, "got version: " + mMajor + "." + mMinor + "." + mMaintenance);
             if (Constants.DEBUG) Log.d(TAG, "got date: " + mDate);
         } catch (NumberFormatException ex) {
             // malformed version, write the log and continue
