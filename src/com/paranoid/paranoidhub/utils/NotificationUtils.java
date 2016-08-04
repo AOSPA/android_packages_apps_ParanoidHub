@@ -40,7 +40,8 @@ public class NotificationUtils {
                 .setContentTitle(resources.getString(R.string.update_found_title))
                 .setSmallIcon(R.drawable.ic_launcher_mono)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher))
-                .setContentIntent(pIntent);
+                .setContentIntent(pIntent)
+                .setOngoing(true);
 
         builder.setContentText(resources.getString(R.string.rom_name) + " "
                 + infosRom[0].getVersion().toString());
