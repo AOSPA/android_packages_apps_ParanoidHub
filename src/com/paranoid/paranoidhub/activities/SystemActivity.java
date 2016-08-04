@@ -134,7 +134,15 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
 
     @Override
     public void versionFound(PackageInfo[] info) {
+        //Found an update
         mState = STATE_FOUND;
+        if (info != null && info.length > 0) {
+            if(FileUtils.isOnDownloadList(this, info[0].getFilename())) {
+                //Package is already downloaded, so skip to install
+                mState = STATE_INSTALL;
+                addFile(FileUtils.getFile(this, info[0].getFilename()), info[0].getMd5());
+            }
+        }
         updateMessages(info);
     }
 
@@ -266,6 +274,7 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
         if (md5 != null && !"".equals(md5)) {
             final Snackbar md5Snackbar = Snackbar.make(mCoordinatorLayout, R.string.calculating_md5, Snackbar.LENGTH_INDEFINITE);
             md5Snackbar.show();
+            mButton.hide();
             new Thread() {
                 public void run() {
                     final String calculatedMd5 = FileUtils.md5(file);
@@ -289,6 +298,7 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
     }
 
     private void reallyAddFile(final File file) {
+        mButton.show();
         mFiles.add(file);
     }
 
