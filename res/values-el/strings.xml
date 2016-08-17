@@ -1,0 +1,46 @@
+<resources>
+    <!-- GENERAL -->
+    <string name="app_name">Ενημερώσεις Paranoid Android</string>
+    <string name="rom_name">Paranoid Android</string>
+
+    <!-- Up To Date -->
+    <string name="no_updates_title">Ενημερώσεις Paranoid Android</string>
+    <string name="no_updates_text">Η συσκευή σας είναι ήδη ενημερωμένη!</string>
+
+    <!-- Update available -->
+    <string name="update_found_title">Μια ενημέρωση είναι διαθέσιμη</string>
+    <string name="update_found_text">Η έκδοση %1$s του Paranoid Android είναι διαθέσιμη.\n\nΠατήστε στο κουμπί παρακάτω για να ξεκινήσει η μεταφόρτωση. Η μεταφόρτωση ενημερώσεων μέσω σύνδεσης δεδομένων ή κατά την περιαγωγή μπορεί να οδηγήσει στην επιβολή επιπλέον χρεώσεων.\nΗ ενημέρωση απαιτεί την επανεκκίνηση της συσκευής.\n\nΜέγεθος αρχείου ενημέρωσης: %2$s</string>
+
+    <!-- Downloading update -->
+    <string name="downloading_title">Μεταφόρτωση ενημέρωσης…</string>
+    <string name="downloading_text">Μεταφόρτωση… %1$s\nΠατήστε στο κουμπί παρακάτω για να ακυρώσετε τη μεταφόρτωση</string>
+
+    <!-- Download failed -->
+    <string name="download_failed_title">Η μεταφόρτωση απέτυχε</string>
+    <string name="download_failed_text">Η ενημέρωση απέτυχε.\nΠατήστε στο κουμπί παρακάτω για να γίνει επανάληψη του ελέγχου για ενημερώσεις.</string>
+
+    <!-- Install -->
+    <string name="install_title">Εγκατάσταση ενημέρωσης</string>
+    <string name="install_text">Η μεταφόρτωση της ενημέρωσης ολοκληρώθηκε με επιτυχία.\n Πατήστε στο κουμπί παρακάτω για να γίνει η εγκατάσταση.</string>
+
+    <!-- MD5 -->
+    <string name="calculating_md5">Υπολογισμός αθροίσματος MD5…</string>
+    <string name="md5_mismatch">Το MD5 δεν μπορεί να επιβεβαιωθεί</string>
+    <string name="md5_install_anyway">Συνέχεια</string>
+
+    <!-- Reboot -->
+    <string name="alert_reboot_install_title">Εγκατάσταση ενημέρωσης</string>
+    <string name="alert_reboot_one_message">Η συσκευή σας θα κάνει επανεκκίνηση και εγκατάσταση της ενημέρωσης.</string>
+    <string name="alert_reboot_now">Εγκατάσταση τώρα</string>
+
+    <!-- Errors -->
+    <string name="error_cannot_resume">Σφάλμα: Η μεταφόρτωση δεν μπόρεσε να συνεχιστεί</string>
+    <string name="error_device_not_found">Σφάλμα: Η κάρτα μνήμης δεν είναι συνδεδεμένη</string>
+    <string name="error_file_already_exists">Σφάλμα: Το αρχείο υπάρχει ήδη</string>
+    <string name="error_file_error">Σφάλμα: Σφάλμα αποθηκευτικού χώρου</string>
+    <string name="error_http_data_error">Σφάλμα: Σφάλμα HTTP</string>
+    <string name="error_insufficient_space">Σφάλμα: Δεν υπάρχει διαθέσιμος χώρος</string>
+    <string name="error_too_many_redirects">Σφάλμα: Υπερβολικά πολλές ανακατευθύνσεις</string>
+    <string name="error_unhandled_http_code">Σφάλμα: Ο κωδικός HTTP δεν μπορεί να διαχειριστεί</string>
+    <string name="error_unknown">Σφάλμα: Άγνωστο σφάλμα</string>
+</resources>
