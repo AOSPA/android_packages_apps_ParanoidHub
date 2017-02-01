@@ -62,7 +62,7 @@
             android:fontFamily="sans-serif"
             android:lineSpacingExtra="@dimen/text_line_spacing"
             android:padding="@dimen/text_padding"
-            android:textColor="@color/textColor"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="@dimen/text_size" />
 
     </RelativeLayout>
@@ -78,6 +78,6 @@
         app:layout_anchor="@id/activity_layout"
         app:layout_anchorGravity="bottom|right|end"
         app:pressedTranslationZ="16dp"
-        app:rippleColor="@android:color/white" />
+        app:rippleColor="?android:attr/colorControlHighlight" />
 
 </android.support.design.widget.CoordinatorLayout>
