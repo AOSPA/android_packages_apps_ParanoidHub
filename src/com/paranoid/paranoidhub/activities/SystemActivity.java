@@ -1,7 +1,10 @@
 package com.paranoid.paranoidhub.activities;
 
+import android.app.IThemeCallback;
+import android.app.ThemeManager;
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -62,8 +65,16 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
     private FloatingActionButton mButton;
     private TextView mToolbar;
 
+    private int mTheme;
+    private ThemeManager mThemeManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mThemeManager = (ThemeManager) getSystemService(Context.THEME_SERVICE);
+        if (mThemeManager != null) {
+            mThemeManager.addCallback(mThemeCallback);
+        }
+        getTheme().applyStyle(mTheme, true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system);
 
@@ -315,5 +326,25 @@ public class SystemActivity extends AppCompatActivity implements FloatingActionB
 
     @Override
     public void checkError(String cause) {
+    }
+
+    private final IThemeCallback mThemeCallback = new IThemeCallback.Stub() {
+
+        @Override
+        public void onThemeChanged(int themeMode, int color) {
+            onCallbackAdded(themeMode, color);
+            recreateActivity();
+        }
+
+        @Override
+        public void onCallbackAdded(int themeMode, int color) {
+            mTheme = color;
+        }
+    };
+
+    private void recreateActivity() {
+        runOnUiThread(() -> {
+            recreate();
+        });
     }
 }
