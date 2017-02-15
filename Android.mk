@@ -26,6 +26,8 @@ LOCAL_AAPT_FLAGS := --auto-add-overlay \
     --extra-packages android.support.v7.appcompat \
     --extra-packages android.support.design
 
+include frameworks/base/packages/SettingsLib/common.mk
+
 include $(BUILD_PACKAGE)
 
 include $(CLEAR_VARS)

@@ -30,6 +30,8 @@ import com.paranoid.paranoidhub.utils.DeviceInfoUtils;
 import com.paranoid.paranoidhub.utils.FileUtils;
 import com.paranoid.paranoidhub.utils.NotificationUtils;
 
+import com.android.settingslib.drawer.SettingsDrawerActivity;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +39,7 @@ import java.util.List;
 
 import ly.count.android.sdk.Countly;
 
-public class SystemActivity extends AppCompatActivity implements FloatingActionButton.OnClickListener,
+public class SystemActivity extends SettingsDrawerActivity implements FloatingActionButton.OnClickListener,
         UpdaterListener, DownloadHelper.DownloadCallback {
 
     private static final String TAG = Constants.BASE_TAG + "Activity";
