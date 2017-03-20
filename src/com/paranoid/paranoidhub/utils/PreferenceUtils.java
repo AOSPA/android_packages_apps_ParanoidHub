@@ -9,7 +9,7 @@ public class PreferenceUtils {
     public static final String PROPERTY_LAST_CHECK = "lastCheck";
     public static final String DOWNLOAD_ROM_ID = "download_rom_id";
     public static final String DOWNLOAD_ROM_MD5 = "download_rom_md5";
-    public static final String DOWNLOAD_ROM_FILENAME = "download_rom_filaname";
+    public static final String DOWNLOAD_ROM_FILENAME = "download_rom_filename";
 
     public static String getPreference(Context context, String key, String defaultValue) {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(key, defaultValue);
