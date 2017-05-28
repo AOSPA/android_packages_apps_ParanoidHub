@@ -22,6 +22,30 @@
       "revId": "3c45fe66b6fb3fc159e9f6057b13900b37b74e2a",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7266c4a1_d4f5c334",
+        "filename": "res/values-es/strings.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2017-05-28T18:22:20Z",
+      "side": 1,
+      "message": "It has been always like that everywhere. Is the most used and recommended as well. The original word is \"succesfully\", and its translation \"satisfactoriamente\". \"Correctamente\" stands for \"correctly\".",
+      "parentUuid": "d0ad2ca3_6af56cca",
+      "range": {
+        "startLine": 42,
+        "startChar": 57,
+        "endLine": 42,
+        "endChar": 75
+      },
+      "revId": "3c45fe66b6fb3fc159e9f6057b13900b37b74e2a",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
     }
   ]
 }
