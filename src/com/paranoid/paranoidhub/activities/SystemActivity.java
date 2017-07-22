@@ -76,6 +76,7 @@ public class SystemActivity extends SettingsDrawerActivity implements FloatingAc
 
         mUpdatePackage = null;
         DownloadHelper.init(this, this);
+        FileUtils.init(this);
         mRomUpdater = new RomUpdater(this, true);
         mRebootHelper = new RebootHelper(new RecoveryHelper(SystemActivity.this));
 
