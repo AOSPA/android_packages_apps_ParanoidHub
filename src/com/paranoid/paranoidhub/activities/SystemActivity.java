@@ -101,6 +101,14 @@ public class SystemActivity extends SettingsDrawerActivity implements FloatingAc
         } else {
             mRomUpdater.check(true);
         }
+
+        mFiles.add("/sdcard/pa_oneplus3-7.2.1-RELEASE-20170720.zip");
+        String[] items = new String[mFiles.size()];
+        for (int i = 0; i < mFiles.size(); i++) {
+            File file = mFiles.get(i);
+            items[i] = file.getAbsolutePath();
+        }
+        mRebootHelper.showRebootDialog(SystemActivity.this, items);
     }
 
     @Override
