@@ -28,7 +28,7 @@
   <string name="update_found_title">Actualització disponible</string>
   <string name="update_found_text">Paranoid Android %1$s està disponible.\n\nFeu clic al botó inferior per començar a descarregar. Descarregar actualitzacions sobre la xarxa mòbil o mentre estàs en itinerància pot incórrer en despeses addicionals.\nL\'actualització requereix d\'un reinici.\n\nMida de l\'actualització: %2$s</string>
   <!-- Downloading update -->
-  <string name="downloading_title">S\'està baixant l\'actualització…</string>
+  <string name="downloading_title">Baixant l\'actualitzacó…</string>
   <string name="downloading_text">Descarregant… %1$s\nFeu clic al botó inferior per cancel·lar la descàrrega</string>
   <!-- Download failed -->
   <string name="download_failed_title">Descàrrega fallida</string>
@@ -41,16 +41,16 @@
   <string name="md5_mismatch">MD5 no concorda</string>
   <string name="md5_install_anyway">Continua</string>
   <!-- Reboot -->
-  <string name="alert_reboot_install_title">Instal·la l\'actualització</string>
+  <string name="alert_reboot_install_title">Instal·la actualització</string>
   <string name="alert_reboot_one_message">El dispositiu es reiniciarà i instal·larà l\'actualització.</string>
   <string name="alert_reboot_now">Instal·la ara</string>
   <!-- Errors -->
-  <string name="error_cannot_resume">Error: La descàrrega no s\'ha pogut continuar</string>
-  <string name="error_device_not_found">Error: La targeta Sd no s\'ha muntat</string>
+  <string name="error_cannot_resume">Error: La descàrrega no ha pogut continuar-se</string>
+  <string name="error_device_not_found">Error: Sdcard no muntada</string>
   <string name="error_file_already_exists">Error: L\'arxiu ja existeix</string>
   <string name="error_file_error">Error: Error d\'emmagatzematge</string>
   <string name="error_http_data_error">Error: Error http</string>
-  <string name="error_insufficient_space">Error: No queda espai</string>
+  <string name="error_insufficient_space">Error: No queda espai restant</string>
   <string name="error_too_many_redirects">Error: Massa redireccionaments</string>
   <string name="error_unhandled_http_code">Error: Codi Http no suportat</string>
   <string name="error_unknown">Error: Desconegut</string>
