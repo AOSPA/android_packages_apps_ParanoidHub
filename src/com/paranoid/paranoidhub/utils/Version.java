@@ -7,14 +7,14 @@ import java.io.Serializable;
  * Class to manage different versions
  * <p/>
  * Format<br>
- * pa_A-B-C.D.E-F-G.zip<br>
+ * pa_A-B-CDE-F-G.zip<br>
  * where<br>
  * A = device name, required<br>
  * B = extra information, not required (for gapps)<br>
- * C = major, integer from 0 to n, required<br>
- * D = minor, integer from 0 to 9, required<br>
- * E = maintenance, integer from 0 to n, not required<br>
- * F = tag. Expected value is DEV, PRESS, or RELEASE <br>
+ * C = major, first letter of Android version we are based on, required<br>
+ * D = minor, letter, from A to Z, required<br>
+ * E = maintenance, integer(String) from 0 to 9, not required<br>
+ * F = tag. Expected value is BETA, DEV, PRESS, or RELEASE <br>
  * G = date, YYYYMMDD, not required
  * Any additions past G will be ignored
  * <p/>
@@ -27,13 +27,14 @@ public class Version implements Serializable {
 
     private static final String TAG = "Hub/Version";
 
+    private static final String BETA_RELEASE_TAG = "BETA";
     private static final String DEV_RELEASE_TAG = "DEV";
     private static final String PRESS_RELEASE_TAG = "PRESS";
     private static final String PUB_RELEASE_TAG = "RELEASE";
 
-    private int mMajor = 0;
-    private int mMinor = 0;
-    private int mMaintenance = 0;
+    private String mMajor = "";
+    private String mMinor = "";
+    private String mMaintenance = "";
 
     private String mTag = "";
     private String mDate = "";
@@ -55,13 +56,13 @@ public class Version implements Serializable {
 
     private void parseVersion(String version, String tag, String date) {
         try {
-            String[] parts = version.split("\\.");
-            mMajor = Integer.parseInt(parts[0]);
+            char[] parts = version.toCharArray();
+            mMajor = String.valueOf(parts[0]);
             if (parts.length > 1) {
-                mMinor = Integer.parseInt(parts[1]);
+                mMinor = String.valueOf(parts[1]);
             }
             if (parts.length > 2) {
-                mMaintenance = Integer.parseInt(parts[2]);
+                mMaintenance = String.valueOf(parts[2]);
             }
             mTag = tag;
             mDate = date;
@@ -120,7 +121,7 @@ public class Version implements Serializable {
     }
 
     public String toString() {
-        return mMajor + "." + mMinor + (mMaintenance > 0 ? "." + mMaintenance : "")
+        return mMajor + "." + mMinor + (Integer.parseInt(mMaintenance) > 0 ? "." + mMaintenance : "")
                 + " (" + mDate + ")";
     }
 }
