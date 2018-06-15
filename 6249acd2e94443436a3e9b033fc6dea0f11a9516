@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7494bc9_75bd4c25",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-06-15T02:05:32Z",
+      "side": 1,
+      "message": "Do we need to add BETA_RELEASE_TAG here?",
+      "revId": "6249acd2e94443436a3e9b033fc6dea0f11a9516",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    }
+  ]
+}
