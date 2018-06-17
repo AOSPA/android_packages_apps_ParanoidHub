@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "584f5fac_fd63278c",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2018-06-17T20:46:13Z",
+      "side": 1,
+      "message": "I don\u0027t think we should change this definition from what it was prior. Maintenance should still be optional. When we go for a public release, the first one will be, for example, OA for all devices. From there, certain devices may get OA1, OA2, etc.",
+      "revId": "83179b064912778cca080719b2de83404c040c34",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "75e5ecc9_7e27cab3",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2018-06-17T20:46:13Z",
+      "side": 1,
+      "message": "mMaintenance is always a numeral and the accessor converts it to an int anyway, so keep this as an int.",
+      "revId": "83179b064912778cca080719b2de83404c040c34",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e370d45f_4b37abe8",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2018-06-17T20:46:13Z",
+      "side": 1,
+      "message": "Rather than going string-\u003echar-\u003estring, just make the mMajor and mMinor variables char types.",
+      "revId": "83179b064912778cca080719b2de83404c040c34",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c362643a_92229408",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2018-06-17T20:46:13Z",
+      "side": 1,
+      "message": "this should return -1 always for the DEV build case, -1 for the PRESS-\u003ePUB case (not a supported upgrade path), and 1 for the BETA-\u003ePUB case. We need additional support for making PUB-\u003eBETA an opt-in case.",
+      "revId": "83179b064912778cca080719b2de83404c040c34",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    }
+  ]
+}
