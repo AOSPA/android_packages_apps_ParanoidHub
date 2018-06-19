@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cbe0486e_d6bcf5ca",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2018-06-19T00:52:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "584f5fac_fd63278c",
+      "revId": "83179b064912778cca080719b2de83404c040c34",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75e5ecc9_7e27cab3",
         "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
         "patchSetId": 6
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "4433c1bc_411baad4",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2018-06-19T00:52:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75e5ecc9_7e27cab3",
+      "revId": "83179b064912778cca080719b2de83404c040c34",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e370d45f_4b37abe8",
         "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
         "patchSetId": 6
@@ -47,6 +83,24 @@
       "writtenOn": "2018-06-17T20:46:13Z",
       "side": 1,
       "message": "Rather than going string-\u003echar-\u003estring, just make the mMajor and mMinor variables char types.",
+      "revId": "83179b064912778cca080719b2de83404c040c34",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7d5eb96d_9b174494",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2018-06-19T00:52:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e370d45f_4b37abe8",
       "revId": "83179b064912778cca080719b2de83404c040c34",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
       "unresolved": false
