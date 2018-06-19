@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "058b5121_c7f5f96d",
+        "filename": "src/com/paranoid/paranoidhub/updater/server/PaServer.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2018-06-19T01:16:27Z",
+      "side": 1,
+      "message": "Yeah, I will take it out. It´s just for testing.",
+      "parentUuid": "49fe2187_488be583",
+      "revId": "b30dff8bfe4b0488e8fd70f23bc25bcb6a025ae0",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a494cf1c_67e99374",
         "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
         "patchSetId": 14
@@ -30,6 +48,24 @@
       "writtenOn": "2018-06-19T01:03:09Z",
       "side": 1,
       "message": "There\u0027s no need to charAt on a char variable.",
+      "revId": "b30dff8bfe4b0488e8fd70f23bc25bcb6a025ae0",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "87d60bc0_9d0e83ec",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2018-06-19T01:16:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a494cf1c_67e99374",
       "revId": "b30dff8bfe4b0488e8fd70f23bc25bcb6a025ae0",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "717ecf23_22e22a42",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2018-06-19T01:16:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc5d40d5_fb104845",
+      "revId": "b30dff8bfe4b0488e8fd70f23bc25bcb6a025ae0",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe168707_6304c47a",
         "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
         "patchSetId": 14
@@ -64,6 +118,24 @@
       "writtenOn": "2018-06-19T01:03:09Z",
       "side": 1,
       "message": "Use Character.getNumericValue for this",
+      "revId": "b30dff8bfe4b0488e8fd70f23bc25bcb6a025ae0",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff88f329_e65d3211",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2018-06-19T01:16:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe168707_6304c47a",
       "revId": "b30dff8bfe4b0488e8fd70f23bc25bcb6a025ae0",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "6213e5cc_f68808bc",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2018-06-19T01:16:27Z",
+      "side": 1,
+      "message": "Again, we don\u0027t have a tag for public release now. Public release won\u0027t have tags, so pub doesn\u0027t exist anymore.",
+      "parentUuid": "7f173984_14b559fd",
+      "revId": "b30dff8bfe4b0488e8fd70f23bc25bcb6a025ae0",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "09851b3a_f447c634",
         "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
         "patchSetId": 14
@@ -98,6 +188,24 @@
       "writtenOn": "2018-06-19T01:03:09Z",
       "side": 1,
       "message": "No need for charAt",
+      "revId": "b30dff8bfe4b0488e8fd70f23bc25bcb6a025ae0",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cb06ad73_07e63188",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2018-06-19T01:16:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09851b3a_f447c634",
       "revId": "b30dff8bfe4b0488e8fd70f23bc25bcb6a025ae0",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "b24464ab_12a913e3",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2018-06-19T01:16:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a0dd0ab_04a9e3ca",
+      "revId": "b30dff8bfe4b0488e8fd70f23bc25bcb6a025ae0",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "768c841d_1dd80817",
         "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
         "patchSetId": 14
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "03111413_30be344e",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2018-06-19T01:16:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "768c841d_1dd80817",
+      "revId": "b30dff8bfe4b0488e8fd70f23bc25bcb6a025ae0",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f2e0004_cb90a19b",
         "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
         "patchSetId": 14
@@ -149,6 +293,24 @@
       "writtenOn": "2018-06-19T01:03:09Z",
       "side": 1,
       "message": "char types do not have member functions. They are primitive datatypes. just check if it\u0027s equal to \u0027\u0027",
+      "revId": "b30dff8bfe4b0488e8fd70f23bc25bcb6a025ae0",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "16ff7fd3_8fd6ba65",
+        "filename": "src/com/paranoid/paranoidhub/utils/Version.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2018-06-19T01:16:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f2e0004_cb90a19b",
       "revId": "b30dff8bfe4b0488e8fd70f23bc25bcb6a025ae0",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
       "unresolved": false
