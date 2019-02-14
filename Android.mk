@@ -1,6 +1,8 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
+LOCAL_PRIVATE_PLATFORM_APIS := true
+
 LOCAL_SDK_VERSION := current
 LOCAL_PACKAGE_NAME := ParanoidHub
 LOCAL_CERTIFICATE := platform
