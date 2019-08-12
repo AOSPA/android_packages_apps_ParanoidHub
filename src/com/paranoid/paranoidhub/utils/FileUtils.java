@@ -29,7 +29,10 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Scanner;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class FileUtils {
 
@@ -98,6 +101,14 @@ public class FileUtils {
         return null; //couldn't find file
     }
 
+	public static File getSideload(Context context) {
+        File downloads = initSettingsHelper(context);
+        for (File f : downloads.listFiles()) {
+            return f;
+        }
+        return null;
+    }
+
     public static boolean isOnDownloadList(Context context, String fileName) {
         for (String file : getDownloadList(context)) {
             if (fileName.equals(file))
@@ -105,6 +116,17 @@ public class FileUtils {
         }
         return false;
     }
+
+	public static boolean isUpdateSideloaded(Context context) {
+		File downloads = initSettingsHelper(context);
+        for (File f : downloads.listFiles()) {
+            if (f.getName().startsWith(PREFIX) 
+				        && f.getName().endsWith(SUFFIX)) {
+                return true;
+            }
+        }
+        return false;
+	}
 
     private static boolean isRom(String name) {
         return name.startsWith(PREFIX) && name.endsWith(SUFFIX);
@@ -319,5 +341,35 @@ public class FileUtils {
     private static boolean folderExists(String path) {
         File f = new File(path);
         return f.exists() && f.isDirectory();
+    }
+
+	/**
+     * Get the offset to the compressed data of a file inside the given zip
+     *
+     * @param zipFile input zip file
+     * @param entryPath full path of the entry
+     * @return the offset of the compressed, or -1 if not found
+     * @throws IllegalArgumentException if the given entry is not found
+     */
+    public static long getZipEntryOffset(ZipFile zipFile, String entryPath) {
+        // Each entry has an header of (30 + n + m) bytes
+        // 'n' is the length of the file name
+        // 'm' is the length of the extra field
+        final int FIXED_HEADER_SIZE = 30;
+        Enumeration<? extends ZipEntry> entries = zipFile.entries();
+        long offset = 0;
+        while (entries.hasMoreElements()) {
+            ZipEntry entry = entries.nextElement();
+            int n = entry.getName().length();
+            int m = entry.getExtra() == null ? 0 : entry.getExtra().length;
+            int headerSize = FIXED_HEADER_SIZE + n + m;
+            offset += headerSize;
+            if (entry.getName().equals(entryPath)) {
+                return offset;
+            }
+            offset += entry.getCompressedSize();
+        }
+        Log.e(TAG, "Entry " + entryPath + " not found");
+        throw new IllegalArgumentException("The given entry was not found");
     }
 }
