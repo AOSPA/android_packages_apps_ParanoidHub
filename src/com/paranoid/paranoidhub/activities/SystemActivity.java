@@ -22,6 +22,7 @@ import com.paranoid.paranoidhub.helpers.DownloadHelper;
 import com.paranoid.paranoidhub.helpers.RebootHelper;
 import com.paranoid.paranoidhub.helpers.RecoveryHelper;
 import com.paranoid.paranoidhub.receivers.DownloadReceiver;
+import com.paranoid.paranoidhub.updater.ABUpdateController;
 import com.paranoid.paranoidhub.updater.RomUpdater;
 import com.paranoid.paranoidhub.updater.Updater.PackageInfo;
 import com.paranoid.paranoidhub.updater.Updater.UpdaterListener;
@@ -33,14 +34,16 @@ import com.paranoid.paranoidhub.utils.NotificationUtils;
 import com.android.settingslib.drawer.SettingsDrawerActivity;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.zip.ZipFile;
 
 import ly.count.android.sdk.Countly;
 
 public class SystemActivity extends SettingsDrawerActivity implements FloatingActionButton.OnClickListener,
-        UpdaterListener, DownloadHelper.DownloadCallback {
+        UpdaterListener, DownloadHelper.DownloadCallback, ABUpdateController.InstallListener {
 
     private static final String TAG = Constants.BASE_TAG + "Activity";
 
@@ -49,8 +52,11 @@ public class SystemActivity extends SettingsDrawerActivity implements FloatingAc
     private static final int STATE_FOUND = 1;
     private static final int STATE_DOWNLOADING = 2;
     private static final int STATE_INSTALL = 3;
-    private static final int STATE_ERROR = 4;
+    private static final int STATE_INSTALLING = 4;
+    private static final int STATE_INSTALLED = 5;
+    private static final int STATE_ERROR = 6;
 
+    private ABUpdateController mUpdateController;
     private RomUpdater mRomUpdater;
     private RebootHelper mRebootHelper;
 
@@ -63,6 +69,8 @@ public class SystemActivity extends SettingsDrawerActivity implements FloatingAc
     private TextView mMessage;
     private FloatingActionButton mButton;
     private TextView mToolbar;
+
+    private boolean mIsSideload = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +105,7 @@ public class SystemActivity extends SettingsDrawerActivity implements FloatingAc
             }
         } else if (DownloadHelper.isDownloading()) {
             mState = STATE_DOWNLOADING;
-            updateMessages((PackageInfo) null);
+            updateMessages((PackageInfo) null, mIsSideload);
         } else {
             mRomUpdater.check(true);
         }
@@ -132,42 +140,49 @@ public class SystemActivity extends SettingsDrawerActivity implements FloatingAc
     @Override
     public void startChecking() {
         mState = STATE_CHECK;
-        updateMessages(mUpdatePackage);
+        updateMessages(mUpdatePackage, mIsSideload);
     }
 
     @Override
     public void versionFound(PackageInfo[] info) {
+        mIsSideload = false;
         //Found an update
         mState = STATE_FOUND;
         if (info != null && info.length > 0) {
-            if(FileUtils.isOnDownloadList(this, info[0].getFilename())) {
+            if (FileUtils.isOnDownloadList(this, info[0].getFilename())) {
                 //Package is already downloaded, so skip to install
                 mState = STATE_INSTALL;
                 addFile(FileUtils.getFile(this, info[0].getFilename()), info[0].getMd5());
             }
+        } else {
+            if (FileUtils.isUpdateSideloaded(this)) {
+                mIsSideload = true;
+                mState = STATE_INSTALL;
+                addFile(FileUtils.getSideload(this), null);
+            }
         }
-        updateMessages(info);
+        updateMessages(info, mIsSideload);
     }
 
-    private void updateMessages(PackageInfo[] info) {
+    private void updateMessages(PackageInfo[] info, boolean isSideload) {
         if (info != null && info.length > 0) {
-            updateMessages(info.length > 0 ? info[0] : null);
+            updateMessages(info.length > 0 ? info[0] : null, isSideload);
         }
     }
 
-    private void updateMessages(PackageInfo info) {
+    private void updateMessages(PackageInfo info, boolean isSideload) {
         mUpdatePackage = info;
         switch (mState) {
             default:
             case STATE_CHECK:
-                if (mUpdatePackage == null) {
+                if (mUpdatePackage == null && !isSideload) {
                     mToolbar.setText(R.string.no_updates_title);
                     mMessage.setText(R.string.no_updates_text);
                     mButton.setImageResource(R.drawable.ic_check_update);
                 }
                 break;
             case STATE_FOUND:
-                if (!mRomUpdater.isScanning() && mUpdatePackage != null) {
+                if (!mRomUpdater.isScanning() && mUpdatePackage != null && !isSideload) {
                     mToolbar.setText(R.string.update_found_title);
                     mMessage.setText(String.format(
                             getResources().getString(R.string.update_found_text),
@@ -191,6 +206,17 @@ public class SystemActivity extends SettingsDrawerActivity implements FloatingAc
                 mMessage.setText(R.string.install_text);
                 mButton.setImageResource(R.drawable.ic_install_update);
                 break;
+            case STATE_INSTALLING:
+                mToolbar.setText(R.string.installing_title);
+                mMessage.setText(R.string.installing_text);
+                mButton.hide();
+                break;
+            case STATE_INSTALLED:
+                mToolbar.setText(R.string.installed_title);
+                mMessage.setText(R.string.installed_text);
+                mButton.setImageResource(R.drawable.ic_install_update);
+                mButton.show();
+                break;
         }
     }
 
@@ -209,7 +235,7 @@ public class SystemActivity extends SettingsDrawerActivity implements FloatingAc
                     DownloadHelper.registerCallback(SystemActivity.this);
                     DownloadHelper.downloadFile(mUpdatePackage.getPath(),
                             mUpdatePackage.getFilename(), mUpdatePackage.getMd5());
-                    updateMessages(mUpdatePackage);
+                    updateMessages(mUpdatePackage, mIsSideload);
                     HashMap<String, String> segmentation = new HashMap<>();
                     segmentation.put("device", DeviceInfoUtils.getDevice());
                     segmentation.put("file", mUpdatePackage.getFilename());
@@ -219,21 +245,48 @@ public class SystemActivity extends SettingsDrawerActivity implements FloatingAc
             case STATE_DOWNLOADING:
                 mState = STATE_CHECK;
                 DownloadHelper.clearDownloads();
-                updateMessages((PackageInfo) null);
+                updateMessages((PackageInfo) null, mIsSideload);
                 break;
             case STATE_ERROR:
                 mState = STATE_CHECK;
                 mRomUpdater.check(true);
                 break;
             case STATE_INSTALL:
-                String[] items = new String[mFiles.size()];
-                for (int i = 0; i < mFiles.size(); i++) {
-                    File file = mFiles.get(i);
-                    items[i] = file.getAbsolutePath();
-                }
-                mRebootHelper.showRebootDialog(SystemActivity.this, items);
+                installABOrReboot();
+                break;
+            case STATE_INSTALLED:
+                reboot(false);
                 break;
         }
+    }
+
+    private void installABOrReboot() {
+        File updateFile = mFiles.get(0);
+        boolean isABUpdate = false;
+        try {
+            ZipFile zipFile = new ZipFile(updateFile);
+            isABUpdate = ABUpdateController.isABUpdate(zipFile);
+            zipFile.close();
+        } catch (IllegalArgumentException | IOException e) {}
+
+        mUpdateController = new ABUpdateController(updateFile);
+        mUpdateController.setListener(this);
+        if (isABUpdate) {
+            mState = STATE_INSTALLING;
+            updateMessages((PackageInfo) null, mIsSideload);
+            mUpdateController.start();
+        } else {
+            reboot(true);
+        }
+    }
+
+    private void reboot(boolean toRecovery) {
+        String[] items = new String[mFiles.size()];
+        for (int i = 0; i < mFiles.size(); i++) {
+            File file = mFiles.get(i);
+            items[i] = file.getAbsolutePath();
+        }
+        mRebootHelper.showRebootDialog(SystemActivity.this, items, toRecovery);
     }
 
     @Override
@@ -245,7 +298,7 @@ public class SystemActivity extends SettingsDrawerActivity implements FloatingAc
     @Override
     public void onDownloadError(String reason) {
         mState = STATE_ERROR;
-        updateMessages((PackageInfo) null);
+        updateMessages((PackageInfo) null, mIsSideload);
     }
 
     @Override
@@ -259,12 +312,23 @@ public class SystemActivity extends SettingsDrawerActivity implements FloatingAc
     public void onDownloadFinished(Uri uri, final String md5) {
         if (uri != null) {
             mState = STATE_INSTALL;
-            updateMessages((PackageInfo) null);
+            updateMessages((PackageInfo) null, mIsSideload);
             addFile(uri, md5);
         } else {
             mState = STATE_CHECK;
             mRomUpdater.check(true);
         }
+    }
+
+    @Override
+    public void onInstallProgress(int status, int progress) {
+        if (status == UpdateController.FAILED) {
+            mState = STATE_ERROR;
+        } else if (status == UpdateController.INSTALLED) {
+            mState = STATE_INSTALLED;
+            mUpdateController.removeListener(this);
+        }
+        updateMessages((PackageInfo) null, mIsSideload);
     }
 
     public void addFile(Uri uri, final String md5) {

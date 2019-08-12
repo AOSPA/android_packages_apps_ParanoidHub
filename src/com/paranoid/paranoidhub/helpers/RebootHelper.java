@@ -39,7 +39,7 @@ public class RebootHelper {
         mRecoveryHelper = recoveryHelper;
     }
 
-    public void showRebootDialog(final Context context, final String[] items) {
+    public void showRebootDialog(final Context context, final String[] items, boolean toRecovery) {
 
         if (items == null || items.length == 0) {
             return;
@@ -55,7 +55,7 @@ public class RebootHelper {
             public void onClick(DialogInterface dialog, int whichButton) {
                 dialog.dismiss();
 
-                reboot(context, items);
+                reboot(context, items, toRecovery);
 
             }
         });
@@ -70,7 +70,7 @@ public class RebootHelper {
         alert.show();
     }
 
-    private void reboot(final Context context, final String[] items) {
+    private void reboot(final Context context, final String[] items, boolean toRecovery) {
 
         try {
 
@@ -109,7 +109,7 @@ public class RebootHelper {
                 }
             }
 
-            ((PowerManager) context.getSystemService(Activity.POWER_SERVICE)).reboot("recovery");
+            ((PowerManager) context.getSystemService(Activity.POWER_SERVICE)).reboot(toRecovery? "recovery" : null);
 
         } catch (Exception e) {
             e.printStackTrace();
