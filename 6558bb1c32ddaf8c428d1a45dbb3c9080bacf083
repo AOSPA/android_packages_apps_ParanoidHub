@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1a714f6_6209d6aa",
+        "filename": "src/com/paranoid/paranoidhub/activities/SystemActivity.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2019-08-12T15:33:05Z",
+      "side": 1,
+      "message": "Hidden because no action is applicable during installation anyway",
+      "revId": "6558bb1c32ddaf8c428d1a45dbb3c9080bacf083",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75f0d78f_2d90be9c",
+        "filename": "src/com/paranoid/paranoidhub/activities/SystemActivity.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2019-08-12T15:33:05Z",
+      "side": 1,
+      "message": "Needs a reboot image",
+      "revId": "6558bb1c32ddaf8c428d1a45dbb3c9080bacf083",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afb929ef_09c985a2",
+        "filename": "src/com/paranoid/paranoidhub/activities/SystemActivity.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2019-08-12T15:33:05Z",
+      "side": 1,
+      "message": "Needs to retrieve the desired file, not sure what to do if multiple files are stored in this list",
+      "revId": "6558bb1c32ddaf8c428d1a45dbb3c9080bacf083",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9f04e5d_b357be08",
+        "filename": "src/com/paranoid/paranoidhub/utils/FileUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2019-08-12T15:33:05Z",
+      "side": 1,
+      "message": "Can probably compare versions in case there\u0027s multiple pa zips in this path",
+      "revId": "6558bb1c32ddaf8c428d1a45dbb3c9080bacf083",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad",
+      "unresolved": true
+    }
+  ]
+}
