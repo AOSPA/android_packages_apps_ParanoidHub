@@ -1,40 +1,47 @@
 LOCAL_PATH:= $(call my-dir)
+
 include $(CLEAR_VARS)
 
+LOCAL_MODULE_TAGS := optional
+
+LOCAL_SRC_FILES := $(call all-java-files-under, src)
+
 LOCAL_USE_AAPT2 := true
-LOCAL_PRIVATE_PLATFORM_APIS := true
+
+LOCAL_STATIC_ANDROID_LIBRARIES := \
+    com.google.android.material_material \
+    androidx.core_core \
+    androidx.appcompat_appcompat \
+    androidx.cardview_cardview \
+    androidx.preference_preference \
+    androidx.recyclerview_recyclerview \
+
+LOCAL_RESOURCE_DIR := \
+    $(LOCAL_PATH)/res
 
 LOCAL_PACKAGE_NAME := ParanoidHub
-LOCAL_CERTIFICATE := platform
+LOCAL_PRIVATE_PLATFORM_APIS := true
 LOCAL_PRIVILEGED_MODULE := true
-LOCAL_PROGUARD_ENABLED := disabled
-
-LOCAL_STATIC_JAVA_LIBRARIES := \
-    android-common \
-    android-support-v4 \
-    android-support-design \
-    android-support-v7-appcompat \
-    countly \
-    volley
-
-LOCAL_SRC_FILES += $(call all-java-files-under, src)
-
-LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/res \
-    frameworks/support/v7/appcompat/res \
-    frameworks/support/design/res
-
-LOCAL_AAPT_FLAGS := --auto-add-overlay \
-    --extra-packages android.support.v4 \
-    --extra-packages android.support.v7.appcompat \
-    --extra-packages android.support.design
+LOCAL_PRODUCT_MODULE := true
+LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
 include frameworks/base/packages/SettingsLib/common.mk
 
 include $(BUILD_PACKAGE)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE := ParanoidHubStudio
+LOCAL_MODULE_CLASS := FAKE
+LOCAL_MODULE_SUFFIX := -timestamp
+updater_system_deps := $(call java-lib-deps,framework)
+updater_system_libs_path := $(abspath $(LOCAL_PATH))/system_libs
 
-LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := \
-    countly:/libs/countly.jar
+include $(BUILD_SYSTEM)/base_rules.mk
 
-include $(BUILD_MULTI_PREBUILT)
+$(LOCAL_BUILT_MODULE): $(updater_system_deps)
+	$(hide) mkdir -p $(updater_system_libs_path)
+	$(hide) rm -rf $(updater_system_libs_path)/*.jar
+	$(hide) cp $(updater_system_deps) $(updater_system_libs_path)/framework.jar
+	$(hide) echo "Fake: $@"
+	$(hide) mkdir -p $(dir $@)
+	$(hide) touch $@
