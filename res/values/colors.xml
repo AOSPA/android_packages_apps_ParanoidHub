@@ -1,6 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#EF4438</color>
-    <color name="colorTitle">#FFFFFF</color>
-    <color name="textColor">#1E1E1E</color>
+    <color name="theme_primary">@android:color/white</color>
+    <color name="theme_primary_dark">@android:color/white</color>
+    <color name="theme_accent">#ff87d432</color>
+
+    <color name="inverted">#212121</color>
+    <color name="ic_background">#333333</color>
+
+    <color name="error">#ffd93025</color>
+
+    <color name="header_background_color_update_check">#d8f4ba</color>
+    <color name="header_background_color_update_found">#f1ffe2</color>
+    <color name="header_post_info_changelog_title">@color/header_title_color</color>
+    <color name="header_title_color">#707070</color>
 </resources>
