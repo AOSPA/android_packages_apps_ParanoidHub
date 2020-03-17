@@ -1,36 +1,21 @@
-About
------
+Paranoid Over-The-Air Updates
+=======
+Simple application to download and apply OTA updates.
 
-Paranoid over the air updates app
+Build with Android Studio
+-------------------------
+Updater needs access to the system API, therefore it can't be built only using
+the public SDK. You first need to generate the libraries with all the needed
+classes. The application also needs elevated privileges, so you need to sign
+it with the right key to update the one in the system partition. To do this:
 
+ - Place this directory anywhere in the Android source tree
+ - Generate a keystore and keystore.properties using `gen-keystore.sh`
+ - Build the dependencies running `make UpdaterStudio` from the root of the
+   Android source tree. This command will add the needed libraries in
+   `system_libraries/`.
 
-License
--------
+You need to do the above once, unless Android Studio can't find some symbol.
+In this case, rebuild the system libraries with `make UpdaterStudio`.
 
-ParanoidHub is licensed under the terms of the *GNU General Public License,
-version 3.0*. See the *COPYING* file for the full license text.
-
-
-Using the app
--------------
-
-ParanoidHub allows you to update your Paranoid Android ROM and your Google Apps.
-If an update is found, you'll receive a notification. Click it to open the app.
-Go to the Updates tab and click on the file you want to download.
-Once the download finishes, it will be added to the Install tab. Click the 
-Install button and select the options you want to perform. Your device will reboot 
-into recovery to install the updates.
-Only TWRP and CWM-based recoveries are supported. Closed source CWM is not supported.
-
-
-Building the app
-----------------
-
-ParanoidHub needs to be installed in /system/priv-app to achieve the system
-permissions it needs. If you want to debug the app with Eclipse, first
-delete the app from /data/app if you had it there and move it to /system/priv-app,
-grant the file with the necessary permissions and reboot. Then increment the version
-code in AndroidManifest.xml and the app will run with the right permissions. 
-
-
--EOF-
+This application is based on the LineageOS Updater
