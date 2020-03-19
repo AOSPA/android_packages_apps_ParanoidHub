@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="header_image_size">198dp</dimen>
-    <dimen name="header_title_size">72dp</dimen>
-    <dimen name="header_total_size">270dp</dimen>
-    <dimen name="header_text_size">19sp</dimen>
-    <dimen name="header_padding">24dp</dimen>
-    <dimen name="header_elevation">4dp</dimen>
+    <dimen name="header_height">340dp</dimen>
 
-    <dimen name="text_size">14sp</dimen>
     <dimen name="text_padding">24dp</dimen>
-    <dimen name="text_line_spacing">16dp</dimen>
-    <dimen name="text_extra_line_spacing">40dp</dimen>
+    <dimen name="text_size">12sp</dimen>
 
-    <dimen name="fab_padding">16dp</dimen>
-    <dimen name="fab_elevation">4dp</dimen>
+    <dimen name="fab_padding">24dp</dimen>
+
+    <!-- Donut View -->
+    <dimen name="donut_thickness">5dp</dimen>
+    <dimen name="donut_inner_text_size">16dp</dimen>
+    <dimen name="donut_view_label_text_size">21sp</dimen>
+    <dimen name="donut_view_percent_sign_size">20sp</dimen>
+    <dimen name="donut_view_percent_text_size">45sp</dimen>
+    <dimen name="donut_view_shrunken_label_text_size">10sp</dimen>
 </resources>
