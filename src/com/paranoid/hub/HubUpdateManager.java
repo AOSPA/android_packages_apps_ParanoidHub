@@ -1,0 +1,205 @@
+/*
+ * Copyright (C) 2020 Paranoid Android
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.paranoid.hub;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import android.view.View;
+
+import androidx.preference.PreferenceManager;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import com.paranoid.hub.R;
+import com.paranoid.hub.download.ClientConnector;
+import com.paranoid.hub.download.DownloadClient;
+import com.paranoid.hub.misc.Constants;
+import com.paranoid.hub.misc.Utils;
+import com.paranoid.hub.model.ChangeLog;
+import com.paranoid.hub.model.UpdateInfo;
+import com.paranoid.hub.model.UpdatePresenter;
+import com.paranoid.hub.receiver.UpdateCheckReceiver;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
+import org.json.JSONException;
+
+public class HubUpdateManager implements ClientConnector.ConnectorListener{
+
+    private static final String TAG = "HubUpdateManager";
+
+    private Context mContext;
+    private ClientConnector mConnector;
+    private final Handler mMainThread = new Handler(Looper.getMainLooper());
+    private final Handler mThread = new Handler();
+    private HubActivity mHub;
+    private HubController mController;
+
+    private ChangeLog mChangelog;
+
+    private boolean mIsLogMatchMaking = false;
+    private boolean mIsUpdateAvailable = false;
+    private boolean mUserInitiated;
+
+    public HubUpdateManager(Context context, HubController controller, HubActivity activity) {
+        mContext = context;
+        mController = controller;
+        mHub = activity;
+    }
+
+    public void warmUpMatchMaker(boolean userInitiated) {
+        if (mConnector == null) {
+            mConnector = new ClientConnector(mContext);
+            mConnector.addClientStatusListener(this);
+        }
+        if (userInitiated != mUserInitiated) {
+            mUserInitiated = userInitiated;
+        }
+        File oldJson = Utils.getCachedUpdateList(mContext);
+        File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
+        String url = Utils.getServerURL(mContext);
+        Log.d(TAG, "Updating ota information from " + url);
+        mConnector.insert(oldJson, newJson, url);
+    }
+
+    public void warmUpLogMatchMaker() {
+        mConnector = new ClientConnector(mContext);
+        mConnector.addClientStatusListener(this);
+        File oldJson = Utils.getCachedChangelog(mContext);
+        File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
+        String url = Utils.getChangelogURL(mContext);
+        Log.d(TAG, "Updating changelog from " + url);
+        mConnector.insert(oldJson, newJson, url);
+        mIsLogMatchMaking = true;
+        beginMatchMaker();
+    }
+
+    public void beginMatchMaker() {
+        if (mUserInitiated) {
+            if (mHub != null) {
+                mMainThread.post(() -> {
+                    mHub.getProgressBar().setVisibility(View.VISIBLE);
+                    mHub.getProgressBar().setIndeterminate(true);
+                });
+            }
+            mThread.postDelayed(() -> {
+                mConnector.start();
+            }, 5000);
+        } else {
+            mConnector.start();
+        }
+    }
+
+    private void requestUpdate(File oldJson, File newJson) {
+        Log.d(TAG, "Requesting update..");
+        try {
+            syncUpdate(newJson);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+            long millis = System.currentTimeMillis();
+            prefs.edit().putLong(Constants.PREF_LAST_UPDATE_CHECK, millis).apply();
+            if (mHub != null) {
+                mMainThread.post(() -> {
+                    mHub.updateSystemStatus();
+                });
+            }
+            if (oldJson.exists() && UpdatePresenter.isNewUpdate(mContext, oldJson, newJson)) {
+                UpdateCheckReceiver.updateRepeatingUpdatesCheck(mContext);
+            }
+            // In case we set a one-shot check because of a previous failure
+            UpdateCheckReceiver.cancelUpdatesCheck(mContext);
+            newJson.renameTo(oldJson);
+        } catch (IOException | JSONException e) {
+        }
+    }
+
+    private void syncUpdate(File json) throws IOException, JSONException {
+        Log.d(TAG, "Syncing requested update");
+        UpdateInfo update = UpdatePresenter.matchMakeJson(mContext, json);
+        mIsUpdateAvailable = mController.isUpdateAvailable(update);
+        if (mIsUpdateAvailable) {};
+        if (mUserInitiated) {
+            if (mHub != null) {
+                mMainThread.post(() -> {
+                    mHub.showSnackbar(
+                            mIsUpdateAvailable ? R.string.update_found_snack : R.string.no_updates_found_snack,
+                            Snackbar.LENGTH_SHORT);
+                });
+            }
+        }
+    }
+
+    private void fetchCachedOrNewUpdates() {
+        File cachedUpdate = Utils.getCachedUpdateList(mContext);
+        if (cachedUpdate.exists()) {
+            try {
+                syncUpdate(cachedUpdate);
+                Log.d(TAG, "Cached list parsed");
+            } catch (IOException | JSONException e) {
+                Log.e(TAG, "Error while parsing json list", e);
+            }
+        } else {
+            warmUpMatchMaker(false);
+            beginMatchMaker();
+        }
+    }
+
+    public ChangeLog getChangelog() {
+        return mChangelog;
+    }
+
+    @Override
+    public void onClientStatusFailure(boolean cancelled) {
+        Log.d(TAG, "Could not download updates");
+        if (mHub != null) {
+            mMainThread.post(() -> {
+                if (!cancelled) {
+                    mHub.showSnackbar(R.string.error_update_check_failed_snack, Snackbar.LENGTH_LONG);
+                }
+                mHub.getProgressBar().setVisibility(View.GONE);
+                mHub.getProgressBar().setIndeterminate(false);
+            });
+        }
+    }
+
+    @Override
+    public void onClientStatusResponse(int statusCode, String url, DownloadClient.Headers headers) {}
+
+    @Override
+    public void onClientStatusSuccess(File oldJson, File newJson) {
+        if (mIsLogMatchMaking) {
+            try {
+                mChangelog = UpdatePresenter.matchMakeChangelog(newJson);
+            } catch (IOException | JSONException e) {}
+            mIsLogMatchMaking = false;
+            Log.d(TAG, "Changelog Updated!");
+            fetchCachedOrNewUpdates();
+        }
+        requestUpdate(oldJson, newJson);
+        if (mHub != null) {
+            mMainThread.post(() -> {
+                mHub.getProgressBar().setVisibility(View.GONE);
+                mHub.getProgressBar().setIndeterminate(false);
+            });
+        }
+    }
+
+    
+}
