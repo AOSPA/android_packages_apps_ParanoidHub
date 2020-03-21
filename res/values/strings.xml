@@ -78,7 +78,7 @@
     <string name="update_found_changelog">%1$s</string>
     <string name="update_found_changelog_default">A new version of Paranoid Android is ready to install. No changes for this update were found.</string>
     <string name="update_found_size">Update size: %1$s</string>
-    <string name="update_found_button_text">Download update</string>
+    <string name="update_found_button_text">Download and install</string>
     <string name="update_found_warning_and_desc">Downloading updates over a cellular network or while roaming may cause additional charges. \n\nThis update requires your device to restart</string>
     <string name="update_found_notification_title">System Update Available</string>
     <string name="update_found_notification_text">Paranoid Android %1$s %2$s</string>
@@ -87,15 +87,30 @@
     <string name="update_found_snack">New updates found</string>
     <string name="update_found_notification_snooze">Later</string>
 
+    <!-- Updating -->
+    <string name="updating_title">Updating your device...</string>
+    <string name="updating_failed_title">Could\'nt update</string>
+    <string name="updating_step_downloading_title">Step 1 of 2 - Downloading</string>
+    <string name="updating_step_downloading_paused_title">Step 1 of 2 - Download paused</string>
+    <string name="updating_step_downloading_verify_title">Step 1 of 3 - Downloading</string>
+    <string name="updating_step_downloading_paused_verify_title">Step 1 of 3 - Download paused</string>
+    <string name="updating_step_verifying_title">Step 2 of 3 - Verifying</string>
+    <string name="updating_step_installing_title">Step 2 of 2 - Installing</string>
+    <string name="updating_step_installing_paused_title">Step 2 of 2 - Installation paused</string>
+    <string name="updating_step_installing_finalizing_title">Step 2 of 2 - Finalizing</string>
+    <string name="updating_step_installing_verify_title">Step 3 of 3 - Installing</string>
+    <string name="updating_step_installing_paused_verify_title">Step 3 of 3 - Installation paused</string>
+    <string name="updating_step_installing_finalizing_verify_title">Step 3 of 3 - Finalizing</string>
+    <string name="updating_step_installed_title">Restart to finish the update</string>
+
     <!-- Update starting -->
     <string name="starting_update_notification_title">Starting Update</string>
     <string name="starting_update_notification_text">Preparing to download the update</string>
     <string name="starting_update_title">@string/starting_update_notification_title</string>
 
     <!-- Downloading update -->
-    <string name="downloading_title">Downloading Update...</string>
-    <string name="downloading_text">Downloading… %1$s\nTap on the button below to cancel downloading</string>
-    <string name="downloading_paused_title">Download Paused</string>
+    <string name="downloading_title">@string/updating_title</string>
+    <string name="downloading_paused_title">@string/updating_title</string>
     <string name="downloading_button_text">Cancel update</string>
     <string name="downloading_button_text_pause">Pause update</string>
     <string name="downloading_button_text_resume">Resume update</string>
@@ -110,20 +125,20 @@
     <string name="paused_error_update_notification_text">Start the download again when you\'re ready</string>
 
     <!-- Verifying update -->
-    <string name="verifying_update_title">Verifying Update...</string>
+    <string name="verifying_update_title">@string/updating_title</string>
     <string name="verifying_update_notification_title">@string/verifying_update_title</string>
     <string name="verifying_update_notification_text">This won\'t take long</string>
     <string name="verified_update_notification_title">Update Verified</string>
     <string name="verified_update_notification_text">Install the update when you\'re ready</string>
-    <string name="verifying_error_update_notification_title">Problem verifying update</string>
+    <string name="verifying_error_update_notification_title">Verification problem</string>
     <string name="verifying_error_update_notification_text">Try downloading the update again</string>
 
     <!-- Verified update -->
     <string name="verified_download_snack">Update verified</string>
 
     <!-- Install -->
-    <string name="install_title">Apply Update</string>
-    <string name="install_button_text">Install update</string>
+    <string name="install_title">Install Update</string>
+    <string name="install_button_text">Restart and install</string>
     <string name="install_warning_and_desc">Tap the restart button below to apply the update. This process can take 5-10 minutes.</string>
     <string name="install_warning_and_desc_ab">While the update is being applied, you can use your phone as normal. \nWhen it\'s finished, tap the restart button to finalize the update.</string>
     <string name="install_update_notification_title">Ready to update</string>
@@ -135,13 +150,14 @@
     <string name="install_update_dialog_message_ab">You are about to upgrade to <xliff:g id="update_name">%1$s</xliff:g>.\n\nIf you press <xliff:g id="ok">%2$s</xliff:g>, the device will begin installing in the background.\n\nOnce completed, you will be prompted to reboot.</string>
     <string name="install_update_dialog_message_info">%1$s %2$s</string>
     <string name="install_update_dialog_cancel">Cancel</string>
-    <string name="installing_title">Applying Update</string>
+    <string name="installing_title">@string/updating_title</string>
     <string name="installing_warning_and_desc_ab">The update is being applied, do not power off your device during this process. \nYou can pause the update by tapping below.</string>
     <string name="installing_suspended_text">Update Paused</string>
+    <string name="installing_failed_button_text">Try again</string>
     <string name="installing_update_notification_title">Preparing Update</string>
     <string name="installing_update_notification_title_ab">Applying Update</string>
     <string name="installing_update_notification_text">Tap to read more</string>
-    <string name="installing_error_update_notification_title">Update Failed</string>
+    <string name="installing_error_update_notification_title">Installation problem</string>
     <string name="installing_error_update_notification_text">Tap to read more</string>
     <string name="installing_suspended_update_notification_title">@string/installing_suspended_text</string>
     <string name="installing_suspended_update_notification_text">Resume the update at any time</string>
@@ -159,7 +175,7 @@
     <string name="installed_update_notification_text">Please restart you\'re device</string>
 
     <!-- Restart -->
-    <string name="restart_title">Restart to apply</string>
+    <string name="restart_title">Your device is updated</string>
     <string name="restart_button_text">@string/installed_button_text</string>
 
     <!-- Errors -->
