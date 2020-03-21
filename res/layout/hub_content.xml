@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/system_update_header"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="84dp"
+        android:layout_marginBottom="32dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:animateLayoutChanges="true">
+
+        <ImageView
+            android:id="@+id/header_system_update_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/header_system_update" />
+
+        <TextView
+            android:id="@+id/header_system_update_status"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAppearance="@*android:style/TextAppearance.DeviceDefault.Headline"
+            android:textColor="?android:attr/textColorPrimary" />
+
+        <TextView
+            android:id="@+id/header_system_update_status_message"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textAppearance="@*android:style/TextAppearance.DeviceDefault.Body1"
+            android:textColor="?android:attr/textColorPrimary" />
+
+        <ProgressBar
+            android:id="@+id/system_update_progress"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            style="?android:progressBarStyleHorizontal" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/system_update_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="18dp"
+        android:layout_marginRight="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true">
+
+        <Button
+            android:id="@+id/system_update_primary_button"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            style="@style/HubTheme.Button.Colored" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/system_update_preference_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="18dp"
+        android:layout_marginRight="4dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/system_update_action_button">
+
+        <ImageView
+            android:id="@+id/system_update_secondary_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:paddingBottom="5dp"
+            android:src="@drawable/ic_preferences" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/system_update_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:animateLayoutChanges="true"
+        android:layout_above="@id/system_update_action_button">
+
+        <TextView
+            android:id="@+id/system_update_size"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19dp"
+            android:layout_marginLeft="4dp"
+            android:textAppearance="@*android:style/TextAppearance.DeviceDefault.Body1"
+            android:textColor="?android:attr/textColorPrimary" />
+
+        <LinearLayout
+            android:id="@+id/system_update_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/system_update_info_icon"
+                android:visibility="gone"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_info_outline_grey600_24dp" />
+
+            <TextView
+                android:id="@+id/system_update_info_desc"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:layout_marginLeft="6dp"
+                android:textAppearance="@*android:style/TextAppearance.DeviceDefault.Body1"
+                android:textColor="?android:attr/textColorPrimary" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/version_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:animateLayoutChanges="true"
+        android:layout_below="@id/system_update_header">
+
+        <TextView
+            android:id="@+id/system_update_version_header"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@*android:style/TextAppearance.DeviceDefault.Body1"
+            android:textColor="?android:attr/textColorPrimary" />
+
+        <TextView
+            android:id="@+id/system_update_version_header_info"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:linksClickable="true"
+            android:textAppearance="@*android:style/TextAppearance.DeviceDefault.Body1"
+            android:textColor="?android:attr/textColorPrimary" />
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/system_update_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_above="@id/system_update_footer"
+        android:layout_below="@id/version_header">
+
+        <TextView
+            android:id="@+id/system_update_desc"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@*android:style/TextAppearance.DeviceDefault.Body1"
+            android:textColor="?android:attr/textColorPrimary" />
+    </ScrollView>
+
+</RelativeLayout>
