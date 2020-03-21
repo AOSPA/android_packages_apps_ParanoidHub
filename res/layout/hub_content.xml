@@ -49,6 +49,16 @@
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
             style="?android:progressBarStyleHorizontal" />
+
+        <TextView
+            android:id="@+id/header_system_update_step"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textAppearance="@*android:style/TextAppearance.DeviceDefault.Body1"
+            android:textColor="?android:attr/textColorPrimary" />
     </LinearLayout>
 
     <RelativeLayout

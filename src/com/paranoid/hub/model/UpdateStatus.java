@@ -23,18 +23,19 @@ public class UpdateStatus {
     public static final int AVAILABLE = 2;
     public static final int STARTING = 3;
     public static final int DOWNLOADING = 4;
-    public static final int DOWNLOADED = 5;
-    public static final int PAUSED = 6;
-    public static final int PAUSED_ERROR = 7;
-    public static final int DELETED = 8;
-    public static final int VERIFYING = 9;
-    public static final int VERIFIED = 10;
-    public static final int VERIFICATION_FAILED = 11;
-    public static final int INSTALLING = 12;
-    public static final int INSTALLED = 13;
-    public static final int INSTALLATION_FAILED = 14;
-    public static final int INSTALLATION_CANCELLED = 15;
-    public static final int INSTALLATION_SUSPENDED = 16;
+    public static final int DOWNLOAD_FAILED = 5;
+    public static final int DOWNLOADED = 6;
+    public static final int PAUSED = 7;
+    public static final int PAUSED_ERROR = 8;
+    public static final int DELETED = 9;
+    public static final int VERIFYING = 10;
+    public static final int VERIFIED = 11;
+    public static final int VERIFICATION_FAILED = 12;
+    public static final int INSTALLING = 13;
+    public static final int INSTALLED = 14;
+    public static final int INSTALLATION_FAILED = 15;
+    public static final int INSTALLATION_CANCELLED = 16;
+    public static final int INSTALLATION_SUSPENDED = 17;
 
     public static final class Persistent {
         public static final int UNKNOWN = 0;
