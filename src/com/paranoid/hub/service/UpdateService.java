@@ -84,12 +84,6 @@ public class UpdateService extends Service implements StatusListener {
     public static final int DOWNLOAD_RESUME = 0;
     public static final int DOWNLOAD_PAUSE = 1;
 
-    public static final int INTENT_RESUME_DOWNLOAD = 0;
-    public static final int INTENT_PAUSE = 1;
-    public static final int INTENT_SUSPEND = 2;
-    public static final int INTENT_RESUME_INSTALL = 3;
-    public static final int INTENT_RESTART = 4;
-
     private final IBinder mBinder = new LocalBinder();
     private boolean mHasClients;
 
@@ -149,6 +143,28 @@ public class UpdateService extends Service implements StatusListener {
             } else {
                 Log.e(TAG, "Unknown download action");
             }
+        } else if (ACTION_INSTALL_UPDATE.equals(intent.getAction())) {
+            String downloadId = intent.getStringExtra(EXTRA_DOWNLOAD_ID);
+            UpdateInfo update = mUpdaterController.getUpdate(downloadId);
+            if (!Utils.isDebug() && update.getPersistentStatus() != UpdateStatus.Persistent.VERIFIED) {
+                throw new IllegalArgumentException(update.getDownloadId() + " is not verified");
+            }
+            try {
+                if (Utils.isABUpdate(update.getFile())) {
+                    ABUpdateInstaller installer = ABUpdateInstaller.getInstance(this,
+                            mUpdaterController);
+                    installer.install(downloadId);
+                } else {
+                    UpdateInstaller installer = UpdateInstaller.getInstance(this,
+                            mUpdaterController);
+                    installer.install(downloadId);
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "Could not install update", e);
+                mUpdaterController.getActualUpdate(downloadId)
+                        .setStatus(UpdateStatus.INSTALLATION_FAILED);
+                mUpdaterController.notifyUpdateChange(downloadId);
+            }
         } else if (ACTION_INSTALL_STOP.equals(intent.getAction())) {
             if (UpdateController.isInstalling()) {
                 UpdateController controller = UpdateController.getInstance(this,
@@ -197,10 +213,6 @@ public class UpdateService extends Service implements StatusListener {
             extras.putString(HubController.EXTRA_DOWNLOAD_ID, update.getDownloadId());
             mNotificationContractor.setExtras(extras);
             handleUpdateStatusChange(update);
-        } else if (state == HubController.STATE_DOWNLOAD_PROGRESS) {
-            handleUpdateStatusChange(update);
-        } else if (state == HubController.STATE_INSTALL_PROGRESS) {
-            handleUpdateStatusChange(update);
         } else if (state == HubController.STATE_UPDATE_DELETE) {
             Bundle extras = mNotificationContractor.getExtras();
             if (extras != null && update.getDownloadId().equals(
@@ -221,30 +233,6 @@ public class UpdateService extends Service implements StatusListener {
                 tryStopSelf();
                 break;
             }
-            case STARTING: {
-                NotificationContract contract = mNotificationContractor.create(NotificationContractor.ONGOING_NOTIFICATION_CHANNEL, false);
-                contract.setTitle(getString(R.string.starting_update_notification_title));
-                contract.setText(getString(R.string.starting_update_notification_text));
-                contract.setProgress(0, 0, true);
-                contract.setIcon(R.drawable.ic_system_update);
-                contract.setDismissible(false);
-                startForeground(NotificationContractor.ID, contract.write());
-                mNotificationContractor.present(NotificationContractor.ID);
-                break;
-            }
-            case DOWNLOADING: {
-                stopForeground(STOP_FOREGROUND_DETACH);
-                String speed = Formatter.formatFileSize(this, update.getSpeed());
-                CharSequence eta = StringGenerator.formatETA(this, update.getEta() * 1000);
-                NotificationContract contract = mNotificationContractor.create(NotificationContractor.PROGRESS_NOTIFICATION_CHANNEL, false);
-                contract.setTitle(getString(R.string.downloading_notification_title));
-                contract.setText(getString(R.string.downloading_notification_text, eta, speed));
-                contract.setProgress(100, update.getProgress(), false);
-                contract.setIcon(android.R.drawable.stat_sys_download);
-                contract.setDismissible(false);
-                mNotificationContractor.present(NotificationContractor.ID);
-                break;
-            }
             case DOWNLOADED: {
                 stopForeground(STOP_FOREGROUND_DETACH);
                 NotificationContract contract = mNotificationContractor.create(NotificationContractor.ONGOING_NOTIFICATION_CHANNEL, true);
@@ -253,49 +241,8 @@ public class UpdateService extends Service implements StatusListener {
                 contract.setProgress(0, 0, false);
                 contract.setIcon(R.drawable.ic_system_update);
                 contract.setDismissible(true);
-                mNotificationContractor.present(NotificationContractor.ID);
+                if (!Utils.isABDevice) mNotificationContractor.present(NotificationContractor.ID);
                 tryStopSelf();
-                break;
-            }
-            case PAUSED: {
-                stopForeground(STOP_FOREGROUND_DETACH);
-                NotificationContract contract = mNotificationContractor.create(NotificationContractor.ONGOING_NOTIFICATION_CHANNEL, false);
-                contract.setTitle(getString(R.string.paused_update_notification_title));
-                contract.setText(getString(R.string.paused_update_notification_text));
-                // In case we pause before the first progress update
-                contract.setProgress(100, update.getProgress(), false);
-                contract.setIcon(R.drawable.ic_system_update);
-                contract.setDismissible(false);
-                contract.setAction(R.drawable.ic_notification_resume,
-                        getString(R.string.downloading_button_text_resume),
-                        getPendingIntent(update.getDownloadId(), INTENT_RESUME_DOWNLOAD));
-                mNotificationContractor.present(NotificationContractor.ID);
-                tryStopSelf();
-                break;
-            }
-            case PAUSED_ERROR: {
-                stopForeground(STOP_FOREGROUND_DETACH);
-                NotificationContract contract = mNotificationContractor.create(NotificationContractor.ONGOING_NOTIFICATION_CHANNEL, false);
-                contract.setTitle(getString(R.string.paused_error_update_notification_title));
-                contract.setText(getString(R.string.paused_error_update_notification_text));
-                contract.setProgress(update.getProgress() > 0 ? 100 : 0, update.getProgress(), false);
-                contract.setIcon(R.drawable.ic_system_update);
-                contract.setDismissible(true);
-                contract.setAction(R.drawable.ic_notification_resume,
-                        getString(R.string.downloading_button_text_resume),
-                        getPendingIntent(update.getDownloadId(), INTENT_RESUME_DOWNLOAD));
-                mNotificationContractor.present(NotificationContractor.ID);
-                tryStopSelf();
-                break;
-            }
-            case VERIFYING: {
-                NotificationContract contract = mNotificationContractor.create(NotificationContractor.ONGOING_NOTIFICATION_CHANNEL, false);
-                contract.setTitle(getString(R.string.verifying_update_notification_title));
-                contract.setText(getString(R.string.verifying_update_notification_text));
-                contract.setProgress(0, 0, true);
-                contract.setIcon(R.drawable.ic_system_update);
-                contract.setDismissible(false);
-                mNotificationContractor.present(NotificationContractor.ID);
                 break;
             }
             case VERIFIED: {
@@ -306,39 +253,8 @@ public class UpdateService extends Service implements StatusListener {
                 contract.setProgress(0, 0, false);
                 contract.setIcon(R.drawable.ic_system_update);
                 contract.setDismissible(false);
-                mNotificationContractor.present(NotificationContractor.ID);
+                if (!Utils.isABDevice) mNotificationContractor.present(NotificationContractor.ID);
                 tryStopSelf();
-                break;
-            }
-            case VERIFICATION_FAILED: {
-                stopForeground(STOP_FOREGROUND_DETACH);
-                NotificationContract contract = mNotificationContractor.create(NotificationContractor.ONGOING_NOTIFICATION_CHANNEL, true);
-                contract.setTitle(getString(R.string.verifying_error_update_notification_title));
-                contract.setText(getString(R.string.verifying_error_update_notification_text));
-                contract.setProgress(0, 0, false);
-                contract.setIcon(R.drawable.ic_system_update);
-                contract.setDismissible(true);
-                mNotificationContractor.present(NotificationContractor.ID);
-                tryStopSelf();
-                break;
-            }
-            case INSTALLING: {
-                String percent = NumberFormat.getPercentInstance().format(update.getInstallProgress() / 100.f);
-                boolean notAB = UpdateController.isInstalling();
-                NotificationContract contract = mNotificationContractor.create(NotificationContractor.PROGRESS_NOTIFICATION_CHANNEL, false);
-                contract.setTitle(notAB ? getString(R.string.installing_update_notification_title) : update.getFinalizing() ?
-                        getString(R.string.installing_finalizing_update_notification_text) :
-                        getString(R.string.installing_preparing_update_notification_text));
-                contract.setText(percent);
-                contract.setProgress(100, update.getInstallProgress(), false);
-                contract.setIcon(R.drawable.ic_system_update);
-                contract.setDismissible(false);
-                if (ABUpdateController.isInstallingUpdate(this)) {
-                    contract.setAction(R.drawable.ic_notification_pause,
-                            getString(R.string.installing_suspended_text),
-                            getPendingIntent(null, INTENT_SUSPEND));
-                }
-                mNotificationContractor.present(NotificationContractor.ID);
                 break;
             }
             case INSTALLED: {
@@ -349,68 +265,10 @@ public class UpdateService extends Service implements StatusListener {
                 contract.setProgress(0, 0, false);
                 contract.setIcon(R.drawable.ic_system_update);
                 contract.setDismissible(false);
-                contract.setAction(R.drawable.ic_notification_restart,
-                        getString(R.string.restart_button_text),
-                        getPendingIntent(null, INTENT_RESTART));
-                mNotificationContractor.present(NotificationContractor.ID);
-                tryStopSelf();
-                break;
-            }
-            case INSTALLATION_FAILED: {
-                stopForeground(STOP_FOREGROUND_DETACH);
-                NotificationContract contract = mNotificationContractor.create(NotificationContractor.ONGOING_NOTIFICATION_CHANNEL, true);
-                contract.setTitle(getString(R.string.installing_error_update_notification_title));
-                contract.setText(getString(R.string.installing_error_update_notification_text));
-                contract.setProgress(0, 0, false);
-                contract.setIcon(R.drawable.ic_system_update);
-                contract.setDismissible(true);
-                mNotificationContractor.present(NotificationContractor.ID);
-                tryStopSelf();
-                break;
-            }
-            case INSTALLATION_CANCELLED: {
-                stopForeground(true);
-                tryStopSelf();
-                break;
-            }
-            case INSTALLATION_SUSPENDED: {
-                stopForeground(STOP_FOREGROUND_DETACH);
-                NotificationContract contract = mNotificationContractor.create(NotificationContractor.ONGOING_NOTIFICATION_CHANNEL, false);
-                contract.setTitle(getString(R.string.installing_suspended_update_notification_title));
-                contract.setText(getString(R.string.installing_suspended_update_notification_text));
-                // In case we pause before the first progress update
-                contract.setProgress(100, update.getProgress(), false);
-                contract.setIcon(R.drawable.ic_system_update);
-                contract.setDismissible(false);
-                contract.setAction(R.drawable.ic_notification_resume,
-                        getString(R.string.downloading_button_text_resume),
-                        getPendingIntent(null, INTENT_RESUME_INSTALL));
                 mNotificationContractor.present(NotificationContractor.ID);
                 tryStopSelf();
                 break;
             }
         }
-    }
-
-    private PendingIntent getPendingIntent(String downloadId, int type) {
-        Intent intent = new Intent(this, UpdateService.class);
-        if (type == INTENT_RESUME_DOWNLOAD) {
-            intent.setAction(ACTION_DOWNLOAD_CONTROL);
-            intent.putExtra(EXTRA_DOWNLOAD_ID, downloadId);
-            intent.putExtra(EXTRA_DOWNLOAD_CONTROL, DOWNLOAD_RESUME);
-        } else if (type == INTENT_PAUSE) {
-            intent.setAction(ACTION_DOWNLOAD_CONTROL);
-            intent.putExtra(EXTRA_DOWNLOAD_ID, downloadId);
-            intent.putExtra(EXTRA_DOWNLOAD_CONTROL, DOWNLOAD_PAUSE);
-        } else if (type == INTENT_SUSPEND) {
-            intent.setAction(ACTION_INSTALL_SUSPEND);
-        } else if (type == INTENT_RESUME_INSTALL) {
-            intent.setAction(ACTION_INSTALL_RESUME);
-        } else if (type == INTENT_RESTART) {
-            intent = new Intent(this, UpdateReceiver.class);
-            intent.setAction(UpdateReceiver.ACTION_INSTALL_REBOOT);
-            return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        }
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

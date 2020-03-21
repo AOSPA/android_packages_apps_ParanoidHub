@@ -130,6 +130,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     private TextView mUpdateDescription;
     private TextView mUpdateSize;
     private TextView mHeaderStatusMessage;
+    private TextView mHeaderStatusStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +144,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         mUpdateDescription = (TextView) findViewById(R.id.system_update_desc);
         mUpdateSize = (TextView) findViewById(R.id.system_update_size);
         mHeaderStatusMessage = (TextView) findViewById(R.id.header_system_update_status_message);
+        mHeaderStatusStep = (TextView) findViewById(R.id.header_system_update_step);
 
         mInfoIcon = (ImageView) findViewById(R.id.system_update_info_icon);
         mInfoDescription = (TextView) findViewById(R.id.system_update_info_desc);
@@ -277,6 +279,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         mButton.setVisibility(View.GONE);
         mVersionHeader.setVisibility(View.GONE);
         mSecondaryButton.setVisibility(View.VISIBLE);
+        mHeaderStatusStep.setVisibility(View.GONE);
         HubController controller = mUpdateService.getController();
         if (checkForUpdates == CHECK_LOCAL) {
             mHeaderStatus.setText(getResources().getString(R.string.update_checking_local_title));
@@ -336,12 +339,18 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case DOWNLOADING:
                 mHeaderStatus.setText(getResources().getString(R.string.downloading_title));
+                mHeaderStatusStep.setText(Utils.isDebug() ? 
+                        getResources().getString(R.string.updating_step_downloading_title) :
+                        getResources().getString(R.string.updating_step_downloading_verify_title));
                 mVersionHeader.setVisibility(View.VISIBLE);
                 mButton.setText(R.string.downloading_button_text_pause);
                 mButton.setVisibility(View.VISIBLE);
                 break;
             case PAUSED:
                 mHeaderStatus.setText(getResources().getString(R.string.downloading_paused_title));
+                mHeaderStatusStep.setText(Utils.isDebug() ? 
+                        getResources().getString(R.string.updating_step_downloading_paused_title) :
+                        getResources().getString(R.string.updating_step_downloading_paused_verify_title));
                 mVersionHeader.setVisibility(View.VISIBLE);
                 mButton.setText(R.string.downloading_button_text_resume);
                 mButton.setVisibility(View.VISIBLE);
@@ -351,25 +360,50 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 mVersionHeader.setVisibility(View.VISIBLE);
                 mProgressBar.setIndeterminate(true);
                 break;
+            case VERIFIED:
+                if (Utils.isABUpdate(update.getFile()) {
+                    Log.d(TAG, "This is a A/B update, starting instal");
+                    Utils.triggerUpdate(getApplicationContext(), update.getDownloadId());
+                } else {
+                    mHeaderStatus.setText(getResources().getString(R.string.install_title));
+                    mVersionHeader.setVisibility(View.VISIBLE);
+                    mButton.setText(R.string.install_button_text);
+                    mButton.setVisibility(View.VISIBLE);
+                    mInfoDescription.setText(Utils.isABDevice() ? 
+                            getResources().getString(R.string.install_warning_and_desc_ab) :
+                            getResources().getString(R.string.install_warning_and_desc));
+                    mProgressBar.setIndeterminate(false);
+                    reportMessage(R.string.verified_download_snack);
+                }
+                break;
             case INSTALLATION_CANCELLED:
             case INSTALLATION_FAILED:
                 reportMessage(R.string.installing_error_update_notification_title);
             case DOWNLOADED:
-                mHeaderStatus.setText(getResources().getString(R.string.install_title));
-                mVersionHeader.setVisibility(View.VISIBLE);
-                mButton.setText(R.string.install_button_text);
-                mButton.setVisibility(View.VISIBLE);
-                mInfoDescription.setText(getResources().getString(Utils.isABDevice() 
-                        ? R.string.install_warning_and_desc_ab 
-                        : R.string.install_warning_and_desc));
-                mProgressBar.setIndeterminate(false);
-                reportMessage(R.string.verified_download_snack);
+                if (Utils.isABUpdate(update.getFile()) {
+                    Log.d(TAG, "This is a A/B update, starting instal");
+                    Utils.triggerUpdate(getApplicationContext(), update.getDownloadId());
+                } else {
+                    mHeaderStatus.setText(getResources().getString(R.string.install_title));
+                    mVersionHeader.setVisibility(View.VISIBLE);
+                    mButton.setText(R.string.install_button_text);
+                    mButton.setVisibility(View.VISIBLE);
+                    mInfoDescription.setText(getResources().getString(Utils.isABDevice() 
+                            ? R.string.install_warning_and_desc_ab 
+                            : R.string.install_warning_and_desc));
+                    mProgressBar.setIndeterminate(false);
+                }
                 break;
             case INSTALLING:
                 if (update != null) {
-                    mHeaderStatus.setText(update.getFinalizing() ? 
-                            getResources().getString(R.string.installing_finalizing_update_title) :
-                            getResources().getString(R.string.installing_title));
+                    mHeaderStatus.setText(getResources().getString(R.string.installing_title));
+                    mHeaderStatusStep.setText(Utils.isDebug() ? 
+                            getResources().getString(update.getFinalizing() ? 
+                            R.string.updating_step_installing_finalizing_title : 
+                            R.string.updating_step_installing_title) : 
+                            getResources().getString(update.getFinalizing() ? 
+                            R.string.updating_step_installing_finalizing_verify_title : 
+                            R.string.updating_step_installing_verify_title));
                     mVersionHeader.setVisibility(View.VISIBLE);
                     mButton.setText(R.string.installing_suspend_button_text);
                     mButton.setVisibility(View.VISIBLE);
@@ -379,7 +413,10 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 }
                 break;
             case INSTALLATION_SUSPENDED:
-                mHeaderStatus.setText(getResources().getString(R.string.installing_suspended_text));
+                mHeaderStatus.setText(getResources().getString(R.string.installing_title));
+                mHeaderStatusStep.setText(Utils.isDebug() ? 
+                        getResources().getString(R.string.updating_step_installing_paused_title) :
+                        getResources().getString(R.string.updating_step_installing_paused_verify_title));
                 mVersionHeader.setVisibility(View.VISIBLE);
                 mButton.setText(R.string.installing_suspended_button_text);
                 mButton.setVisibility(View.VISIBLE);
@@ -388,6 +425,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case INSTALLED:
                 mHeaderStatus.setText(getResources().getString(R.string.restart_title));
+                mHeaderStatusStep.setText(getResources().getString(R.string.updating_step_installed_title));
                 mVersionHeader.setVisibility(View.VISIBLE);
                 mButton.setText(R.string.restart_button_text);
                 mButton.setVisibility(View.VISIBLE);
@@ -399,6 +437,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         mInfoDescription.setVisibility(infoAllowed ? View.VISIBLE : View.GONE);
         mUpdateDescription.setVisibility(status != UNAVAILABLE ? View.VISIBLE : View.GONE);
         mVersionHeaderInfo.setVisibility(status != UNAVAILABLE ? View.VISIBLE : View.GONE);
+        mHeaderStatusStep.setVisibility((status == DOWNLOADING || status == INSTALLING) ? View.VISIBLE : View.GONE);
         updateStatusAndInfo(update, checkForUpdates);
         updateProgress(update, checkForUpdates);
         updateSystemStatus(update, checkForUpdates);
@@ -511,7 +550,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 listener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog,int id) {
-                        controller.startInstall(downloadId);
+                        Utils.triggerUpdate(getApplicationContext(), downloadId);
                     }
                 };
             }
