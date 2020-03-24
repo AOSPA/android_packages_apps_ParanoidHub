@@ -71,7 +71,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
     }
 
     public void warmUpMatchMaker(boolean userInitiated) {
-        if (mEnabled) {
+        if (mEnabled && !mController.hasActiveDownloads()) {
             if (mConnector == null) {
                 mConnector = new ClientConnector(mContext);
                 mConnector.addClientStatusListener(this);
@@ -196,7 +196,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
     }
 
     private void fetchCachedOrNewUpdates() {
-        if (mEnabled) {
+        if (mEnabled && !mController.hasActiveDownloads()) {
             File cachedUpdate = Utils.getCachedUpdateList(mContext);
             if (cachedUpdate.exists()) {
                 try {
