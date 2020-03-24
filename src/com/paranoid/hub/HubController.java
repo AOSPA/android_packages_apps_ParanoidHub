@@ -164,7 +164,7 @@ public class HubController {
                 Log.d(TAG, "Download complete");
                 Update update = mDownloads.get(downloadId).mUpdate;
                 update.setStatus(UpdateStatus.DOWNLOADED, mContext);
-                setDownloading(false);
+                removeDownloadClient(mDownloads.get(downloadId));
                 if (!Utils.isDebug()) verifyUpdateAsync(update, downloadId);
                 notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
                 tryReleaseWakelock();
@@ -178,8 +178,8 @@ public class HubController {
                     // Already notified
                 } else {
                     Log.e(TAG, "Download failed");
-                    setDownloading(false);
-                    update.setStatus(UpdateStatus.PAUSED_ERROR, mContext);
+                    removeDownloadClient(mDownloads.get(downloadId));
+                    update.setStatus(UpdateStatus.DOWNLOAD_FAILED, mContext);
                     notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
                 }
                 tryReleaseWakelock();
@@ -347,7 +347,7 @@ public class HubController {
 
     public boolean startDownload(String downloadId) {
         Log.d(TAG, "Starting " + downloadId);
-        if (!mDownloads.containsKey(downloadId) || isDownloading()) {
+        if (!mDownloads.containsKey(downloadId) || isDownloading(downloadId)) {
             return false;
         }
         Update update = mDownloads.get(downloadId).mUpdate;
@@ -368,11 +368,11 @@ public class HubController {
                     .build();
         } catch (IOException exception) {
             Log.e(TAG, "Could not build download client");
-            update.setStatus(UpdateStatus.PAUSED_ERROR, mContext);
+            update.setStatus(UpdateStatus.DOWNLOAD_FAILED, mContext);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
             return false;
         }
-        setDownloading(true);
+        addDownloadClient(mDownloads.get(downloadId), downloadClient);
         update.setStatus(UpdateStatus.STARTING, mContext);
         notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
         downloadClient.start();
@@ -382,7 +382,7 @@ public class HubController {
 
     public boolean resumeDownload(String downloadId) {
         Log.d(TAG, "Resuming " + downloadId);
-        if (!mDownloads.containsKey(downloadId) || isDownloading()) {
+        if (!mDownloads.containsKey(downloadId) || isDownloading(downloadId)) {
             return false;
         }
         Update update = mDownloads.get(downloadId).mUpdate;
@@ -413,7 +413,7 @@ public class HubController {
                 notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
                 return false;
             }
-            setDownloading(true);
+            addDownloadClient(mDownloads.get(downloadId), downloadClient);
             update.setStatus(UpdateStatus.STARTING, mContext);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
             downloadClient.resume();
@@ -423,16 +423,18 @@ public class HubController {
     }
 
     public boolean pauseDownload(String downloadId) {
-        Log.d(TAG, "Pausing " + downloadId);
-        if (!isDownloading()) {
+        if (!isDownloading(downloadId)) {
+            Log.d(TAG, "Couldn't pausing, nothing downloading");
             return false;
         }
         DownloadEntry entry = mDownloads.get(downloadId);
 		if (entry.mDownloadClient == null) {
+            Log.d(TAG, "Download id is unavailable");
 			return false;
 		}
+        Log.d(TAG, "Pausing " + downloadId);
         entry.mDownloadClient.cancel();
-        setDownloading(false);
+        removeDownloadClient(mDownloads.get(downloadId));
         entry.mUpdate.setStatus(UpdateStatus.PAUSED, mContext);
         entry.mUpdate.setEta(0);
         entry.mUpdate.setSpeed(0);
@@ -472,7 +474,7 @@ public class HubController {
 
     public boolean deleteUpdate(String downloadId) {
         Log.d(TAG, "Cancelling " + downloadId);
-        if (!mDownloads.containsKey(downloadId) || isDownloading()) {
+        if (!mDownloads.containsKey(downloadId) || isDownloading(downloadId)) {
             return false;
         }
         Update update = mDownloads.get(downloadId).mUpdate;
@@ -527,9 +529,9 @@ public class HubController {
         }
     }
 
-    public boolean isDownloading() {
-        boolean isDownloading = mPrefs.getBoolean(Constants.IS_UPDATE_DOWNLOADING, false);
-        return isDownloading;
+    public boolean isDownloading(String downloadId) {
+        return mDownloads.containsKey(downloadId) &&
+                mDownloads.get(downloadId).mDownloadClient != null;
     }
 
     public boolean hasActiveDownloads() {
@@ -562,13 +564,20 @@ public class HubController {
         return ABUpdateController.isWaitingForReboot(mContext, downloadId);
     }
 
-    private void setDownloading(boolean isDownloading) {
-        mPrefs.edit().putBoolean(Constants.IS_UPDATE_DOWNLOADING, isDownloading).apply();
-        if (isDownloading) {
-            mActiveDownloads++;
-        } else {
-            mActiveDownloads--;
+    private void addDownloadClient(DownloadEntry entry, DownloadClient downloadClient) {
+        if (entry.mDownloadClient != null) {
+            return;
         }
+        entry.mDownloadClient = downloadClient;
+        mActiveDownloads++;
+    }
+
+    private void removeDownloadClient(DownloadEntry entry) {
+        if (entry.mDownloadClient == null) {
+            return;
+        }
+        entry.mDownloadClient = null;
+        mActiveDownloads--;
     }
 
     public void setPerformanceMode(boolean enable) {
