@@ -208,17 +208,19 @@ public class UpdateService extends Service implements StatusListener {
 
     @Override
     public void onUpdateStatusChanged(Update update, int state) {
-        if (state == HubController.STATE_STATUS_CHANGED) {
-            Bundle extras = new Bundle();
-            extras.putString(HubController.EXTRA_DOWNLOAD_ID, update.getDownloadId());
-            mNotificationContractor.setExtras(extras);
-            handleUpdateStatusChange(update);
-        } else if (state == HubController.STATE_UPDATE_DELETE) {
-            Bundle extras = mNotificationContractor.getExtras();
-            if (extras != null && update.getDownloadId().equals(
-                extras.getString(HubController.EXTRA_DOWNLOAD_ID))) {
-                mNotificationContractor.setExtras(null);
-                mNotificationContractor.retract(NotificationContractor.ID);
+        if (update != null) {
+            if (state == HubController.STATE_STATUS_CHANGED) {
+                Bundle extras = new Bundle();
+                extras.putString(HubController.EXTRA_DOWNLOAD_ID, update.getDownloadId());
+                mNotificationContractor.setExtras(extras);
+                handleUpdateStatusChange(update);
+            } else if (state == HubController.STATE_UPDATE_DELETE) {
+                Bundle extras = mNotificationContractor.getExtras();
+                if (extras != null && update.getDownloadId().equals(
+                    extras.getString(HubController.EXTRA_DOWNLOAD_ID))) {
+                    mNotificationContractor.setExtras(null);
+                    mNotificationContractor.retract(NotificationContractor.ID);
+                }
             }
         }
     }

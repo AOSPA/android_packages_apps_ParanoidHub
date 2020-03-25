@@ -220,7 +220,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onUpdateStatusChanged(Update update, int state) {
-        mDownloadId = update.getDownloadId();
+        mDownloadId = update != null ? update.getDownloadId() : "0";
         runOnUiThread(() -> {
             if (state == HubController.STATE_DOWNLOAD_PROGRESS 
                     || state == HubController.STATE_INSTALL_PROGRESS) {
@@ -300,7 +300,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             mSecondaryButton.setVisibility(View.GONE);
             updateStatusAndInfo(update, checkForUpdates);
             updateProgress(update, checkForUpdates);
-            updateSystemStatus(update, checkForUpdates);
+            updateSystemStatus(update, checkForUpdates, false);
             return;
         } else if (checkForUpdates == CHECK_NORMAL) {
             mHeaderStatus.setText(getResources().getString(R.string.update_checking_title));
@@ -310,17 +310,18 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             mSecondaryButton.setVisibility(View.GONE);
             updateStatusAndInfo(update, checkForUpdates);
             updateProgress(update, checkForUpdates);
-            updateSystemStatus(update, checkForUpdates);
+            updateSystemStatus(update, checkForUpdates, false);
             return;
         }
 
-        if (controller.getUpdateStatus() != UNAVAILABLE && update == null) {
+        if (controller.getUpdateStatus() == AVAILABLE && update == null) {
             beginHubReset();
             return;
         } else if (update == null) {
             mHeaderStatus.setText(getResources().getString(R.string.no_updates_title));
             mButton.setText(R.string.button_check_for_update);
             mButton.setVisibility(View.VISIBLE);
+            updateSystemStatus(update, checkForUpdates, true);
             Log.d(TAG, "Update is null");
             return;
         }
@@ -471,7 +472,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         mHeaderStatusStep.setVisibility(stepsAllowed ? View.VISIBLE : View.GONE);
         updateStatusAndInfo(update, checkForUpdates);
         updateProgress(update, checkForUpdates);
-        updateSystemStatus(update, checkForUpdates);
+        updateSystemStatus(update, checkForUpdates, false);
     }
 
     private MaterialAlertDialogBuilder checkForUpdates() {
@@ -496,14 +497,14 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         return dialog;
     }
 
-    public void updateSystemStatus(Update update, int checkForUpdates) {
+    public void updateSystemStatus(Update update, int checkForUpdates, boolean forceUnavailable) {
         if (checkForUpdates == CHECK_LOCAL || checkForUpdates == CHECK_NORMAL) {
             mVersionHeader.setVisibility(View.GONE);
             Log.d(TAG, "Not showing system status because we are checking for updates");
             return;
         }
         boolean updateUnavailable = update != null && update.getStatus() == UNAVAILABLE;
-        if (updateUnavailable) {
+        if (updateUnavailable || forceUnavailable) {
             mVersionHeader.setVisibility(View.VISIBLE);
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             long lastChecked = prefs.getLong(Constants.PREF_LAST_UPDATE_CHECK, -1) / 1000;
