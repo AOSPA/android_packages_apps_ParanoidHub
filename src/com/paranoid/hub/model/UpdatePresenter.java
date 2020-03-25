@@ -69,7 +69,12 @@ public class UpdatePresenter {
                 json += line;
             }
         }
-        JSONObject obj = new JSONObject(json);
+        JSONObject obj = null;
+        try {
+            obj = new JSONObject(json);
+        } catch (JSONException e) {
+            return null;
+        }
         JSONArray updates = obj.getJSONArray("updates");
         for (int i = 0; i < updates.length(); i++) {
             if (updates.isNull(i)) {
@@ -78,7 +83,7 @@ public class UpdatePresenter {
             try {
                 update = buildUpdate(context, updates.getJSONObject(i));
             } catch (JSONException e) {
-                Log.e(TAG, "Could not parse update object, index=" + i, e);
+                Log.d(TAG, "Could not parse update object, index=" + i, e);
             }
         }
         return update;
@@ -102,7 +107,7 @@ public class UpdatePresenter {
             try {
                 changelog = buildChangelog(changes.getJSONObject(i));
             } catch (JSONException e) {
-                Log.e(TAG, "Could not parse update object, index=" + i, e);
+                Log.d(TAG, "Could not parse changelog object, index=" + i, e);
             }
         }
         return changelog;
@@ -120,8 +125,12 @@ public class UpdatePresenter {
     public static boolean isNewUpdate(Context context, File oldJson, File newJson)
             throws IOException, JSONException {
         UpdateInfo oldListInfo = matchMakeJson(context, oldJson);
-        Update oldUpdateList = new Update(oldListInfo);
         UpdateInfo newListInfo = matchMakeJson(context, newJson);
+        if (oldListInfo == null || newListInfo == null) {
+            return false;
+        }
+
+        Update oldUpdateList = new Update(oldListInfo);
         Update newUpdateList = new Update(newListInfo);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
