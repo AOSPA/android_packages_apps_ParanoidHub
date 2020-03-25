@@ -168,7 +168,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
             if (update != null) {
                 mIsUpdateAvailable = mController.isUpdateAvailable(update, false);
                 if (mIsUpdateAvailable) {};
-                if (mUserInitiated) {
+                if (mUserInitiated && !mIsUpdateAvailable) {
                     if (mHub != null) {
                         mMainThread.post(() -> {
                             mHub.reportMessage(R.string.no_updates_found_snack);
