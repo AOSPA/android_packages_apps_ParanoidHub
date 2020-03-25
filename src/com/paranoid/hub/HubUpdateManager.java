@@ -165,14 +165,19 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
         if (mEnabled) {
             Log.d(TAG, "Syncing requested update");
             UpdateInfo update = UpdatePresenter.matchMakeJson(mContext, json);
-            mIsUpdateAvailable = mController.isUpdateAvailable(update, false);
-            if (mIsUpdateAvailable) {};
-            if (mUserInitiated) {
-                if (mHub != null) {
-                    mMainThread.post(() -> {
-                        mHub.reportMessage(R.string.no_updates_found_snack);
-                    });
+            if (update != null) {
+                mIsUpdateAvailable = mController.isUpdateAvailable(update, false);
+                if (mIsUpdateAvailable) {};
+                if (mUserInitiated) {
+                    if (mHub != null) {
+                        mMainThread.post(() -> {
+                            mHub.reportMessage(R.string.no_updates_found_snack);
+                        });
+                    }
                 }
+            } else {
+                Update nullUpdate = null;
+                mController.notifyUpdateStatusChanged(nullUpdate, HubController.STATE_STATUS_CHANGED);
             }
         }
     }
