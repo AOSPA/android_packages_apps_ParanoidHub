@@ -278,7 +278,7 @@ public class HubController {
         return mIsUpdatesOnline;
     }
 
-    public boolean isUpdateAvailable(UpdateInfo info, boolean isLocalUpdate) {
+    public boolean isUpdateAvailable(UpdateInfo info, boolean isReadyForRollout, boolean isLocalUpdate) {
         Update update = new Update(info);
         boolean needsReboot = mPrefs.getBoolean(Constants.NEEDS_REBOOT_AFTER_UPDATE, false);
         int status = mPrefs.getInt(Constants.UPDATE_STATUS, -1);
@@ -320,7 +320,7 @@ public class HubController {
             return false;
         }
 
-        if (!mDownloads.containsKey(info.getDownloadId())) {
+        if (!mDownloads.containsKey(info.getDownloadId()) && isReadyForRollout) {
             Log.d(TAG, "Adding update entry: " + info.getDownloadId());
             mDownloads.put(info.getDownloadId(), new DownloadEntry(update));
             if (isLocalUpdate) {
@@ -338,8 +338,6 @@ public class HubController {
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
             return true;
         }
-        update.setAvailableOnline(true && info.getAvailableOnline());
-        update.setDownloadUrl(info.getDownloadUrl());
         update.setStatus(status, mContext);
         notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
         return false;

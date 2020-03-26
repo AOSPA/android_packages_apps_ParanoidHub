@@ -54,6 +54,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
     private final Handler mThread = new Handler();
     private HubActivity mHub;
     private HubController mController;
+    private RolloutContractor mRolloutContractor;
 
     private ChangeLog mChangelog;
 
@@ -68,6 +69,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
         mHub = activity;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         mEnabled = prefs.getBoolean(Constants.IS_MATCHMAKER_ENABLED, true);
+        mRolloutContractor = new RolloutContractor(context);
     }
 
     public void warmUpMatchMaker(boolean userInitiated) {
@@ -166,7 +168,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
             Log.d(TAG, "Syncing requested update");
             UpdateInfo update = UpdatePresenter.matchMakeJson(mContext, json);
             if (update != null) {
-                mIsUpdateAvailable = mController.isUpdateAvailable(update, false);
+                mIsUpdateAvailable = mController.isUpdateAvailable(update, mRolloutContractor.isReady(), false);
                 if (mIsUpdateAvailable) {};
                 if (mUserInitiated && !mIsUpdateAvailable) {
                     if (mHub != null) {
@@ -193,7 +195,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
             boolean updateAvailable = false;
             UpdateInfo localUpdate = controller.setUpdate(update);
             Log.d(TAG, "Checking if " + localUpdate.getName() + " is available for local upgrade");
-            updateAvailable = mController.isUpdateAvailable(localUpdate, true);
+            updateAvailable = mController.isUpdateAvailable(localUpdate, false, true);
             if (updateAvailable) {
                 Log.d(TAG, "Local update: " + localUpdate.getName() + " is available");
             }
@@ -221,6 +223,11 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
 
     public ChangeLog getChangelog() {
         return mChangelog;
+    }
+
+    private boolean isReadyForRollout() {
+        if (Constants.IS_STAGED_ROLLOUT) {
+            
     }
 
     @Override
@@ -258,6 +265,4 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
             });
         }
     }
-
-    
 }
