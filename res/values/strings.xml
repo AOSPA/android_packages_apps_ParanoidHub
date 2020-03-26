@@ -183,7 +183,7 @@
     <string name="error_update_refreshing_hub">Resetting...</string>
     <string name="error_update_refreshing_hub_header_status">Update data is corrupted</string>
     <string name="error_update_refreshing_hub_desc">Paranoid Android Updates ran into a problem, all configurations and data will be reset.</string>
-    <string name="error_update_check_failed_snack">The update check failed. Please check your internet connection and try again later.</string>
+    <string name="error_update_check_failed_snack">Failed to check for updates. Please check your internet connection and try again later.</string>
     <string name="error_download_failed_snack">The download failed. Please check your internet connection and try again later.</string>
     <string name="error_verification_failed_snack">The update verification failed.</string>
     <string name="error_update_not_installable_snack">This update can\'t be installed on top of the current build.</string>
