@@ -357,6 +357,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 mVersionHeader.setVisibility(View.VISIBLE);
                 mButton.setText(R.string.button_pause_update);
                 mButton.setVisibility(View.VISIBLE);
+                mInfoDescription.setText(getResources().getString(R.string.downloading_performance_mode_warning_and_desc));
                 break;
             case DOWNLOAD_FAILED:
                 mHeaderStatus.setText(getResources().getString(R.string.updating_failed_title));
@@ -462,7 +463,11 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 reportMessage(R.string.verified_download_snack);
                 break;
         }
-        boolean infoAllowed = (status == AVAILABLE || status == DOWNLOADED || status == INSTALLING);
+
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(Utils.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
+        boolean isUpdatingInPerfMode = (status == DOWNLOADING && prefs.getBoolean(Constants.PREF_AB_PERF_MODE, 
+                getResources().getBoolean(R.bool.config_abPerformanceModeDefault)));
+        boolean infoAllowed = (status == AVAILABLE || status == DOWNLOADED || status == INSTALLING || isUpdatingInPerfMode);
         boolean stepsAllowed = (status == DOWNLOADING || status == PAUSED || status == INSTALLING 
                 || status == INSTALLATION_SUSPENDED || status == INSTALLED);
         mInfoIcon.setVisibility(infoAllowed ? View.VISIBLE : View.GONE);
