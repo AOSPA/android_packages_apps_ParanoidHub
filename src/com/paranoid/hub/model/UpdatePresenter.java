@@ -122,7 +122,7 @@ public class UpdatePresenter {
      * @throws IOException
      * @throws JSONException
      */
-    public static boolean isNewUpdate(Context context, File oldJson, File newJson)
+    public static boolean isNewUpdate(Context context, File oldJson, File newJson, boolean isReadyForRollout)
             throws IOException, JSONException {
         UpdateInfo oldListInfo = matchMakeJson(context, oldJson);
         UpdateInfo newListInfo = matchMakeJson(context, newJson);
@@ -138,6 +138,10 @@ public class UpdatePresenter {
         if (status == UpdateStatus.DOWNLOADING 
                 || status == UpdateStatus.DOWNLOADED) {
             Log.d(TAG, "Update is downloading or already downloaded");
+            return false;
+        }
+
+        if (!isReadyForRollout) {
             return false;
         }
 

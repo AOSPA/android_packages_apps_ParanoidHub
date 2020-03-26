@@ -26,6 +26,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.paranoid.hub.HubActivity;
+import com.paranoid.hub.RolloutContractor;
 import com.paranoid.hub.R;
 import com.paranoid.hub.download.DownloadClient;
 import com.paranoid.hub.misc.BuildInfoUtils;
@@ -81,6 +82,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
             return;
         }
 
+        RolloutContractor rolloutContractor = new RolloutContractor(context);
         final File json = Utils.getCachedUpdateList(context);
         final File jsonNew = new File(json.getAbsolutePath() + UUID.randomUUID());
         String url = Utils.getServerURL(context);
@@ -99,7 +101,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
             @Override
             public void onSuccess(File destination) {
                 try {
-                    if (json.exists() && UpdatePresenter.isNewUpdate(context, json, jsonNew)) {
+                    if (json.exists() && UpdatePresenter.isNewUpdate(context, json, jsonNew, rolloutContractor.isReady())) {
                         Update update = UpdatePresenter.getUpdate();
                         showNotification(context, update.getVersion());
                         updateRepeatingUpdatesCheck(context);
