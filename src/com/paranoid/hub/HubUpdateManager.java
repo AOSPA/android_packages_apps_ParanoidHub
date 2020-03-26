@@ -44,7 +44,7 @@ import java.util.UUID;
 
 import org.json.JSONException;
 
-public class HubUpdateManager implements ClientConnector.ConnectorListener{
+public class HubUpdateManager implements ClientConnector.ConnectorListener {
 
     private static final String TAG = "HubUpdateManager";
 
@@ -54,6 +54,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
     private final Handler mThread = new Handler();
     private HubActivity mHub;
     private HubController mController;
+    private RolloutContractor mRolloutContractor;
 
     private ChangeLog mChangelog;
 
@@ -68,6 +69,8 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
         mHub = activity;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         mEnabled = prefs.getBoolean(Constants.IS_MATCHMAKER_ENABLED, true);
+        mRolloutContractor = new RolloutContractor(context);
+        mRolloutContractor.setupDevice();
     }
 
     public void warmUpMatchMaker(boolean userInitiated) {
@@ -150,7 +153,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
                 long millis = System.currentTimeMillis();
                 prefs.edit().putLong(Constants.PREF_LAST_UPDATE_CHECK, millis).apply();
-                if (oldJson.exists() && UpdatePresenter.isNewUpdate(mContext, oldJson, newJson)) {
+                if (oldJson.exists() && UpdatePresenter.isNewUpdate(mContext, oldJson, newJson, mRolloutContractor.isReady())) {
                     UpdateCheckReceiver.updateRepeatingUpdatesCheck(mContext);
                 }
                 // In case we set a one-shot check because of a previous failure
@@ -166,7 +169,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
             Log.d(TAG, "Syncing requested update");
             UpdateInfo update = UpdatePresenter.matchMakeJson(mContext, json);
             if (update != null) {
-                mIsUpdateAvailable = mController.isUpdateAvailable(update, false);
+                mIsUpdateAvailable = mController.isUpdateAvailable(update, mRolloutContractor.isReady(), false);
                 if (mIsUpdateAvailable) {};
                 if (mUserInitiated && !mIsUpdateAvailable) {
                     if (mHub != null) {
@@ -193,7 +196,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
             boolean updateAvailable = false;
             UpdateInfo localUpdate = controller.setUpdate(update);
             Log.d(TAG, "Checking if " + localUpdate.getName() + " is available for local upgrade");
-            updateAvailable = mController.isUpdateAvailable(localUpdate, true);
+            updateAvailable = mController.isUpdateAvailable(localUpdate, false, true);
             if (updateAvailable) {
                 Log.d(TAG, "Local update: " + localUpdate.getName() + " is available");
             }
@@ -258,6 +261,4 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener{
             });
         }
     }
-
-    
 }
