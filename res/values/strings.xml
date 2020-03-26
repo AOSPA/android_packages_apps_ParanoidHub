@@ -125,6 +125,7 @@
     <string name="downloading_notification_text">%1$s, %2$s/s</string>
     <string name="downloading_donut_text_completed">completed</string>
     <string name="downloading_error_update_title">Download problem</string>
+    <string name="downloading_performance_mode_warning_and_desc">Performance mode is currently enabled and might limit performance in other areas during the installation process. To avoid this, you can opt-out from the settings menu.</string>
 
     <!-- Update paused -->
     <string name="paused_update_notification_title">Download Paused</string>
