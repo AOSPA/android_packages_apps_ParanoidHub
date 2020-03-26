@@ -23,6 +23,7 @@ public final class Constants {
     }
 
     public static final boolean IS_STAGED_ROLLOUT_ENABLED = true;
+    public static final String IS_ROLLOUT_SCHEDULED = "is_staged_rollout_scheduled";
 
     public static final String AB_PAYLOAD_BIN_PATH = "payload.bin";
     public static final String AB_PAYLOAD_PROPERTIES_PATH = "payload_properties.txt";
