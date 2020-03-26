@@ -229,10 +229,12 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     @Override
     public void onClientStatusFailure(boolean cancelled) {
         Log.d(TAG, "Could not download updates");
+        Update nullUpdate = null;
+        mController.notifyUpdateStatusChanged(nullUpdate, HubController.STATE_STATUS_CHANGED);
         if (mHub != null) {
             mMainThread.post(() -> {
                 if (!cancelled) {
-                    mHub.reportMessage(R.string.error_update_check_failed_snack);
+                    mHub.reportMessage(R.string.no_updates_found_snack);
                 }
                 mHub.getProgressBar().setVisibility(View.GONE);
                 mHub.getProgressBar().setIndeterminate(false);
