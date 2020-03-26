@@ -144,6 +144,11 @@ public class Utils {
         return url;
     }
 
+    public static String getWhitelistUrl(Context context) {
+        String url = context.getResources().getString(R.string.updater_device_whitelist_url);
+        return url;
+    }
+
     public static void triggerUpdate(Context context, String downloadId) {
         final Intent intent = new Intent(context, UpdateService.class);
         intent.setAction(UpdateService.ACTION_INSTALL_UPDATE);
