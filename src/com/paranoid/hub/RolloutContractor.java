@@ -19,9 +19,12 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import com.paranoid.hub.R;
 import com.paranoid.hub.download.ClientConnector;
@@ -77,9 +80,9 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     private ClientConnector mConnector;
     private final Object mLock = new Object();
     private TelephonyManager mTelephonyManager;
+    private SharedPreferences mPrefs;
 
     private boolean mReady = false;
-    private boolean mScheduled = false;
     private String mImei;
 
     public RolloutContractor(Context context) {
@@ -89,6 +92,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
             mConnector = new ClientConnector(context);
             mConnector.addClientStatusListener(this);
         }
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public void setupDevice() {
@@ -128,13 +132,14 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     public void schedule() {
-        if (mScheduled) {
+        boolean scheduled = mPrefs.getBoolean(Constants.IS_ROLLOUT_SCHEDULED, false);
+        if (scheduled) {
             Log.d(TAG, "Rollout is already scheduled");
             return;
         }
 
-        if (!mReady) {
-            mScheduled = true;
+        if (!isReady()) {
+            mPrefs.edit().putBoolean(Constants.IS_ROLLOUT_SCHEDULED, true).apply();
             long millisToRollout = getRolloutForDevice();
             PendingIntent rolloutIntent = getRolloutIntent();
             AlarmManager alarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
@@ -185,7 +190,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     public void setReady(boolean ready) {
-        mScheduled = false;
+        mPrefs.edit().putBoolean(Constants.IS_ROLLOUT_SCHEDULED, false).apply();
         synchronized (mLock) {
             if (ready != mReady) {
                 mReady = ready;
