@@ -623,6 +623,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         boolean needsReboot = prefs.getBoolean(Constants.NEEDS_REBOOT_AFTER_UPDATE, false);
         if (needsReboot) {
             PowerManager pm = (PowerManager) HubActivity.this.getSystemService(Context.POWER_SERVICE);
+            update.setStatus(UpdateStatus.UNAVAILABLE, getApplicationContext());
             prefs.edit().putBoolean(Constants.NEEDS_REBOOT_AFTER_UPDATE, false).apply();
             pm.reboot(null);
             return;
