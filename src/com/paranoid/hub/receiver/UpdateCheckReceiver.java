@@ -26,6 +26,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.paranoid.hub.HubActivity;
+import com.paranoid.hub.RolloutContractor;
 import com.paranoid.hub.R;
 import com.paranoid.hub.download.DownloadClient;
 import com.paranoid.hub.misc.BuildInfoUtils;
@@ -63,6 +64,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
 
         final SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
+        RolloutContractor rolloutContractor = new RolloutContractor(context);
 
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             // Set a repeating alarm on boot to check for new updates once per day
@@ -73,6 +75,11 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
             Log.d(TAG, "Network not available, scheduling new check");
             scheduleUpdatesCheck(context, false);
             return;
+        }
+
+        if ("rollout_action".equals(intent.getAction())) {
+            rolloutContractor.setReady(true);
+            Log.d(TAG, "Rollout iniated, start the check again");
         }
 
         if (SNOOZE_DOWNLOAD_ACTION.equals(intent.getAction())) {
@@ -99,7 +106,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
             @Override
             public void onSuccess(File destination) {
                 try {
-                    if (json.exists() && UpdatePresenter.isNewUpdate(context, json, jsonNew)) {
+                    if (json.exists() && UpdatePresenter.isNewUpdate(context, json, jsonNew, rolloutContractor.isReady())) {
                         Update update = UpdatePresenter.getUpdate();
                         showNotification(context, update.getVersion());
                         updateRepeatingUpdatesCheck(context);
