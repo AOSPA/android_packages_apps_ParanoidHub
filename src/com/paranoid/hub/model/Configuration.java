@@ -15,18 +15,30 @@
  */
 package com.paranoid.hub.model;
 
-public class ChangeLog {
+public class Configuration {
 
+    private boolean mEnabled;
     private String mChangelog;
 
-    public ChangeLog() {
+    public Configuration() {
     }
 
-    public String get() {
-        return mChangelog;
+    public void setOtaEnabled(String enabled) {
+        boolean otaEnabled = Boolean.parseBoolean(enabled); 
+        if (otaEnabled != mEnabled) {
+            mEnabled = otaEnabled;
+        }
     }
 
-    public void set(String changelog) {
+    public void setChangelog(String changelog) {
         mChangelog = changelog;
+    }
+
+    public boolean isOtaEnabledFromServer() {
+        return mEnabled;
+    }
+
+    public String getChangelog() {
+        return mChangelog;
     }
 }

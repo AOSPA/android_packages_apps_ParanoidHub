@@ -87,7 +87,7 @@ import com.paranoid.hub.misc.BuildInfoUtils;
 import com.paranoid.hub.misc.Constants;
 import com.paranoid.hub.misc.StringGenerator;
 import com.paranoid.hub.misc.Utils;
-import com.paranoid.hub.model.ChangeLog;
+import com.paranoid.hub.model.Configuration;
 import com.paranoid.hub.model.Update;
 import com.paranoid.hub.model.UpdateInfo;
 import com.paranoid.hub.model.UpdatePresenter;
@@ -257,10 +257,10 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 mUpdateSize.setText(String.format(
                         getResources().getString(R.string.update_found_size),
                         Formatter.formatShortFileSize(this, update.getFileSize())));
-                ChangeLog changelog = mManager.getChangelog();
-                if (changelog != null) {
+                Configuration config = mManager.getConfiguration();
+                if (config != null) {
                     mUpdateDescription.setText(String.format(
-                            getResources().getString(R.string.update_found_changelog), changelog.get()));
+                            getResources().getString(R.string.update_found_changelog), config.getChangelog()));
                 } else {
                     mUpdateDescription.setText(getResources().getString(R.string.update_found_changelog_default));
                 }

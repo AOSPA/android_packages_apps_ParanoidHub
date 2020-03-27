@@ -31,7 +31,7 @@ import com.paranoid.hub.download.ClientConnector;
 import com.paranoid.hub.download.DownloadClient;
 import com.paranoid.hub.misc.Constants;
 import com.paranoid.hub.misc.Utils;
-import com.paranoid.hub.model.ChangeLog;
+import com.paranoid.hub.model.Configuration;
 import com.paranoid.hub.model.Update;
 import com.paranoid.hub.model.UpdateInfo;
 import com.paranoid.hub.model.UpdatePresenter;
@@ -56,10 +56,10 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     private HubController mController;
     private RolloutContractor mRolloutContractor;
 
-    private ChangeLog mChangelog;
+    private Configuration mConfig;
 
     private boolean mEnabled;
-    private boolean mIsLogMatchMaking = false;
+    private boolean mIsConfigMatchMaking = false;
     private boolean mIsUpdateAvailable = false;
     private boolean mUserInitiated;
 
@@ -94,17 +94,19 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
 
     public void warmUpLogMatchMaker() {
         if (mEnabled) {
-            mConnector = new ClientConnector(mContext);
-            mConnector.addClientStatusListener(this);
-            File oldJson = Utils.getCachedChangelog(mContext);
+            if (mConnector == null) {
+                mConnector = new ClientConnector(mContext);
+                mConnector.addClientStatusListener(this);
+            }
+            File oldJson = Utils.getCachedConfiguration(mContext);
             File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
-            String url = Utils.getChangelogURL(mContext);
-            Log.d(TAG, "Updating changelog from " + url);
+            String url = Utils.getConfigurationURL(mContext);
+            Log.d(TAG, "Updating hub configuration from " + url);
             mConnector.insert(oldJson, newJson, url);
-            mIsLogMatchMaking = true;
+            mIsConfigMatchMaking = true;
             beginMatchMaker();
         } else {
-            Log.d(TAG, "Can't get changelog updates because match maker is disabled");
+            Log.d(TAG, "Can't get configuration because match maker is disabled");
         }
     }
 
@@ -147,19 +149,25 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
 
     private void requestUpdate(File oldJson, File newJson) {
         if (mEnabled) {
-            Log.d(TAG, "Requesting update..");
-            try {
-                syncUpdate(newJson);
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-                long millis = System.currentTimeMillis();
-                prefs.edit().putLong(Constants.PREF_LAST_UPDATE_CHECK, millis).apply();
-                if (oldJson.exists() && UpdatePresenter.isNewUpdate(mContext, oldJson, newJson, mRolloutContractor.isReady())) {
-                    UpdateCheckReceiver.updateRepeatingUpdatesCheck(mContext);
+            if (mConfig.isOtaEnabledFromServer()) {
+                Log.d(TAG, "Requesting update..");
+                try {
+                    syncUpdate(newJson);
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+                    long millis = System.currentTimeMillis();
+                    prefs.edit().putLong(Constants.PREF_LAST_UPDATE_CHECK, millis).apply();
+                    if (oldJson.exists() && UpdatePresenter.isNewUpdate(mContext, oldJson, newJson, mRolloutContractor.isReady())) {
+                        UpdateCheckReceiver.updateRepeatingUpdatesCheck(mContext);
+                    }
+                    // In case we set a one-shot check because of a previous failure
+                    UpdateCheckReceiver.cancelUpdatesCheck(mContext);
+                    newJson.renameTo(oldJson);
+                } catch (IOException | JSONException e) {
                 }
-                // In case we set a one-shot check because of a previous failure
-                UpdateCheckReceiver.cancelUpdatesCheck(mContext);
-                newJson.renameTo(oldJson);
-            } catch (IOException | JSONException e) {
+            } else {
+                Log.d(TAG, "Can't check for new updates, ota enabled from sever? " + mConfig.isOtaEnabledFromServer());
+                Update nullUpdate = null;
+                mController.notifyUpdateStatusChanged(nullUpdate, HubController.STATE_STATUS_CHANGED);
             }
         }
     }
@@ -205,25 +213,31 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
 
     private void fetchCachedOrNewUpdates() {
         if (mEnabled && !mController.hasActiveDownloads()) {
-            File cachedUpdate = Utils.getCachedUpdateList(mContext);
-            if (cachedUpdate.exists()) {
-                try {
-                    syncUpdate(cachedUpdate);
-                    Log.d(TAG, "Cached list parsed");
-                } catch (IOException | JSONException e) {
-                    Log.e(TAG, "Error while parsing json list", e);
+            if (mConfig.isOtaEnabledFromServer()) {
+                File cachedUpdate = Utils.getCachedUpdateList(mContext);
+                if (cachedUpdate.exists()) {
+                    try {
+                        syncUpdate(cachedUpdate);
+                        Log.d(TAG, "Cached list parsed");
+                    } catch (IOException | JSONException e) {
+                        Log.e(TAG, "Error while parsing json list", e);
+                    }
+                } else {
+                    warmUpMatchMaker(false);
+                    beginMatchMaker();
                 }
             } else {
-                warmUpMatchMaker(false);
-                beginMatchMaker();
+                Log.d(TAG, "Can't fetch cached updates, ota enabled from sever? " + mConfig.isOtaEnabledFromServer());
+                Update nullUpdate = null;
+                mController.notifyUpdateStatusChanged(nullUpdate, HubController.STATE_STATUS_CHANGED);
             }
         } else {
             Log.d(TAG, "Can't fetch cached updates because match maker is disabled");
         }
     }
 
-    public ChangeLog getChangelog() {
-        return mChangelog;
+    public Configuration getConfiguration() {
+        return mConfig;
     }
 
     @Override
@@ -247,12 +261,12 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
 
     @Override
     public void onClientStatusSuccess(File oldJson, File newJson) {
-        if (mIsLogMatchMaking) {
+        if (mIsConfigMatchMaking) {
             try {
-                mChangelog = UpdatePresenter.matchMakeChangelog(newJson);
+                mConfig = UpdatePresenter.matchMakeConfiguration(newJson);
             } catch (IOException | JSONException e) {}
-            mIsLogMatchMaking = false;
-            Log.d(TAG, "Changelog Updated!");
+            mIsConfigMatchMaking = false;
+            Log.d(TAG, "Ota configuration Updated!");
             fetchCachedOrNewUpdates();
         }
         requestUpdate(oldJson, newJson);
