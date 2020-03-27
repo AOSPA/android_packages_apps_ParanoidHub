@@ -31,13 +31,13 @@
     <string name="export_path" translatable="false">/ParanoidHub</string>
 
     <!-- The URL of the devices json update file on the server -->
-    <string name="updater_server_url" translatable="false">"https://raw.githubusercontent.com/Sirhc95/ota_test/master/%s.json"</string>
+    <string name="hub_server_url" translatable="false">"https://raw.githubusercontent.com/Sirhc95/ota_test/master/%s.json"</string>
 
-    <!-- The URL of the json that holds the updates information -->
-    <string name="updater_changelog_url" translatable="false">"https://raw.githubusercontent.com/Sirhc95/ota_test/master/changelog.json"</string>
+    <!-- The URL of the json that holds the ota configuration -->
+    <string name="hub_configuration_url" translatable="false">"https://raw.githubusercontent.com/Sirhc95/ota_test/master/ota_configuration.json"</string>
 
     <!-- The URL of the json that holds a list of whitelisted devices that bypass the wait of a rollout -->
-    <string name="updater_device_whitelist_url" translatable="false">"https://raw.githubusercontent.com/Sirhc95/ota_test/master/whitelisted_devices.json"</string>
+    <string name="hub_device_whitelist_url" translatable="false">"https://raw.githubusercontent.com/Sirhc95/ota_test/master/whitelisted_devices.json"</string>
 
     <plurals name="eta_seconds">
         <item quantity="one">1 second left</item>
