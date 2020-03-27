@@ -83,8 +83,8 @@ public class Utils {
         return new File(context.getCacheDir(), "updates.json");
     }
 
-    public static File getCachedChangelog(Context context) {
-        return new File(context.getCacheDir(), "changelog.json");
+    public static File getCachedConfiguration(Context context) {
+        return new File(context.getCacheDir(), "configuration.json");
     }
 
     public static boolean isDebug() {
@@ -135,17 +135,17 @@ public class Utils {
     public static String getServerURL(Context context) {
         String device = SystemProperties.get(Constants.PROP_DEVICE);
         String url = String.format(context.getResources().getString(
-                R.string.updater_server_url), device);
+                R.string.hub_server_url), device);
         return url;
     }
 
-    public static String getChangelogURL(Context context) {
-        String url = context.getResources().getString(R.string.updater_changelog_url);
+    public static String getConfigurationURL(Context context) {
+        String url = context.getResources().getString(R.string.hub_configuration_url);
         return url;
     }
 
     public static String getWhitelistUrl(Context context) {
-        String url = context.getResources().getString(R.string.updater_device_whitelist_url);
+        String url = context.getResources().getString(R.string.hub_device_whitelist_url);
         return url;
     }
 

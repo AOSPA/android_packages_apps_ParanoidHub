@@ -54,10 +54,11 @@ public class UpdatePresenter {
         return update;
     }
 
-    private static ChangeLog buildChangelog(JSONObject object) throws JSONException {
-        ChangeLog changelog = new ChangeLog();
-        changelog.set(object.getString("info"));
-        return changelog;
+    private static Configuration buildConfiguration(JSONObject object) throws JSONException {
+        Configuration config = new Configuration();
+        config.setOtaEnabled(object.getString("enabled"));
+        config.setChangelog(object.getString("info"));
+        return config;
     }
 
     public static UpdateInfo matchMakeJson(Context context, File file)
@@ -89,9 +90,9 @@ public class UpdatePresenter {
         return update;
     }
 
-    public static ChangeLog matchMakeChangelog(File file)
+    public static Configuration matchMakeConfiguration(File file)
             throws IOException, JSONException {
-        ChangeLog changelog = null;
+        Configuration config = null;
         String json = "";
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             for (String line; (line = br.readLine()) != null;) {
@@ -99,18 +100,18 @@ public class UpdatePresenter {
             }
         }
         JSONObject obj = new JSONObject(json);
-        JSONArray changes = obj.getJSONArray("changelog");
+        JSONArray changes = obj.getJSONArray("ota_configuration");
         for (int i = 0; i < changes.length(); i++) {
             if (changes.isNull(i)) {
                 continue;
             }
             try {
-                changelog = buildChangelog(changes.getJSONObject(i));
+                config = buildConfiguration(changes.getJSONObject(i));
             } catch (JSONException e) {
-                Log.d(TAG, "Could not parse changelog object, index=" + i, e);
+                Log.d(TAG, "Could not parse configuration object, index=" + i, e);
             }
         }
-        return changelog;
+        return config;
     }
 
     /**
