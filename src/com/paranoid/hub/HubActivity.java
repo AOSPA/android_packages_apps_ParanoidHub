@@ -170,14 +170,14 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         ((ViewGroup) findViewById(R.id.system_update_footer)).getLayoutTransition()
                 .enableTransitionType(LayoutTransition.CHANGING);
 
-        if (ContextCompat.checkSelfPermission(HubActivity.this,
+        /*if (ContextCompat.checkSelfPermission(HubActivity.this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) 
                     != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(HubActivity.this,
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, 
                     Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     1);
-        }
+        }*/
     }
 
     @Override
