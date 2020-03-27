@@ -99,8 +99,8 @@ public class Utils {
         SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
         boolean allowDowngradingDefault = context.getResources().getBoolean(R.bool.config_allowDowngradingDefault);
         boolean allowDowngrading = prefs.getBoolean(Constants.PREF_ALLOW_DOWNGRADING, allowDowngradingDefault);
-        int jsonVersion = Integer.valueOf(update.getVersion());
-        int currentVersion = Integer.valueOf(SystemProperties.get(Constants.PROP_VERSION_CODE));
+        float jsonVersion = Float.valueOf(update.getVersion());
+        float currentVersion = Float.valueOf(SystemProperties.get(Constants.PROP_VERSION_CODE));
         if (update.getPersistentStatus() == UpdateStatus.Persistent.LOCAL_UPDATE) {
             Log.d(TAG, update.getName() + " is compatible by local upgrade");
             return true;
