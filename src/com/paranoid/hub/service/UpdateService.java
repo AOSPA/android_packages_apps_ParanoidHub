@@ -122,7 +122,7 @@ public class UpdateService extends Service implements StatusListener {
         Log.d(TAG, "Starting service");
 
         if (intent == null || intent.getAction() == null) {
-            if (ABUpdateController.isInstallingUpdate(this)) {
+            if (mController.isInstalling(this, true)) {
                 // The service is being restarted.
                 ABUpdateController controller = ABUpdateController.getInstance(this,
                         mController);
@@ -166,32 +166,32 @@ public class UpdateService extends Service implements StatusListener {
                 mController.notifyUpdateStatusChanged(mController.getActualUpdate(downloadId), HubController.STATE_STATUS_CHANGED);
             }
         } else if (ACTION_INSTALL_STOP.equals(intent.getAction())) {
-            if (UpdateController.isInstalling()) {
+            if (mController.isInstalling(this, false)) {
                 UpdateController controller = UpdateController.getInstance(this,
                         mController);
                 controller.cancel();
-            } else if (ABUpdateController.isInstallingUpdate(this)) {
+            } else if (mController.isInstalling(this, true)) {
                 ABUpdateController controller = ABUpdateController.getInstance(this,
                         mController);
                 controller.reconnect();
                 controller.cancel();
             }
         } else if (ACTION_INSTALL_SUSPEND.equals(intent.getAction())) {
-            if (ABUpdateController.isInstallingUpdate(this)) {
+            if (mController.isInstalling(this, true)) {
                 ABUpdateController controller = ABUpdateController.getInstance(this,
                         mController);
                 controller.reconnect();
                 controller.suspend();
             }
         } else if (ACTION_INSTALL_RESUME.equals(intent.getAction())) {
-            if (ABUpdateController.isInstallingUpdateSuspended(this)) {
+            if (HubController.isInstallSuspended(this)) {
                 ABUpdateController controller = ABUpdateController.getInstance(this,
                         mController);
                 controller.reconnect();
                 controller.resume();
             }
         }
-        return ABUpdateController.isInstallingUpdate(this) ? START_STICKY : START_NOT_STICKY;
+        return mController.isInstalling(this, true) ? START_STICKY : START_NOT_STICKY;
     }
 
     public HubController getController() {
@@ -200,7 +200,7 @@ public class UpdateService extends Service implements StatusListener {
 
     private void tryStopSelf() {
         if (!mHasClients && !mController.hasActiveDownloads() &&
-                !mController.isInstallingUpdate()) {
+                !mController.isInstalling(this, false) && !mController.isInstalling(this, true)) {
             Log.d(TAG, "Service no longer needed, stopping");
             stopSelf();
         }
