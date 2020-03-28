@@ -550,22 +550,15 @@ public class HubController {
         return mVerifyingUpdates.contains(downloadId);
     }
 
-    public boolean isInstallingUpdate() {
-        return UpdateController.isInstalling() ||
-                ABUpdateController.isInstallingUpdate(mContext);
+    public boolean isInstalling(Context context, boolean abUpdate) {
+        if (abUpdate) {
+            return ABUpdateController.isInstalling(context);
+        }
+        return UpdateController.isInstalling();
     }
 
-    public boolean isInstallingUpdate(String downloadId) {
-        return UpdateController.isInstalling(downloadId) ||
-                ABUpdateController.isInstallingUpdate(mContext, downloadId);
-    }
-
-    public boolean isInstallingABUpdate() {
-        return ABUpdateController.isInstallingUpdate(mContext);
-    }
-
-    public boolean isWaitingForReboot(String downloadId) {
-        return ABUpdateController.isWaitingForReboot(mContext, downloadId);
+    public boolean isInstallSuspended(Context context) {
+        return ABUpdateController.isInstallSuspended(context);
     }
 
     private void addDownloadClient(DownloadEntry entry, DownloadClient downloadClient) {
