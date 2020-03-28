@@ -29,11 +29,11 @@ import com.paranoid.hub.HubActivity;
 import com.paranoid.hub.RolloutContractor;
 import com.paranoid.hub.R;
 import com.paranoid.hub.download.DownloadClient;
-import com.paranoid.hub.misc.BuildInfoUtils;
 import com.paranoid.hub.misc.Constants;
 import com.paranoid.hub.misc.Utils;
 import com.paranoid.hub.model.Update;
 import com.paranoid.hub.model.UpdatePresenter;
+import com.paranoid.hub.model.Version;
 import com.paranoid.hub.notification.NotificationContract;
 import com.paranoid.hub.notification.NotificationContractor;
 import com.paranoid.hub.service.UpdateService;
@@ -144,7 +144,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
                 PendingIntent.FLAG_UPDATE_CURRENT);
         String buildInfo = String.format(
                 context.getResources().getString(R.string.update_found_notification_text),
-                BuildInfoUtils.getVersionFlavor(), version);
+                Version.getCurrentFlavor(), version);
         NotificationContractor contractor = new NotificationContractor(context);
         NotificationContract contract = contractor.create(NotificationContractor.NEW_UPDATES_NOTIFICATION_CHANNEL, true);
         contract.setTitle(context.getResources().getString(R.string.update_found_notification_title));
