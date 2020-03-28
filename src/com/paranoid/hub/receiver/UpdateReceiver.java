@@ -75,8 +75,6 @@ public class UpdateReceiver extends BroadcastReceiver {
             pm.reboot(null);
         } else if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            prefs.edit().remove(Constants.PREF_NEEDS_REBOOT_ID).apply();
-
             if (shouldShowUpdateFailedNotification(context)) {
                 prefs.edit().putBoolean(Constants.PREF_INSTALL_NOTIFIED, true).apply();
                 showUpdateFailedNotification(context);
