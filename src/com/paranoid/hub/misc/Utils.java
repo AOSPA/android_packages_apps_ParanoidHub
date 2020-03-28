@@ -40,6 +40,7 @@ import com.paranoid.hub.model.Update;
 import com.paranoid.hub.model.UpdateBaseInfo;
 import com.paranoid.hub.model.UpdateInfo;
 import com.paranoid.hub.model.UpdateStatus;
+import com.paranoid.hub.model.Version;
 import com.paranoid.hub.service.UpdateService;
 
 import java.io.File;
@@ -88,48 +89,19 @@ public class Utils {
     }
 
     public static boolean isDebug() {
-        String buildType = BuildInfoUtils.getBuildType();
+        String buildType = Version.getBuildType();
         if (("DEV").equals(buildType)) {
             return true;
         }
         return false;
     }
 
-    public static boolean isCompatible(Context context, Update update) {
-        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
-        boolean allowDowngradingDefault = context.getResources().getBoolean(R.bool.config_allowDowngradingDefault);
-        boolean allowDowngrading = prefs.getBoolean(Constants.PREF_ALLOW_DOWNGRADING, allowDowngradingDefault);
-        float jsonVersion = Float.valueOf(update.getVersion());
-        float currentVersion = Float.valueOf(SystemProperties.get(Constants.PROP_VERSION_CODE));
-        if (update.getPersistentStatus() == UpdateStatus.Persistent.LOCAL_UPDATE) {
-            Log.d(TAG, update.getName() + " is compatible by local upgrade");
-            return true;
-        }
-
-        if (allowDowngrading) {
-            Log.d(TAG, update.getName() + " is compatible by downgrade");
-            return true;
-        }
-
-        if (jsonVersion > currentVersion) {
-            if (update.getTimestamp() > BuildInfoUtils.getBuildDateTimestamp()) {
-                Log.d(TAG, update.getName() + " is compatible");
-                return true;
-            }
-            Log.d(TAG, update.getName() + " has a newer version but an older timestamp");
-            return false;
-        }
-        Log.d(TAG, update.getName() + " Verson:" + update.getVersion() 
-                + "Build:" + Long.toString(update.getTimestamp()) 
-                + " is older than current Paranoid Android version");
-        return false;
-    }
-
-    public static boolean canInstall(Context context, UpdateBaseInfo update) {
+    public static boolean canInstall(Context context, Update update) {
         boolean allowDowngradingDefault = context.getResources().getBoolean(R.bool.config_allowDowngradingDefault);
         boolean allowDowngrading = PreferenceManager.getDefaultSharedPreferences(context)
                 .getBoolean(Constants.PREF_ALLOW_DOWNGRADING, allowDowngradingDefault);
-        return (allowDowngrading || update.getTimestamp() > BuildInfoUtils.getBuildDateTimestamp());
+        Version version = new Version(context, update);
+        return (version.isDowngrade() || version.mTimestamp > version.getCurrentTimestamp());
     }
 
     public static String getServerURL(Context context) {
@@ -245,7 +217,7 @@ public class Utils {
 
         removeUncryptFiles(downloadPath);
 
-        long buildTimestamp = BuildInfoUtils.getBuildDateTimestamp();
+        long buildTimestamp = Version.getCurrentTimestamp();
         long prevTimestamp = preferences.getLong(Constants.PREF_INSTALL_OLD_TIMESTAMP, 0);
         String lastUpdatePath = preferences.getString(Constants.PREF_INSTALL_PACKAGE_PATH, null);
         boolean reinstalling = preferences.getBoolean(Constants.PREF_INSTALL_AGAIN, false);

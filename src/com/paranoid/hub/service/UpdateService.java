@@ -50,7 +50,6 @@ import com.paranoid.hub.HubController;
 import com.paranoid.hub.HubController.StatusListener;
 import com.paranoid.hub.controller.ABUpdateController;
 import com.paranoid.hub.controller.UpdateController;
-import com.paranoid.hub.misc.BuildInfoUtils;
 import com.paranoid.hub.misc.StringGenerator;
 import com.paranoid.hub.misc.Utils;
 import com.paranoid.hub.model.Update;

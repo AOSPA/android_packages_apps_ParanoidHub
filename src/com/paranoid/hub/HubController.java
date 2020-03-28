@@ -37,6 +37,7 @@ import com.paranoid.hub.misc.Utils;
 import com.paranoid.hub.model.Update;
 import com.paranoid.hub.model.UpdateInfo;
 import com.paranoid.hub.model.UpdateStatus;
+import com.paranoid.hub.model.Version;
 
 import java.io.File;
 import java.io.IOException;
@@ -306,7 +307,8 @@ public class HubController {
             return false;
         }
 
-        if (!Utils.isCompatible(mContext, update)) {
+        Version version = new Version(mContext, update);
+        if (!version.isUpdateAvailable()) {
             Log.d(TAG, update.getName() + " already installed, up to date");
             update.setStatus(UpdateStatus.UNAVAILABLE, mContext);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
