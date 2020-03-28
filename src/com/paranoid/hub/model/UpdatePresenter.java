@@ -146,13 +146,15 @@ public class UpdatePresenter {
             return false;
         }
 
-        if (Utils.isCompatible(context, oldUpdateList)) {
+        Version olVersion = new Version(context, oldUpdateList);
+        if (olVersion.isUpdateAvailable()) {
             mUpdate = oldUpdateList;
             Log.d(TAG, "Update available via old (cached) list");
             return true;
         }
 
-        if (Utils.isCompatible(context, newUpdateList)) {
+        Version nlVersion = new Version(context, newUpdateList);
+        if (nlVersion.isUpdateAvailable()) {
             mUpdate = newUpdateList;
             Log.d(TAG, "Update available via new list");
             return true;
