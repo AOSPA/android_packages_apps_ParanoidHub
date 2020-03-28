@@ -27,9 +27,9 @@ import androidx.preference.PreferenceManager;
 
 import com.paranoid.hub.R;
 import com.paranoid.hub.HubActivity;
-import com.paranoid.hub.misc.BuildInfoUtils;
 import com.paranoid.hub.misc.Constants;
 import com.paranoid.hub.misc.StringGenerator;
+import com.paranoid.hub.model.Version;
 import com.paranoid.hub.notification.NotificationContract;
 import com.paranoid.hub.notification.NotificationContractor;
 
@@ -47,7 +47,7 @@ public class UpdateReceiver extends BroadcastReceiver {
                 prefs.getBoolean(Constants.PREF_INSTALL_NOTIFIED, false)) {
             return false;
         }
-        long buildTimestamp = BuildInfoUtils.getBuildDateTimestamp();
+        long buildTimestamp = Version.getCurrentTimestamp();
         long lastBuildTimestamp = prefs.getLong(Constants.PREF_INSTALL_OLD_TIMESTAMP, -1);
         return buildTimestamp == lastBuildTimestamp;
     }

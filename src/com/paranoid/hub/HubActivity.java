@@ -83,7 +83,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.paranoid.hub.HubController;
 import com.paranoid.hub.HubController.StatusListener;
 import com.paranoid.hub.download.DownloadClient;
-import com.paranoid.hub.misc.BuildInfoUtils;
 import com.paranoid.hub.misc.Constants;
 import com.paranoid.hub.misc.StringGenerator;
 import com.paranoid.hub.misc.Utils;
@@ -92,6 +91,7 @@ import com.paranoid.hub.model.Update;
 import com.paranoid.hub.model.UpdateInfo;
 import com.paranoid.hub.model.UpdatePresenter;
 import com.paranoid.hub.model.UpdateStatus;
+import com.paranoid.hub.model.Version;
 import com.paranoid.hub.receiver.UpdateCheckReceiver;
 import com.paranoid.hub.service.UpdateService;
 
@@ -249,7 +249,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 mVersionHeader.setTypeface(mVersionHeader.getTypeface(), Typeface.BOLD);
                 mVersionHeader.setText(String.format(
                         getResources().getString(R.string.update_found_text),
-                        BuildInfoUtils.getVersionFlavor(), update.getVersion()));
+                        Version.getCurrentFlavor(), update.getVersion()));
 
                 mVersionHeaderInfo.setMovementMethod(LinkMovementMethod.getInstance());
                 mVersionHeaderInfo.setText(Html.fromHtml(getResources().getString(R.string.update_found_text_info), Html.FROM_HTML_MODE_COMPACT));
@@ -516,7 +516,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             mVersionHeader.setTypeface(mVersionHeader.getTypeface(), Typeface.NORMAL);
             mVersionHeader.setText(String.format(
                     getResources().getString(R.string.no_updates_text), 
-                    BuildInfoUtils.getVersionFlavor(), BuildInfoUtils.getVersionCode(), 
+                    Version.getCurrentFlavor(), Version.getCurrentVersion(), 
                     StringGenerator.getTimeLocalized(this, lastChecked)));
         }
     }
@@ -571,7 +571,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 int resId;
                 titleRes = R.string.install_update_dialog_title;
                 String updateInfo = getResources().getString(R.string.install_update_dialog_message_info,
-                        BuildInfoUtils.getVersionFlavor(), update.getVersion());
+                        Version.getCurrentFlavor(), update.getVersion());
                 try {
                     if (Utils.isABUpdate(update.getFile())) {
                         resId = R.string.install_update_dialog_message_ab;

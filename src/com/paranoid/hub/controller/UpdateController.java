@@ -24,12 +24,12 @@ import android.util.Log;
 import androidx.preference.PreferenceManager;
 
 import com.paranoid.hub.HubController;
-import com.paranoid.hub.misc.BuildInfoUtils;
 import com.paranoid.hub.misc.Constants;
 import com.paranoid.hub.misc.FileUtils;
 import com.paranoid.hub.misc.Utils;
 import com.paranoid.hub.model.UpdateInfo;
 import com.paranoid.hub.model.UpdateStatus;
+import com.paranoid.hub.model.Version;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,7 +76,7 @@ public class UpdateController {
 
         UpdateInfo update = mController.getUpdate(downloadId);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        long buildTimestamp = BuildInfoUtils.getBuildDateTimestamp();
+        long buildTimestamp = Version.getCurrentTimestamp();
         long lastBuildTimestamp = preferences.getLong(Constants.PREF_INSTALL_OLD_TIMESTAMP,
                 buildTimestamp);
         boolean isReinstalling = buildTimestamp == lastBuildTimestamp;
