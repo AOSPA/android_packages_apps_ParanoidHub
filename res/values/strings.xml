@@ -151,8 +151,8 @@
     <string name="install_warning_and_desc_ab">While the update is being applied, you can use your phone as normal. \nWhen it\'s finished, tap the restart button to finalize the update.</string>
     <string name="install_update_notification_title">Ready to update</string>
     <string name="install_update_notification_text">Tap to finish applying the update</string>
-    <string name="install_low_battery_warning_title">Low battery</string>
-    <string name="install_low_battery_warning_text">The battery level is too low, you need at least <xliff:g id="percent_discharging">%1$d</xliff:g>%% of the battery to continue, <xliff:g id="percent_charging">%2$d</xliff:g>%% if charging.</string>
+    <string name="install_low_battery_warning_title">Can\'t update right now</string>
+    <string name="install_low_battery_warning_text">Your device is too low on battery, you need at least <xliff:g id="percent_discharging">%1$d</xliff:g>%% of battery to continue, <xliff:g id="percent_charging">%2$d</xliff:g>%% if charging.</string>
     <string name="install_update_dialog_title">Apply update</string>
     <string name="install_update_dialog_message">You are about to upgrade to <xliff:g id="update_name">%1$s</xliff:g>.\n\nIf you press <xliff:g id="ok">%2$s</xliff:g>, the device will restart itself in recovery mode to install the update.\n\nNote: This feature requires a compatible Recovery or updates will need to be installed manually.</string>
     <string name="install_update_dialog_message_ab">You are about to upgrade to <xliff:g id="update_name">%1$s</xliff:g>.\n\nIf you press <xliff:g id="ok">%2$s</xliff:g>, the device will begin installing in the background.\n\nOnce completed, you will be prompted to reboot.</string>
