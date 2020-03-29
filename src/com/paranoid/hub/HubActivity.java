@@ -603,6 +603,17 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         return dialog;
     }
 
+    private MaterialAlertDialogBuilder enforceBatteryReq() {
+        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this, R.style.HubTheme_Dialog);
+        String requirements = getResources().getString(R.string.install_low_battery_warning_text,
+                    getResources().getInteger(R.integer.battery_ok_percentage_discharging),
+                    getResources().getInteger(R.integer.battery_ok_percentage_charging));
+        dialog.setTitle(getResources().getString(R.string.install_low_battery_warning_title));
+        dialog.setMessage(requirements);
+        dialog.setPositiveButton(android.R.string.ok, null);
+        return dialog;
+    }
+
     private void warmUpCheckForUpdates() {
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(Utils.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
         boolean allowLocalUpdates = prefs.getBoolean(Constants.PREF_ALLOW_LOCAL_UPDATES, false);
@@ -640,7 +651,15 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 warmUpCheckForUpdates();
                 break;
             case AVAILABLE:
-                controller.startDownload(update.getDownloadId());
+                if (Utils.isABUpdate(update.getFile())) {
+                    if (!isBatteryLevelOk()) {
+                        enforceBatteryReq().show();
+                    } else {
+                        controller.startDownload(update.getDownloadId());
+                    }
+                } else {
+                    controller.startDownload(update.getDownloadId());
+                }
                 break;
             case DOWNLOADING:
                 controller.pauseDownload(update.getDownloadId());
