@@ -31,6 +31,7 @@ import com.paranoid.hub.download.ClientConnector;
 import com.paranoid.hub.download.DownloadClient;
 import com.paranoid.hub.misc.Constants;
 import com.paranoid.hub.misc.Utils;
+import com.paranoid.hub.model.Configuration;
 import com.paranoid.hub.notification.NotificationContractor;
 import com.paranoid.hub.receiver.UpdateCheckReceiver;
 
@@ -58,6 +59,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     private static final int SIM_1 = 1;
 
     private static final String ROLLOUT_ACTION = "rollout_action";
+    private static final long INTERVAL_NOW = 0;
     private static final long INTERVAL_15_MINUTES = 900000;
     private static final long INTERVAL_1_DAY = 86400000;
     private static final long INTERVAL_1_DAY_12_HOURS = 129600000;
@@ -78,7 +80,8 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
 
     private Context mContext;
     private ClientConnector mConnector;
-    private final Object mLock = new Object();
+    private Configuration mConfig;
+    private static final Object mLock = new Object();
     private TelephonyManager mTelephonyManager;
     private SharedPreferences mPrefs;
 
@@ -101,6 +104,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
 
         File oldWhitelist = new File(mContext.getCacheDir(), "whitelisted.json");
         File newWhitelist = new File(oldWhitelist.getAbsolutePath() + UUID.randomUUID());
+        newWhitelist.renameTo(oldWhitelist);
         String url = Utils.getWhitelistUrl(mContext);
         Log.d(TAG, "Updating whitelisted devices for rollout from " + url);
         mConnector.insert(oldWhitelist, newWhitelist, url);
@@ -108,9 +112,9 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     private long getRolloutForDevice() {
+        boolean isWhitelistOnly = mConfig.isOtaWhitelistOnly();
         if (isDeviceWhitelisted()) {
-            setReady(true);
-            return 0;
+            return INTERVAL_NOW;
         } else if (isDevice(DEVICE_A)) {
             return INTERVAL_1_DAY;
         } else if (isDevice(DEVICE_B)) {
@@ -122,7 +126,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
         } else if (isDevice(DEVICE_E)) {
             return INTERVAL_15_MINUTES;
         }
-        return INTERVAL_15_MINUTES;
+        return isWhitelistOnly ? INTERVAL_NOW : INTERVAL_15_MINUTES;
     }
 
     private PendingIntent getRolloutIntent() {
@@ -132,25 +136,35 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     public void schedule() {
+        boolean isOtaEnabledFromServer = mConfig.isOtaEnabledFromServer();
         boolean scheduled = mPrefs.getBoolean(Constants.IS_ROLLOUT_SCHEDULED, false);
+        if (!isOtaEnabledFromServer) {
+            Log.d(TAG, "Not scheduling rollout because ota is disabled from sever");
+            return;
+        }
+
         if (scheduled) {
             Log.d(TAG, "Rollout is already scheduled");
             return;
         }
 
         if (!isReady()) {
-            mPrefs.edit().putBoolean(Constants.IS_ROLLOUT_SCHEDULED, true).apply();
             long millisToRollout = getRolloutForDevice();
-            PendingIntent rolloutIntent = getRolloutIntent();
-            AlarmManager alarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-            alarmMgr.set(AlarmManager.ELAPSED_REALTIME,
-                    SystemClock.elapsedRealtime() + millisToRollout,
-                    rolloutIntent);
-            NotificationContractor contractor = new NotificationContractor(mContext);
-            contractor.retract(NotificationContractor.ID);
+            if (millisToRollout != -1) {
+                mPrefs.edit().putBoolean(Constants.IS_ROLLOUT_SCHEDULED, true).apply();
+                PendingIntent rolloutIntent = getRolloutIntent();
+                AlarmManager alarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+                alarmMgr.set(AlarmManager.ELAPSED_REALTIME,
+                        SystemClock.elapsedRealtime() + millisToRollout,
+                        rolloutIntent);
+                NotificationContractor contractor = new NotificationContractor(mContext);
+                contractor.retract(NotificationContractor.ID);
 
-            Date rolloutDate = new Date(System.currentTimeMillis() + millisToRollout);
-            Log.d(TAG, "Rollout for device is: " + rolloutDate);
+                Date rolloutDate = new Date(System.currentTimeMillis() + millisToRollout);
+                Log.d(TAG, "Rollout for device is: " + rolloutDate);
+            } else {
+                Log.d(TAG, "Not scheduling a rollout because ota is in whitelist only mode");
+            }
         }
     }
 
@@ -172,11 +186,11 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
         }
         mWhitelist = list.toArray(new String[list.size()]);
         Log.d(TAG, "Whitelisted devices: " + Arrays.toString(mWhitelist));
-        schedule();
     }
 
     private boolean isDevice(String[] imeiPrefix) {
-        return Stream.of(imeiPrefix).anyMatch(mImei::startsWith);
+        boolean isWhitelistOnly = mConfig.isOtaWhitelistOnly();
+        return !isWhitelistOnly && Stream.of(imeiPrefix).anyMatch(mImei::startsWith);
     }
 
     private boolean isDeviceWhitelisted() {
@@ -198,12 +212,26 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
         }
     }
 
+    public void setConfiguration(Configuration config) (
+        mConfig = config;
+        schedule();
+    }
+
     public boolean isReady() {
         synchronized(mLock) {
-            if (!Utils.isDebug() && Constants.IS_STAGED_ROLLOUT_ENABLED) {
+            if (Constants.IS_STAGED_ROLLOUT_ENABLED) {
+                if (Utils.isDebug()) {
+                    boolean isDeviceWhitelisted = isDeviceWhitelisted();
+                    if (isDeviceWhitelisted) {
+                        Log.d(TAG, "Dev device is whitelisted and is ready for rollout");
+                        return mReady;
+                    }
+                    Log.d(TAG, "Staged rollouts disabled on debug builds");
+                    return false;
+                }
                 return mReady;
             }
-            if (Utils.isDebug()) Log.d(TAG, "Staged rollouts disabled on debug builds");
+            Log.d(TAG, "Staged rollouts are disabled, marking updates as always ready");
             return true;
         }
     }
