@@ -69,7 +69,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         mHub = activity;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         mEnabled = prefs.getBoolean(Constants.IS_MATCHMAKER_ENABLED, true);
-        mRolloutContractor = new RolloutContractor(context);
+        mRolloutContractor = new RolloutContractor(context, this);
         mRolloutContractor.setupDevice();
     }
 
@@ -92,7 +92,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         }
     }
 
-    public void warmUpLogMatchMaker() {
+    public void warmUpConfigMatchMaker() {
         if (mEnabled) {
             if (mConnector == null) {
                 mConnector = new ClientConnector(mContext);
@@ -100,6 +100,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
             }
             File oldJson = Utils.getCachedConfiguration(mContext);
             File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
+            newJson.renameTo(oldJson);
             String url = Utils.getConfigurationURL(mContext);
             Log.d(TAG, "Updating hub configuration from " + url);
             mConnector.insert(oldJson, newJson, url);

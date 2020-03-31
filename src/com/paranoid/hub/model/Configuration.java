@@ -18,6 +18,7 @@ package com.paranoid.hub.model;
 public class Configuration {
 
     private boolean mEnabled;
+    private boolean mWhitelistOnly;
     private String mChangelog;
 
     public Configuration() {
@@ -30,12 +31,23 @@ public class Configuration {
         }
     }
 
+    public void setOtaWhitelistOnly(String enabled) {
+        boolean whitelistOnly = Boolean.parseBoolean(enabled); 
+        if (whitelistOnly != mWhitelistOnly) {
+            mWhitelistOnly = whitelistOnly;
+        }
+    }
+
     public void setChangelog(String changelog) {
         mChangelog = changelog;
     }
 
     public boolean isOtaEnabledFromServer() {
         return mEnabled;
+    }
+
+    public boolean isOtaWhitelistOnly() {
+        return mWhitelistOnly;
     }
 
     public String getChangelog() {
