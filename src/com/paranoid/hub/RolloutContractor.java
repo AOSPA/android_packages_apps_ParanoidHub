@@ -55,6 +55,7 @@ import org.json.JSONObject;
 public class RolloutContractor implements ClientConnector.ConnectorListener {
 
     private static final String TAG = "RolloutContractor";
+    private static final String WHITE_LIST_URL = "http://api.aospa.co/whitelisted_devices.json";
 
     private static final int SIM_1 = 1;
 
@@ -105,9 +106,8 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
         File oldWhitelist = new File(mContext.getCacheDir(), "whitelisted.json");
         File newWhitelist = new File(oldWhitelist.getAbsolutePath() + UUID.randomUUID());
         newWhitelist.renameTo(oldWhitelist);
-        String url = Utils.getWhitelistUrl(mContext);
-        Log.d(TAG, "Updating whitelisted devices for rollout from " + url);
-        mConnector.insert(oldWhitelist, newWhitelist, url);
+        Log.d(TAG, "Updating whitelisted devices for rollout from " + WHITE_LIST_URL);
+        mConnector.insert(oldWhitelist, newWhitelist, WHITE_LIST_URL);
         mConnector.start();
     }
 
