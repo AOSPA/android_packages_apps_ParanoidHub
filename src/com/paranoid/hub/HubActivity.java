@@ -208,7 +208,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             HubController controller = mUpdateService.getController();
             controller.addUpdateStatusListener(HubActivity.this);
             mManager = new HubUpdateManager(getApplicationContext(), controller, HubActivity.this);
-            mManager.warmUpLogMatchMaker();
+            mManager.warmUpConfigMatchMaker();
         }
 
         @Override
