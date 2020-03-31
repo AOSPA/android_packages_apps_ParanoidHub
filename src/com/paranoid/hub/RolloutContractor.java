@@ -31,6 +31,7 @@ import com.paranoid.hub.download.ClientConnector;
 import com.paranoid.hub.download.DownloadClient;
 import com.paranoid.hub.misc.Constants;
 import com.paranoid.hub.misc.Utils;
+import com.paranoid.hub.model.Configuration;
 import com.paranoid.hub.notification.NotificationContractor;
 import com.paranoid.hub.receiver.UpdateCheckReceiver;
 
@@ -78,15 +79,17 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
 
     private Context mContext;
     private ClientConnector mConnector;
+    private Configuration mConfig;
     private final Object mLock = new Object();
     private TelephonyManager mTelephonyManager;
     private SharedPreferences mPrefs;
 
-    private boolean mReady = false;
+    private static boolean mReady = false;
     private String mImei;
 
-    public RolloutContractor(Context context) {
+    public RolloutContractor(Context context, HubUpdateManager manager) {
         mContext = context;
+        mConfig = manager.getConfiguration();
         mTelephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (mConnector == null) {
             mConnector = new ClientConnector(context);
@@ -101,6 +104,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
 
         File oldWhitelist = new File(mContext.getCacheDir(), "whitelisted.json");
         File newWhitelist = new File(oldWhitelist.getAbsolutePath() + UUID.randomUUID());
+        newWhitelist.renameTo(oldWhitelist);
         String url = Utils.getWhitelistUrl(mContext);
         Log.d(TAG, "Updating whitelisted devices for rollout from " + url);
         mConnector.insert(oldWhitelist, newWhitelist, url);
@@ -108,8 +112,9 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     private long getRolloutForDevice() {
+        boolean isWhitelistOnly = mConfig.isOtaWhitelistOnly();
         if (isDeviceWhitelisted()) {
-            setReady(true);
+            setReady(mContext, true);
             return 0;
         } else if (isDevice(DEVICE_A)) {
             return INTERVAL_1_DAY;
@@ -122,7 +127,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
         } else if (isDevice(DEVICE_E)) {
             return INTERVAL_15_MINUTES;
         }
-        return INTERVAL_15_MINUTES;
+        return isWhitelistOnly ? -1 : INTERVAL_15_MINUTES;
     }
 
     private PendingIntent getRolloutIntent() {
@@ -132,25 +137,35 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     public void schedule() {
+        boolean isOtaEnabledFromServer = mConfig.isOtaEnabledFromServer();
         boolean scheduled = mPrefs.getBoolean(Constants.IS_ROLLOUT_SCHEDULED, false);
+        if (!isOtaEnabledFromServer) {
+            Log.d(TAG, "Not scheduling rollout because ota is disabled from sever");
+            return;
+        }
+
         if (scheduled) {
             Log.d(TAG, "Rollout is already scheduled");
             return;
         }
 
         if (!isReady()) {
-            mPrefs.edit().putBoolean(Constants.IS_ROLLOUT_SCHEDULED, true).apply();
             long millisToRollout = getRolloutForDevice();
-            PendingIntent rolloutIntent = getRolloutIntent();
-            AlarmManager alarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-            alarmMgr.set(AlarmManager.ELAPSED_REALTIME,
-                    SystemClock.elapsedRealtime() + millisToRollout,
-                    rolloutIntent);
-            NotificationContractor contractor = new NotificationContractor(mContext);
-            contractor.retract(NotificationContractor.ID);
+            if (millisToRollout != -1) {
+                mPrefs.edit().putBoolean(Constants.IS_ROLLOUT_SCHEDULED, true).apply();
+                PendingIntent rolloutIntent = getRolloutIntent();
+                AlarmManager alarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+                alarmMgr.set(AlarmManager.ELAPSED_REALTIME,
+                        SystemClock.elapsedRealtime() + millisToRollout,
+                        rolloutIntent);
+                NotificationContractor contractor = new NotificationContractor(mContext);
+                contractor.retract(NotificationContractor.ID);
 
-            Date rolloutDate = new Date(System.currentTimeMillis() + millisToRollout);
-            Log.d(TAG, "Rollout for device is: " + rolloutDate);
+                Date rolloutDate = new Date(System.currentTimeMillis() + millisToRollout);
+                Log.d(TAG, "Rollout for device is: " + rolloutDate);
+            } else {
+                Log.d(TAG, "Not scheduling a rollout because ota is in whitelist only mode");
+            }
         }
     }
 
@@ -176,7 +191,8 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     private boolean isDevice(String[] imeiPrefix) {
-        return Stream.of(imeiPrefix).anyMatch(mImei::startsWith);
+        boolean isWhitelistOnly = mConfig.isOtaWhitelistOnly();
+        return !isWhitelistOnly && Stream.of(imeiPrefix).anyMatch(mImei::startsWith);
     }
 
     private boolean isDeviceWhitelisted() {
@@ -189,8 +205,9 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
         return match;
     }
 
-    public void setReady(boolean ready) {
-        mPrefs.edit().putBoolean(Constants.IS_ROLLOUT_SCHEDULED, false).apply();
+    public static void setReady(Context context, boolean ready) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putBoolean(Constants.IS_ROLLOUT_SCHEDULED, false).apply();
         synchronized (mLock) {
             if (ready != mReady) {
                 mReady = ready;
@@ -198,7 +215,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
         }
     }
 
-    public boolean isReady() {
+    public static boolean isReady() {
         synchronized(mLock) {
             if (!Utils.isDebug() && Constants.IS_STAGED_ROLLOUT_ENABLED) {
                 return mReady;

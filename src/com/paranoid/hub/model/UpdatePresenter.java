@@ -57,6 +57,7 @@ public class UpdatePresenter {
     private static Configuration buildConfiguration(JSONObject object) throws JSONException {
         Configuration config = new Configuration();
         config.setOtaEnabled(object.getString("enabled"));
+        config.setOtaWhitelistOnly(object.getString("whitelist_only"));
         config.setChangelog(object.getString("info"));
         return config;
     }

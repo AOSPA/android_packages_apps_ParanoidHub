@@ -78,7 +78,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
         }
 
         if ("rollout_action".equals(intent.getAction())) {
-            rolloutContractor.setReady(true);
+            rolloutContractor.setReady(context, true);
             Log.d(TAG, "Rollout iniated, start the check again");
         }
 
