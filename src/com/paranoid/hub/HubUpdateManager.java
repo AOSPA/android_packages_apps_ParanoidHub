@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemProperties;
 import android.util.Log;
 import android.view.View;
 
@@ -47,6 +48,8 @@ import org.json.JSONException;
 public class HubUpdateManager implements ClientConnector.ConnectorListener {
 
     private static final String TAG = "HubUpdateManager";
+    private static final String DEVICE_FILE = SystemProperties.get(Constants.PROP_DEVICE) + ".json";
+    private static final String OTA_CONFIGURATION_FILE = "ota_configuration.json";
 
     private Context mContext;
     private ClientConnector mConnector;
@@ -84,7 +87,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
             }
             File oldJson = Utils.getCachedUpdateList(mContext);
             File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
-            String url = Utils.getServerURL(mContext);
+            String url = Utils.getServerURL(mContext) + DEVICE_FILE;
             Log.d(TAG, "Updating ota information from " + url);
             mConnector.insert(oldJson, newJson, url);
         } else {
@@ -101,7 +104,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
             File oldJson = Utils.getCachedConfiguration(mContext);
             File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
             newJson.renameTo(oldJson);
-            String url = Utils.getConfigurationURL(mContext);
+            String url = Utils.getServerURL(mContext) + OTA_CONFIGURATION_FILE;
             Log.d(TAG, "Updating hub configuration from " + url);
             mConnector.insert(oldJson, newJson, url);
             mIsConfigMatchMaking = true;

@@ -105,20 +105,7 @@ public class Utils {
     }
 
     public static String getServerURL(Context context) {
-        String device = SystemProperties.get(Constants.PROP_DEVICE);
-        String url = String.format(context.getResources().getString(
-                R.string.hub_server_url), device);
-        return url;
-    }
-
-    public static String getConfigurationURL(Context context) {
-        String url = context.getResources().getString(R.string.hub_configuration_url);
-        return url;
-    }
-
-    public static String getWhitelistUrl(Context context) {
-        String url = context.getResources().getString(R.string.hub_device_whitelist_url);
-        return url;
+        return context.getResources().getString(R.string.hub_server_url);
     }
 
     public static void triggerUpdate(Context context, String downloadId) {
