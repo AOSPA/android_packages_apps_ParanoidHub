@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -90,7 +91,8 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
 
         final File json = Utils.getCachedUpdateList(context);
         final File jsonNew = new File(json.getAbsolutePath() + UUID.randomUUID());
-        String url = Utils.getServerURL(context);
+        String url = Utils.getServerURL(context)
+                + SystemProperties.get(Constants.PROP_DEVICE) + ".json";
         DownloadClient.DownloadCallback callback = new DownloadClient.DownloadCallback() {
             @Override
             public void onFailure(boolean cancelled) {
