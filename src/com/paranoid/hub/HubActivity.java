@@ -242,10 +242,11 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         boolean isChecking = (checkForUpdates == CHECK_LOCAL || checkForUpdates == CHECK_NORMAL);
         if (update != null && (update.getStatus() != UNAVAILABLE || isChecking)) {
             if (update.getStatus() != UNAVAILABLE || isChecking) {
-                if (mVersionHeader.getVisibility() != View.VISIBLE) {
-                    mVersionHeader.setVisibility(View.VISIBLE);
-                }
+                Version version = new Version(getApplicationContext(), update);
+                boolean isBetaUpdate = version.isBetaUpdate();
+                mVersionHeader.setVisibility(isBetaUpdate? View.GONE : View.VISIBLE);
                 mVersionHeaderInfo.setVisibility(View.VISIBLE);
+                mUpdateDescription.setVisibility(isBetaUpdate? View.GONE : View.VISIBLE);
                 mUpdateSize.setVisibility(View.VISIBLE);
 
                 mVersionHeader.setTypeface(mVersionHeader.getTypeface(), Typeface.BOLD);
@@ -254,7 +255,9 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                         Version.getCurrentFlavor(), update.getVersion()));
 
                 mVersionHeaderInfo.setMovementMethod(LinkMovementMethod.getInstance());
-                mVersionHeaderInfo.setText(Html.fromHtml(getResources().getString(R.string.update_found_text_info), Html.FROM_HTML_MODE_COMPACT));
+                mVersionHeaderInfo.setText(Html.fromHtml(isBetaUpdate ?
+                getResources().getString(R.string.update_found_text_info_beta) :
+                getResources().getString(R.string.update_found_text_info), Html.FROM_HTML_MODE_COMPACT));
 
                 mUpdateSize.setText(String.format(
                         getResources().getString(R.string.update_found_size),
@@ -340,7 +343,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             case AVAILABLE:
                 if (update != null) {
                     mHeaderStatus.setText(getResources().getString(R.string.update_found_title));
-                    mVersionHeader.setVisibility(View.VISIBLE);
                     mButton.setText(R.string.button_update_found);
                     mButton.setVisibility(View.VISIBLE);
                     mInfoDescription.setText(getResources().getString(R.string.update_found_warning_and_desc));
@@ -348,7 +350,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case STARTING:
                 mHeaderStatus.setText(getResources().getString(R.string.starting_update_title));
-                mVersionHeader.setVisibility(View.VISIBLE);
                 mProgressBar.setIndeterminate(true);
                 break;
             case DOWNLOADING:
@@ -356,14 +357,12 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 mHeaderStatusStep.setText(Version.isBuild(TYPE_DEV) ? 
                         getResources().getString(R.string.updating_step_downloading_title) :
                         getResources().getString(R.string.updating_step_downloading_verify_title));
-                mVersionHeader.setVisibility(View.VISIBLE);
                 mButton.setText(R.string.button_pause_update);
                 mButton.setVisibility(View.VISIBLE);
                 mInfoDescription.setText(getResources().getString(R.string.downloading_performance_mode_warning_and_desc));
                 break;
             case DOWNLOAD_FAILED:
                 mHeaderStatus.setText(getResources().getString(R.string.updating_failed_title));
-                mVersionHeader.setVisibility(View.VISIBLE);
                 mButton.setText(R.string.button_try_again);
                 mButton.setVisibility(View.VISIBLE);
                 reportMessage(R.string.downloading_error_update_title);
@@ -373,18 +372,15 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 mHeaderStatusStep.setText(Version.isBuild(TYPE_DEV) ? 
                         getResources().getString(R.string.updating_step_downloading_paused_title) :
                         getResources().getString(R.string.updating_step_downloading_paused_verify_title));
-                mVersionHeader.setVisibility(View.VISIBLE);
                 mButton.setText(R.string.button_resume_update);
                 mButton.setVisibility(View.VISIBLE);
                 break;
             case VERIFYING:
                 mHeaderStatus.setText(getResources().getString(R.string.verifying_update_title));
-                mVersionHeader.setVisibility(View.VISIBLE);
                 mProgressBar.setIndeterminate(true);
                 break;
             case VERIFICATION_FAILED:
                 mHeaderStatus.setText(getResources().getString(R.string.updating_failed_title));
-                mVersionHeader.setVisibility(View.VISIBLE);
                 mButton.setText(R.string.button_try_again);
                 mButton.setVisibility(View.VISIBLE);
                 reportMessage(R.string.verifying_error_update_notification_title);
@@ -395,7 +391,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                     Utils.triggerUpdate(getApplicationContext(), update.getDownloadId());
                 } else {
                     mHeaderStatus.setText(getResources().getString(R.string.install_title));
-                    mVersionHeader.setVisibility(View.VISIBLE);
                     mButton.setText(R.string.button_install_update);
                     mButton.setVisibility(View.VISIBLE);
                     mInfoDescription.setText(Utils.isABDevice() ? 
@@ -408,7 +403,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             case INSTALLATION_CANCELLED:
             case INSTALLATION_FAILED:
                 mHeaderStatus.setText(getResources().getString(R.string.updating_failed_title));
-                mVersionHeader.setVisibility(View.VISIBLE);
                 mButton.setText(R.string.button_try_again);
                 mButton.setVisibility(View.VISIBLE);
                 reportMessage(R.string.installing_error_update_notification_title);
@@ -418,7 +412,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                     Utils.triggerUpdate(getApplicationContext(), update.getDownloadId());
                 } else {
                     mHeaderStatus.setText(getResources().getString(R.string.install_title));
-                    mVersionHeader.setVisibility(View.VISIBLE);
                     mButton.setText(R.string.button_install_update);
                     mButton.setVisibility(View.VISIBLE);
                     mInfoDescription.setText(getResources().getString(Utils.isABDevice() 
@@ -437,7 +430,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                             getResources().getString(update.getFinalizing() ? 
                             R.string.updating_step_installing_finalizing_verify_title : 
                             R.string.updating_step_installing_verify_title));
-                    mVersionHeader.setVisibility(View.VISIBLE);
                     mButton.setText(R.string.button_pause_update);
                     mButton.setVisibility(View.VISIBLE);
                     mInfoDescription.setText(getResources().getString(R.string.installing_warning_and_desc_ab));
@@ -450,7 +442,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 mHeaderStatusStep.setText(Version.isBuild(TYPE_DEV) ? 
                         getResources().getString(R.string.updating_step_installing_paused_title) :
                         getResources().getString(R.string.updating_step_installing_paused_verify_title));
-                mVersionHeader.setVisibility(View.VISIBLE);
                 mButton.setText(R.string.button_resume_update);
                 mButton.setVisibility(View.VISIBLE);
                 mInfoDescription.setText(getResources().getString(R.string.installing_suspended_warning_and_desc_ab));
@@ -459,7 +450,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             case INSTALLED:
                 mHeaderStatus.setText(getResources().getString(R.string.restart_title));
                 mHeaderStatusStep.setText(getResources().getString(R.string.updating_step_installed_title));
-                mVersionHeader.setVisibility(View.VISIBLE);
                 mButton.setText(R.string.button_restart);
                 mButton.setVisibility(View.VISIBLE);
                 reportMessage(R.string.verified_download_snack);
