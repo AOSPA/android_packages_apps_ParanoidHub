@@ -110,7 +110,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
                 try {
                     if (json.exists() && UpdatePresenter.isNewUpdate(context, json, jsonNew, rolloutContractor.isReady())) {
                         Update update = UpdatePresenter.getUpdate();
-                        showNotification(context, update.getVersion());
+                        showNotification(context, update);
                         updateRepeatingUpdatesCheck(context);
                     }
                     jsonNew.renameTo(json);
@@ -140,13 +140,16 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
         }
     }
 
-    private static void showNotification(Context context, String version) {
+    private static void showNotification(Context context, Update update) {
+        Version version = new Version(context, update);
+        boolean isBetaUpdate = version.isBetaUpdate();
         Intent notificationIntent = new Intent(context, HubActivity.class);
         PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-        String buildInfo = String.format(
+        String buildInfo = String.format(isBetaUpdate ?
+                context.getResources().getString(R.string.update_found_notification_text_beta) :
                 context.getResources().getString(R.string.update_found_notification_text),
-                Version.getCurrentFlavor(), version);
+                Version.getCurrentFlavor(), update.getVersion());
         NotificationContractor contractor = new NotificationContractor(context);
         NotificationContract contract = contractor.create(NotificationContractor.NEW_UPDATES_NOTIFICATION_CHANNEL, true);
         contract.setTitle(context.getResources().getString(R.string.update_found_notification_title));
