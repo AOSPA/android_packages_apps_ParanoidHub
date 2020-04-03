@@ -193,4 +193,6 @@
     <string name="allow_downgrading_summary">Allow\'s installing older system versions</string>
     <string name="local_update_title">Allow local upgrade</string>
     <string name="local_update_summary">Prompt for updating from storage when checking for updates</string>
+    <string name="allow_beta_updates_title">Opt-in to beta updates</string>
+    <string name="allow_beta_updates_summary">Turning this on allows your device to receive updates for beta releases</string>
 </resources>

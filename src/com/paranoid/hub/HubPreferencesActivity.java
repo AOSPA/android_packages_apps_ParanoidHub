@@ -46,6 +46,7 @@ public class HubPreferencesActivity extends Activity implements
     public static final String PREF_AUTO_DELETE_UPDATES = Constants.PREF_AUTO_DELETE_UPDATES;
     public static final String PREF_ALLOW_DOWNGRADING = Constants.PREF_ALLOW_DOWNGRADING;
     public static final String PREF_ALLOW_LOCAL_UPDATES = Constants.PREF_ALLOW_LOCAL_UPDATES;
+    public static final String PREF_ALLOW_BETA_UPDATES = Constants.PREF_ALLOW_BETA_UPDATES;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +158,8 @@ public class HubPreferencesActivity extends Activity implements
                 case PREF_AB_PERF_MODE:
                     return Utils.isABDevice();
                 case PREF_ALLOW_DOWNGRADING:
+                    return true;
+                case PREF_ALLOW_BETA_UPDATES:
                     return true;
             }
             return true;
