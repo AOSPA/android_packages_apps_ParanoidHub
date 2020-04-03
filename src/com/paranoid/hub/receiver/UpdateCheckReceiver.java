@@ -27,8 +27,10 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.paranoid.hub.HubActivity;
+import com.paranoid.hub.HubUpdateManager;
 import com.paranoid.hub.RolloutContractor;
 import com.paranoid.hub.R;
+import com.paranoid.hub.download.ClientConnector;
 import com.paranoid.hub.download.DownloadClient;
 import com.paranoid.hub.misc.Constants;
 import com.paranoid.hub.misc.Utils;
@@ -46,7 +48,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 
-public class UpdateCheckReceiver extends BroadcastReceiver {
+public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConnector.ConnectorListener {
 
     private static final String TAG = "UpdateCheckReceiver";
 
@@ -57,17 +59,21 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
     private static final String NEW_UPDATES_NOTIFICATION_CHANNEL =
             "new_updates_notification_channel";
 
+    private Context mContext;
+    private ClientConnector mConnector;
+    private RolloutContractor mRolloutContractor;
+
     @Override
     public void onReceive(final Context context, Intent intent) {
+        mContext = context;
+        if (mConnector == null) {
+            mConnector = new ClientConnector(context);
+            mConnector.addClientStatusListener(this);
+        }
+        mRolloutContractor = new RolloutContractor(context);
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             Utils.cleanupDownloadsDir(context);
-        }
-
-        final SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(context);
-        RolloutContractor rolloutContractor = new RolloutContractor(context);
-
-        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            updateConfigurations();
             // Set a repeating alarm on boot to check for new updates once per day
             scheduleRepeatingUpdatesCheck(context);
         }
@@ -78,8 +84,9 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
             return;
         }
 
-        if ("rollout_action".equals(intent.getAction())) {
-            rolloutContractor.setReady(true);
+        if (RolloutContractor.ROLLOUT_ACTION.equals(intent.getAction())) {
+            mRolloutContractor.setScheduled(false);
+            mRolloutContractor.setReady(true);
             Log.d(TAG, "Rollout iniated, start the check again");
         }
 
@@ -88,56 +95,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
             scheduleUpdatesCheck(context, true);
             return;
         }
-
-        final File json = Utils.getCachedUpdateList(context);
-        final File jsonNew = new File(json.getAbsolutePath() + UUID.randomUUID());
-        String url = Utils.getServerURL(context)
-                + SystemProperties.get(Constants.PROP_DEVICE) + ".json";
-        DownloadClient.DownloadCallback callback = new DownloadClient.DownloadCallback() {
-            @Override
-            public void onFailure(boolean cancelled) {
-                Log.e(TAG, "Could not download updates list, scheduling new check");
-                scheduleUpdatesCheck(context, false);
-            }
-
-            @Override
-            public void onResponse(int statusCode, String url,
-                    DownloadClient.Headers headers) {
-            }
-
-            @Override
-            public void onSuccess(File destination) {
-                try {
-                    if (json.exists() && UpdatePresenter.isNewUpdate(context, json, jsonNew, rolloutContractor.isReady())) {
-                        Update update = UpdatePresenter.getUpdate();
-                        showNotification(context, update);
-                        updateRepeatingUpdatesCheck(context);
-                    }
-                    jsonNew.renameTo(json);
-                    long currentMillis = System.currentTimeMillis();
-                    preferences.edit()
-                            .putLong(Constants.PREF_LAST_UPDATE_CHECK, currentMillis)
-                            .apply();
-                    // In case we set a one-shot check because of a previous failure
-                    cancelUpdatesCheck(context);
-                } catch (IOException | JSONException e) {
-                    Log.e(TAG, "Could not parse list, scheduling new check", e);
-                    scheduleUpdatesCheck(context, false);
-                }
-            }
-        };
-
-        try {
-            DownloadClient downloadClient = new DownloadClient.Builder()
-                    .setUrl(url)
-                    .setDestination(jsonNew)
-                    .setDownloadCallback(callback)
-                    .build();
-            downloadClient.start();
-        } catch (IOException e) {
-            Log.e(TAG, "Could not fetch list, scheduling new check", e);
-            scheduleUpdatesCheck(context, false);
-        }
+        updateDeviceConfiguration();
     }
 
     private static void showNotification(Context context, Update update) {
@@ -214,5 +172,50 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmMgr.cancel(getUpdatesCheckIntent(context));
         Log.d(TAG, "Cancelling pending one-shot check");
+    }
+
+    private void updateConfigurations() {
+        mRolloutContractor.setupDevice();
+        updateDeviceConfiguration();
+    }
+
+    private void updateDeviceConfiguration() {
+        File oldJson = Utils.getCachedUpdateList(mContext);
+        File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
+        String url = Utils.getServerURL(mContext) + HubUpdateManager.DEVICE_FILE;
+        Log.d(TAG, "Updating ota information from " + url);
+        mConnector.insert(oldJson, newJson, url);
+        mConnector.start();
+    }
+
+    @Override
+    public void onClientStatusFailure(boolean cancelled) {
+        Log.e(TAG, "Could not download updates list, scheduling new check");
+        scheduleUpdatesCheck(mContext, false);
+    }
+
+    @Override
+    public void onClientStatusResponse(int statusCode, String url, DownloadClient.Headers headers) {}
+
+    @Override
+    public void onClientStatusSuccess(File oldFile, File newFile) {
+        try {
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+            if (oldFile.exists() && UpdatePresenter.isNewUpdate(mContext, oldFile, newFile, mRolloutContractor.isReady())) {
+                Update update = UpdatePresenter.getUpdate();
+                showNotification(mContext, update);
+                updateRepeatingUpdatesCheck(mContext);
+            }
+            newFile.renameTo(oldFile);
+            long currentMillis = System.currentTimeMillis();
+            prefs.edit()
+                    .putLong(Constants.PREF_LAST_UPDATE_CHECK, currentMillis)
+                    .apply();
+            // In case we set a one-shot check because of a previous failure
+            cancelUpdatesCheck(mContext);
+        } catch (IOException | JSONException e) {
+            Log.e(TAG, "Could not parse list, scheduling new check", e);
+            scheduleUpdatesCheck(mContext, false);
+        }
     }
 }

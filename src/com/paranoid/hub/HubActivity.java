@@ -629,12 +629,14 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             return;
         }
 
+        RolloutContractor rolloutContractor = new RolloutContractor(getApplicationContext());
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean needsReboot = prefs.getBoolean(Constants.NEEDS_REBOOT_AFTER_UPDATE, false);
         if (needsReboot) {
             PowerManager pm = (PowerManager) HubActivity.this.getSystemService(Context.POWER_SERVICE);
             update.setStatus(UpdateStatus.UNAVAILABLE, getApplicationContext());
             prefs.edit().putBoolean(Constants.NEEDS_REBOOT_AFTER_UPDATE, false).apply();
+            rolloutContractor.setReady(false);
             pm.reboot(null);
             return;
         }

@@ -91,11 +91,11 @@ public class UpdatePresenter {
         return update;
     }
 
-    public static Configuration matchMakeConfiguration(File file)
+    public static Configuration matchMakeConfiguration(File oldConfig, File newConfig)
             throws IOException, JSONException {
         Configuration config = null;
         String json = "";
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(newConfig))) {
             for (String line; (line = br.readLine()) != null;) {
                 json += line;
             }
@@ -112,6 +112,7 @@ public class UpdatePresenter {
                 Log.d(TAG, "Could not parse configuration object, index=" + i, e);
             }
         }
+        newConfig.renameTo(oldConfig);
         return config;
     }
 
@@ -144,6 +145,7 @@ public class UpdatePresenter {
         }
 
         if (!isReadyForRollout) {
+            Log.d(TAG, "Device is not ready for rollout");
             return false;
         }
 
