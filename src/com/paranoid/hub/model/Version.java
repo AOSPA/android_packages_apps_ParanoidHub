@@ -134,9 +134,10 @@ public class Version {
         return false;
     }
 
-    private boolean isBetaUpdate() {
+    public boolean isBetaUpdate() {
         String[] split = mName.split("-");
-        String updateType = split[4];
-        return TYPE_BETA.equals(updateType);
+        String updateType = split[5];
+        String beta = TYPE_BETA.toLowerCase();
+        return beta.equals(updateType);
     }
 }
