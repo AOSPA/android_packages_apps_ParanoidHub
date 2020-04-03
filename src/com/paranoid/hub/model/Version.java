@@ -28,6 +28,11 @@ public class Version {
 
     private static final String TAG = "Version";
 
+    public static final String TYPE_ALPHA = "ALPHA";
+    public static final String TYPE_BETA = "BETA";
+    public static final String TYPE_DEV = "DEV";
+    public static final String TYPE_RELEASE = "RELEASE";
+
     private Context mContext;
     private String mName;
     private String mVersion;
@@ -108,5 +113,14 @@ public class Version {
 
     public static String getBuildType() {
         return SystemProperties.get(Constants.PROP_BUILD_TYPE);
+    }
+
+    public static boolean isBuild(String type) {
+        String buildType = getBuildType();
+        if ((type).equals(buildType)) {
+            Log.d(TAG, "Current build type is: " + type);
+            return true;
+        }
+        return false;
     }
 }

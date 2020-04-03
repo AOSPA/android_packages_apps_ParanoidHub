@@ -35,6 +35,8 @@ import static com.paranoid.hub.model.UpdateStatus.INSTALLATION_FAILED;
 import static com.paranoid.hub.model.UpdateStatus.INSTALLATION_CANCELLED;
 import static com.paranoid.hub.model.UpdateStatus.INSTALLATION_SUSPENDED;
 
+import static com.paranoid.hub.model.Version.TYPE_DEV;
+
 import android.Manifest;
 import android.animation.LayoutTransition;
 import android.app.Activity;
@@ -351,7 +353,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case DOWNLOADING:
                 mHeaderStatus.setText(getResources().getString(R.string.downloading_title));
-                mHeaderStatusStep.setText(Utils.isDebug() ? 
+                mHeaderStatusStep.setText(Version.isBuild(TYPE_DEV) ? 
                         getResources().getString(R.string.updating_step_downloading_title) :
                         getResources().getString(R.string.updating_step_downloading_verify_title));
                 mVersionHeader.setVisibility(View.VISIBLE);
@@ -368,7 +370,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case PAUSED:
                 mHeaderStatus.setText(getResources().getString(R.string.downloading_paused_title));
-                mHeaderStatusStep.setText(Utils.isDebug() ? 
+                mHeaderStatusStep.setText(Version.isBuild(TYPE_DEV) ? 
                         getResources().getString(R.string.updating_step_downloading_paused_title) :
                         getResources().getString(R.string.updating_step_downloading_paused_verify_title));
                 mVersionHeader.setVisibility(View.VISIBLE);
@@ -428,7 +430,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             case INSTALLING:
                 if (update != null) {
                     mHeaderStatus.setText(getResources().getString(R.string.installing_title));
-                    mHeaderStatusStep.setText(Utils.isDebug() ? 
+                    mHeaderStatusStep.setText(Version.isBuild(TYPE_DEV) ? 
                             getResources().getString(update.getFinalizing() ? 
                             R.string.updating_step_installing_finalizing_title : 
                             R.string.updating_step_installing_title) : 
@@ -445,7 +447,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case INSTALLATION_SUSPENDED:
                 mHeaderStatus.setText(getResources().getString(R.string.installing_title));
-                mHeaderStatusStep.setText(Utils.isDebug() ? 
+                mHeaderStatusStep.setText(Version.isBuild(TYPE_DEV) ? 
                         getResources().getString(R.string.updating_step_installing_paused_title) :
                         getResources().getString(R.string.updating_step_installing_paused_verify_title));
                 mVersionHeader.setVisibility(View.VISIBLE);

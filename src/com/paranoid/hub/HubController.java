@@ -15,6 +15,8 @@
  */
 package com.paranoid.hub;
 
+import static com.paranoid.hub.model.Version.TYPE_DEV;
+
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -166,7 +168,7 @@ public class HubController {
                 Update update = mDownloads.get(downloadId).mUpdate;
                 update.setStatus(UpdateStatus.DOWNLOADED, mContext);
                 removeDownloadClient(mDownloads.get(downloadId));
-                if (!Utils.isDebug()) verifyUpdateAsync(update, downloadId);
+                if (!Version.isBuild(TYPE_DEV)) verifyUpdateAsync(update, downloadId);
                 notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
                 tryReleaseWakelock();
             }
@@ -332,7 +334,7 @@ public class HubController {
             Log.d(TAG, "Adding update entry: " + info.getDownloadId());
             mDownloads.put(info.getDownloadId(), new DownloadEntry(update));
             if (isLocalUpdate) {
-                if (!Utils.isDebug()) {
+                if (!Version.isBuild(TYPE_DEV)) {
                     verifyUpdateAsync(update, info.getDownloadId());
                 } else {
                     Log.d(TAG, "Setting update status for local update");
@@ -399,9 +401,9 @@ public class HubController {
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
             return false;
         }
-        if (file.exists() && update.getFileSize() > 0 && file.length() >= update.getFileSize() && !Utils.isDebug()) {
+        if (file.exists() && update.getFileSize() > 0 && file.length() >= update.getFileSize() && !Version.isBuild(TYPE_DEV)) {
             Log.d(TAG, "File already downloaded, starting verification");
-            if (!Utils.isDebug()) verifyUpdateAsync(update, downloadId);
+            if (!Version.isBuild(TYPE_DEV)) verifyUpdateAsync(update, downloadId);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
         } else {
             DownloadClient downloadClient;
@@ -451,7 +453,7 @@ public class HubController {
     public void startInstall(String downloadId) {
         Update update = getActualUpdate(downloadId);
         if (update.getPersistentStatus() != UpdateStatus.Persistent.VERIFIED 
-                    && !Utils.isDebug()) {
+                    && !Version.isBuild(TYPE_DEV)) {
             throw new IllegalArgumentException(update.getDownloadId() + " is not verified");
         }
         try {

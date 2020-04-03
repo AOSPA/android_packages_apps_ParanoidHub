@@ -15,6 +15,8 @@
  */
 package com.paranoid.hub;
 
+import static com.paranoid.hub.model.Version.TYPE_DEV;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -32,6 +34,7 @@ import com.paranoid.hub.download.DownloadClient;
 import com.paranoid.hub.misc.Constants;
 import com.paranoid.hub.misc.Utils;
 import com.paranoid.hub.model.Configuration;
+import com.paranoid.hub.model.Version;
 import com.paranoid.hub.notification.NotificationContractor;
 import com.paranoid.hub.receiver.UpdateCheckReceiver;
 
@@ -224,7 +227,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     public boolean isReady() {
         synchronized(mLock) {
             if (Constants.IS_STAGED_ROLLOUT_ENABLED) {
-                if (Utils.isDebug()) {
+                if (Version.isBuild(TYPE_DEV)) {
                     boolean isDeviceWhitelisted = isDeviceWhitelisted();
                     if (isDeviceWhitelisted) {
                         Log.d(TAG, "Dev device is whitelisted and is ready for rollout");

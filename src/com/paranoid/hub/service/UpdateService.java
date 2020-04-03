@@ -34,6 +34,8 @@ import static com.paranoid.hub.model.UpdateStatus.INSTALLATION_FAILED;
 import static com.paranoid.hub.model.UpdateStatus.INSTALLATION_CANCELLED;
 import static com.paranoid.hub.model.UpdateStatus.INSTALLATION_SUSPENDED;
 
+import static com.paranoid.hub.model.Version.TYPE_DEV;
+
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -56,6 +58,7 @@ import com.paranoid.hub.model.Update;
 import com.paranoid.hub.model.UpdateInfo;
 import com.paranoid.hub.model.UpdatePresenter;
 import com.paranoid.hub.model.UpdateStatus;
+import com.paranoid.hub.model.Version;
 import com.paranoid.hub.notification.NotificationContract;
 import com.paranoid.hub.notification.NotificationContractor;
 import com.paranoid.hub.receiver.UpdateReceiver;
@@ -145,7 +148,7 @@ public class UpdateService extends Service implements StatusListener {
         } else if (ACTION_INSTALL_UPDATE.equals(intent.getAction())) {
             String downloadId = intent.getStringExtra(EXTRA_DOWNLOAD_ID);
             UpdateInfo update = mController.getUpdate(downloadId);
-            if (!Utils.isDebug() && update.getPersistentStatus() != UpdateStatus.Persistent.VERIFIED) {
+            if (!Version.isBuild(TYPE_DEV) && update.getPersistentStatus() != UpdateStatus.Persistent.VERIFIED) {
                 throw new IllegalArgumentException(update.getDownloadId() + " is not verified");
             }
             try {
