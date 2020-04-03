@@ -39,6 +39,7 @@ public class Version {
     public long mTimestamp;
     private int mPersistentStatus;
 
+    private boolean mAllowBetaUpdates;
     private boolean mAllowDowngrading;
 
     public Version() {
@@ -47,6 +48,7 @@ public class Version {
     public Version(Context context, Update update) {
         mContext = context;
         SharedPreferences prefs = context.getSharedPreferences(Utils.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
+        mAllowBetaUpdates = prefs.getBoolean(Constants.PREF_ALLOW_BETA_UPDATES, false);
         mAllowDowngrading = prefs.getBoolean(Constants.PREF_ALLOW_DOWNGRADING, 
                 context.getResources().getBoolean(R.bool.config_allowDowngradingDefault));
         mName = update.getName();
@@ -67,11 +69,19 @@ public class Version {
         }
 
         if (isIncremental()) {
+            if (isBetaUpdate() && !mAllowBetaUpdates) {
+                Log.d(TAG, mName + " is a beta but the user is not opted in");
+                return false;
+            }
             Log.d(TAG, mName + " is available for incremental or hotfix");
             return true;
         }
 
         if (isNewUpdate()) {
+            if (isBetaUpdate() && !mAllowBetaUpdates) {
+                Log.d(TAG, mName + " is a beta but the user is not opted in");
+                return false;
+            }
             Log.d(TAG, mName + " is available for update");
             return true;
         }
@@ -122,5 +132,11 @@ public class Version {
             return true;
         }
         return false;
+    }
+
+    private boolean isBetaUpdate() {
+        String[] split = mName.split("-");
+        String updateType = split[4];
+        return TYPE_BETA.equals(updateType);
     }
 }

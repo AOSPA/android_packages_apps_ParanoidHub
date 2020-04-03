@@ -37,6 +37,7 @@ public final class Constants {
     public static final String PREF_AB_PERF_MODE = "ab_perf_mode";
     public static final String PREF_ALLOW_DOWNGRADING = "allow_downgrading";
     public static final String PREF_ALLOW_LOCAL_UPDATES = "allow_local_updates";
+    public static final String PREF_ALLOW_BETA_UPDATES = "allow_beta_updates";
 
     // Rollout Configuration
     public static final boolean IS_STAGED_ROLLOUT_ENABLED = true;
