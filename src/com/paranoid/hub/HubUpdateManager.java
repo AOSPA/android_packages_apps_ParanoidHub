@@ -48,7 +48,7 @@ import org.json.JSONException;
 public class HubUpdateManager implements ClientConnector.ConnectorListener {
 
     private static final String TAG = "HubUpdateManager";
-    private static final String DEVICE_FILE = SystemProperties.get(Constants.PROP_DEVICE) + ".json";
+    public static final String DEVICE_FILE = SystemProperties.get(Constants.PROP_DEVICE) + ".json";
     private static final String OTA_CONFIGURATION_FILE = "ota_configuration.json";
 
     private Context mContext;
@@ -103,7 +103,6 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
             }
             File oldJson = Utils.getCachedConfiguration(mContext);
             File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
-            newJson.renameTo(oldJson);
             String url = Utils.getServerURL(mContext) + OTA_CONFIGURATION_FILE;
             Log.d(TAG, "Updating hub configuration from " + url);
             mConnector.insert(oldJson, newJson, url);
@@ -268,7 +267,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     public void onClientStatusSuccess(File oldJson, File newJson) {
         if (mIsConfigMatchMaking) {
             try {
-                mConfig = UpdatePresenter.matchMakeConfiguration(newJson);
+                mConfig = UpdatePresenter.matchMakeConfiguration(oldJson, newJson);
             } catch (IOException | JSONException e) {}
             mIsConfigMatchMaking = false;
             Log.d(TAG, "Ota configuration Updated!");
