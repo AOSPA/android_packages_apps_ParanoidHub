@@ -26,6 +26,7 @@ import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
 import com.paranoid.hub.R;
@@ -62,8 +63,8 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
 
     private static final int SIM_1 = 1;
 
-    private static final String ROLLOUT_ACTION = "rollout_action";
-    private static final long INTERVAL_NOW = 0;
+    public static final String ROLLOUT_ACTION = "rollout_action";
+    private static final long INTERVAL_NOW = -1;
     private static final long INTERVAL_15_MINUTES = 900000;
     private static final long INTERVAL_1_DAY = 86400000;
     private static final long INTERVAL_1_DAY_12_HOURS = 129600000;
@@ -89,7 +90,6 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     private TelephonyManager mTelephonyManager;
     private SharedPreferences mPrefs;
 
-    private boolean mReady = false;
     private String mImei;
 
     public RolloutContractor(Context context) {
@@ -147,15 +147,10 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
             return;
         }
 
-        if (scheduled) {
-            Log.d(TAG, "Rollout is already scheduled");
-            return;
-        }
-
         if (!isReady()) {
             long millisToRollout = getRolloutForDevice();
-            if (millisToRollout != -1) {
-                mPrefs.edit().putBoolean(Constants.IS_ROLLOUT_SCHEDULED, true).apply();
+            if (millisToRollout != INTERVAL_NOW && !scheduled) {
+                setScheduled(true);
                 PendingIntent rolloutIntent = getRolloutIntent();
                 AlarmManager alarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
                 alarmMgr.set(AlarmManager.ELAPSED_REALTIME,
@@ -167,7 +162,11 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
                 Date rolloutDate = new Date(System.currentTimeMillis() + millisToRollout);
                 Log.d(TAG, "Rollout for device is: " + rolloutDate);
             } else {
-                Log.d(TAG, "Not scheduling a rollout because ota is in whitelist only mode");
+                LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(mContext);
+                Intent intent = new Intent();
+                intent.setAction(ROLLOUT_ACTION);
+                broadcastManager.sendBroadcast(intent);
+                Log.d(TAG, "Not scheduling a rollout because the device is whitelisted, triggering immediately");
             }
         }
     }
@@ -204,16 +203,16 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
         }
         boolean match = Stream.of(mWhitelist).anyMatch(mImei::equals);
         Log.d(TAG, "Device is apart of whitelisted rollout: " + match);
+        if (match) setScheduled(false);
         return match;
     }
 
-    public void setReady(boolean ready) {
-        mPrefs.edit().putBoolean(Constants.IS_ROLLOUT_SCHEDULED, false).apply();
-        synchronized (mLock) {
-            if (ready != mReady) {
-                mReady = ready;
-            }
-        }
+    public void setScheduled(boolean isScheduled) {
+        mPrefs.edit().putBoolean(Constants.IS_ROLLOUT_SCHEDULED, isScheduled).apply();
+    }
+
+    public void setReady(boolean isReady) {
+        mPrefs.edit().putBoolean(Constants.IS_ROLLOUT_READY, isReady).apply();
     }
 
     public void setConfiguration(Configuration config) {
@@ -225,22 +224,21 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     public boolean isReady() {
-        synchronized(mLock) {
-            if (Constants.IS_STAGED_ROLLOUT_ENABLED) {
-                if (Version.isBuild(TYPE_DEV)) {
-                    boolean isDeviceWhitelisted = isDeviceWhitelisted();
-                    if (isDeviceWhitelisted) {
-                        Log.d(TAG, "Dev device is whitelisted and is ready for rollout");
-                        return mReady;
-                    }
-                    Log.d(TAG, "Staged rollouts disabled on debug builds");
-                    return false;
+        boolean isReady = mPrefs.getBoolean(Constants.IS_ROLLOUT_READY, false);
+        if (Constants.IS_STAGED_ROLLOUT_ENABLED) {
+            if (Version.isBuild(TYPE_DEV)) {
+                boolean isDeviceWhitelisted = isDeviceWhitelisted();
+                if (isDeviceWhitelisted) {
+                    Log.d(TAG, "Dev device is whitelisted and is ready for rollout");
+                    return isReady;
                 }
-                return mReady;
+                Log.d(TAG, "Staged rollouts disabled on debug builds");
+                return false;
             }
-            Log.d(TAG, "Staged rollouts are disabled, marking updates as always ready");
-            return true;
+            return isReady;
         }
+        Log.d(TAG, "Staged rollouts are disabled, marking updates as always ready");
+        return true;
     }
 
     @Override
