@@ -88,14 +88,6 @@ public class Utils {
         return new File(context.getCacheDir(), "configuration.json");
     }
 
-    public static boolean isDebug() {
-        String buildType = Version.getBuildType();
-        if (("DEV").equals(buildType)) {
-            return true;
-        }
-        return false;
-    }
-
     public static boolean canInstall(Context context, Update update) {
         boolean allowDowngradingDefault = context.getResources().getBoolean(R.bool.config_allowDowngradingDefault);
         boolean allowDowngrading = PreferenceManager.getDefaultSharedPreferences(context)
