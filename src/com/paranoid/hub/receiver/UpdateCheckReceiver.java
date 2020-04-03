@@ -59,13 +59,14 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
+        RolloutContractor rolloutContractor = new RolloutContractor(context);
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            rolloutContractor.setReady(false);
             Utils.cleanupDownloadsDir(context);
         }
 
         final SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
-        RolloutContractor rolloutContractor = new RolloutContractor(context);
 
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             // Set a repeating alarm on boot to check for new updates once per day
@@ -78,7 +79,8 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
             return;
         }
 
-        if ("rollout_action".equals(intent.getAction())) {
+        if (RolloutContractor.ROLLOUT_ACTION.equals(intent.getAction())) {
+            rolloutContractor.setScheduled(false);
             rolloutContractor.setReady(true);
             Log.d(TAG, "Rollout iniated, start the check again");
         }
