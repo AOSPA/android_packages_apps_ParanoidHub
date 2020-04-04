@@ -167,14 +167,6 @@
             android:textAppearance="@*android:style/TextAppearance.DeviceDefault.Body1"
             android:textColor="?android:attr/textColorPrimary" />
 
-        <TextView
-            android:id="@+id/system_update_version_header_info"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:linksClickable="true"
-            android:textAppearance="@*android:style/TextAppearance.DeviceDefault.Body1"
-            android:textColor="?android:attr/textColorPrimary" />
     </LinearLayout>
 
     <ScrollView
