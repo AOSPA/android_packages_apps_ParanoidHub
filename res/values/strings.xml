@@ -77,13 +77,7 @@
     <!-- Update available -->
     <string name="update_found_title">System Update Available</string>
     <string name="update_found_subtitle">%1$s %2$s</string>
-    <string name="update_found_text">Upgrading to %1$s %2$s\n</string>
-    <string name="update_found_text_info">This is a new update for Paranoid Android to improve your device and overall experience. \n\nYou can learn more about this update at &lt;a href="https://blog.paranoidandroid.co/">paranoidandroid.co&lt;/a></string>
-    <string name="update_found_text_info_beta"><![CDATA[This update will install a beta version of Paranoid Android %1$s %2$s (%3$s) on your device. <br/><br/><b><font color=#FF0000>Caution:</font></b> This pre-release version contains 
-    <b>significant</b> behavior changes that can affect apps, in addition to defects that affect normal functioning of your device. This update includes changes to your device that are not finalized and maybe present 
-    differently once an official update is rolled out. <br/><br/>By downloading and installing this update, you agree to the information above. Be sure provide feedback during beta releases as this helps resolve any issues you may receive.]]></string>
-    <string name="update_found_changelog_title">What\'s new</string>
-    <string name="update_found_changelog">%1$s</string>
+    <string name="update_found_changelog"><![CDATA[%1$s]]></string>
     <string name="update_found_changelog_default">A new version of Paranoid Android is ready to install. No changes for this update were found.</string>
     <string name="update_found_size">Update size: %1$s</string>
     <string name="update_found_warning_and_desc">Downloading updates over a cellular network or while roaming may cause additional charges. \n\nThis update requires your device to restart</string>

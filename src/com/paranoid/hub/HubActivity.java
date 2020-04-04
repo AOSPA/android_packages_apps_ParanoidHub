@@ -127,7 +127,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     private ImageView mInfoIcon;
     private ProgressBar mProgressBar;
     private TextView mVersionHeader;
-    private TextView mVersionHeaderInfo;
     private TextView mHeaderStatus;
     private TextView mInfoDescription;
     private TextView mUpdateDescription;
@@ -141,7 +140,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.hub_activity);
 
         mVersionHeader = (TextView) findViewById(R.id.system_update_version_header);
-        mVersionHeaderInfo = (TextView) findViewById(R.id.system_update_version_header_info);
         mHeaderStatus = (TextView) findViewById(R.id.header_system_update_status);
         mProgressBar = (ProgressBar) findViewById(R.id.system_update_progress);
         mUpdateDescription = (TextView) findViewById(R.id.system_update_desc);
@@ -244,30 +242,22 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             if (update.getStatus() != UNAVAILABLE || isChecking) {
                 Version version = new Version(getApplicationContext(), update);
                 boolean isBetaUpdate = version.isBetaUpdate();
-                mVersionHeader.setVisibility(isBetaUpdate? View.GONE : View.VISIBLE);
-                mVersionHeaderInfo.setVisibility(View.VISIBLE);
-                mUpdateDescription.setVisibility(isBetaUpdate? View.GONE : View.VISIBLE);
+                mVersionHeader.setVisibility(View.GONE);
+                mUpdateDescription.setVisibility(View.VISIBLE);
                 mUpdateSize.setVisibility(View.VISIBLE);
-
-                mVersionHeader.setTypeface(mVersionHeader.getTypeface(), Typeface.BOLD);
-                mVersionHeader.setText(String.format(
-                        getResources().getString(R.string.update_found_text),
-                        Version.getCurrentFlavor(), update.getVersion()));
-
-                mVersionHeaderInfo.setMovementMethod(LinkMovementMethod.getInstance());
-                String headerInfo = isBetaUpdate ? String.format(getResources().getString(
-                        R.string.update_found_text_info_beta), Version.getCurrentFlavor(), 
-                        update.getVersion(), update.getTimestamp()) :
-                        getResources().getString(R.string.update_found_text_info);
-                mVersionHeaderInfo.setText(Html.fromHtml(headerInfo, Html.FROM_HTML_MODE_COMPACT));
 
                 mUpdateSize.setText(String.format(
                         getResources().getString(R.string.update_found_size),
                         Formatter.formatShortFileSize(this, update.getFileSize())));
-                Configuration config = mManager.getConfiguration();
-                if (config != null) {
-                    mUpdateDescription.setText(String.format(
-                            getResources().getString(R.string.update_found_changelog), config.getChangelog()));
+
+                mUpdateDescription.setMovementMethod(LinkMovementMethod.getInstance());
+                Configuration changelog = isBetaUpdate ?
+                        mManager.getConfiguration().getBetaChangelog() :
+                        mManager.getConfiguration().getChangelog();
+                if (changelog != null) {
+                    String description = String.format(getResources().getString(
+                            R.string.update_found_changelog), changelog);
+                    mUpdateDescription.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
                 } else {
                     mUpdateDescription.setText(getResources().getString(R.string.update_found_changelog_default));
                 }
@@ -302,7 +292,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         if (checkForUpdates == CHECK_LOCAL) {
             mHeaderStatus.setText(getResources().getString(R.string.update_checking_local_title));
             mVersionHeader.setVisibility(View.GONE);
-            mVersionHeaderInfo.setVisibility(View.GONE);
             mUpdateSize.setVisibility(View.GONE);
             mSecondaryButton.setVisibility(View.GONE);
             updateStatusAndInfo(update, checkForUpdates);
@@ -312,7 +301,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         } else if (checkForUpdates == CHECK_NORMAL) {
             mHeaderStatus.setText(getResources().getString(R.string.update_checking_title));
             mVersionHeader.setVisibility(View.GONE);
-            mVersionHeaderInfo.setVisibility(View.GONE);
             mUpdateSize.setVisibility(View.GONE);
             mSecondaryButton.setVisibility(View.GONE);
             updateStatusAndInfo(update, checkForUpdates);
@@ -467,7 +455,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         mInfoIcon.setVisibility(infoAllowed ? View.VISIBLE : View.GONE);
         mInfoDescription.setVisibility(infoAllowed ? View.VISIBLE : View.GONE);
         mUpdateDescription.setVisibility(status != UNAVAILABLE ? View.VISIBLE : View.GONE);
-        mVersionHeaderInfo.setVisibility(status != UNAVAILABLE ? View.VISIBLE : View.GONE);
         mHeaderStatusStep.setVisibility(stepsAllowed ? View.VISIBLE : View.GONE);
         updateStatusAndInfo(update, checkForUpdates);
         updateProgress(update, checkForUpdates);

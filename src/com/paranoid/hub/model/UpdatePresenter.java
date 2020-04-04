@@ -59,6 +59,7 @@ public class UpdatePresenter {
         config.setOtaEnabled(object.getString("enabled"));
         config.setOtaWhitelistOnly(object.getString("whitelist_only"));
         config.setChangelog(object.getString("info"));
+        config.setBetaChangelog(object.getString("info_beta"));
         return config;
     }
 
