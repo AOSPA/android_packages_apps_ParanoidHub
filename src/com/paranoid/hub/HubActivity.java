@@ -251,9 +251,12 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                         Formatter.formatShortFileSize(this, update.getFileSize())));
 
                 mUpdateDescription.setMovementMethod(LinkMovementMethod.getInstance());
-                Configuration changelog = isBetaUpdate ?
-                        mManager.getConfiguration().getBetaChangelog() :
-                        mManager.getConfiguration().getChangelog();
+                Configuration config = mManager.getConfiguration();
+                String changelog = null;
+                if (config != null) {
+                    changelog = isBetaUpdate ? config.getBetaChangelog() : config.getChangelog();
+                }
+
                 if (changelog != null) {
                     String description = String.format(getResources().getString(
                             R.string.update_found_changelog), changelog);
