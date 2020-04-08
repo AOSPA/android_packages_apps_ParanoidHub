@@ -60,8 +60,6 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     private static final String TAG = "RolloutContractor";
     public static final String WHITELIST_FILE = "whitelisted_devices";
 
-    private static final int SIM_1 = 1;
-
     public static final String ROLLOUT_ACTION = "rollout_action";
     private static final long INTERVAL_NOW = -1;
     private static final long INTERVAL_15_MINUTES = 900000;
@@ -102,7 +100,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     public void setupDevice() {
-        mImei = mTelephonyManager.getImei(SIM_1).toString();
+        mImei = mTelephonyManager.getImei();
         Log.d(TAG, "Device imei is: " + mImei);
 
         File oldWhitelist = new File(mContext.getCacheDir(), "whitelisted.json");
@@ -188,6 +186,10 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     private boolean isDevice(String[] imeiPrefix) {
+        if (mImei == null) {
+            return false;
+        }
+
         boolean isWhitelistOnly = mConfig.isOtaWhitelistOnly();
         return !isWhitelistOnly && Stream.of(imeiPrefix).anyMatch(mImei::startsWith);
     }
@@ -195,6 +197,10 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     private boolean isDeviceWhitelisted() {
         if (mWhitelist == null) {
             Log.d(TAG, "Nothing in the whitelist");
+            return false;
+        }
+
+        if (mImei == null) {
             return false;
         }
         boolean match = Stream.of(mWhitelist).anyMatch(mImei::equals);
