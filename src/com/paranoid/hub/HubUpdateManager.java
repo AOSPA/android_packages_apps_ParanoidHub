@@ -48,8 +48,8 @@ import org.json.JSONException;
 public class HubUpdateManager implements ClientConnector.ConnectorListener {
 
     private static final String TAG = "HubUpdateManager";
-    public static final String DEVICE_FILE = SystemProperties.get(Constants.PROP_DEVICE) + ".json";
-    private static final String OTA_CONFIGURATION_FILE = "ota_configuration.json";
+    public static final String DEVICE_FILE = SystemProperties.get(Constants.PROP_DEVICE);
+    private static final String OTA_CONFIGURATION_FILE = "ota_configuration";
 
     private Context mContext;
     private ClientConnector mConnector;
