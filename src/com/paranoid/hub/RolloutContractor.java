@@ -58,7 +58,7 @@ import org.json.JSONObject;
 public class RolloutContractor implements ClientConnector.ConnectorListener {
 
     private static final String TAG = "RolloutContractor";
-    public static final String WHITELIST_FILE = "whitelisted_devices.json";
+    public static final String WHITELIST_FILE = "whitelisted_devices";
 
     private static final int SIM_1 = 1;
 
