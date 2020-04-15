@@ -152,7 +152,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
 
     private void requestUpdate(File oldJson, File newJson) {
         if (mEnabled) {
-            if (mConfig.isOtaEnabledFromServer()) {
+            if (mConfig != null && mConfig.isOtaEnabledFromServer()) {
                 Log.d(TAG, "Requesting update..");
                 try {
                     syncUpdate(newJson);
@@ -168,7 +168,9 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
                 } catch (IOException | JSONException e) {
                 }
             } else {
-                Log.d(TAG, "Can't check for new updates, ota enabled from sever? " + mConfig.isOtaEnabledFromServer());
+                if (mConfig != null) {
+                    Log.d(TAG, "Can't check for new updates, ota enabled from sever? " + mConfig.isOtaEnabledFromServer());
+                }
                 Update nullUpdate = null;
                 mController.notifyUpdateStatusChanged(nullUpdate, HubController.STATE_STATUS_CHANGED);
             }
@@ -217,7 +219,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     private void fetchCachedOrNewUpdates() {
         mRolloutContractor.setConfiguration(mConfig);
         if (mEnabled && !mController.hasActiveDownloads()) {
-            if (mConfig.isOtaEnabledFromServer()) {
+            if (mConfig != null && mConfig.isOtaEnabledFromServer()) {
                 File cachedUpdate = Utils.getCachedUpdateList(mContext);
                 if (cachedUpdate.exists()) {
                     try {
@@ -231,7 +233,9 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
                     beginMatchMaker();
                 }
             } else {
-                Log.d(TAG, "Can't fetch cached updates, ota enabled from sever? " + mConfig.isOtaEnabledFromServer());
+                if (mConfig != null) {
+                    Log.d(TAG, "Can't fetch cached updates, ota enabled from sever? " + mConfig.isOtaEnabledFromServer());
+                }
                 Update nullUpdate = null;
                 mController.notifyUpdateStatusChanged(nullUpdate, HubController.STATE_STATUS_CHANGED);
             }

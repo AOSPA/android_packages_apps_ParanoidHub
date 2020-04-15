@@ -113,7 +113,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     private long getRolloutForDevice() {
-        boolean isWhitelistOnly = mConfig.isOtaWhitelistOnly();
+        boolean isWhitelistOnly = mConfig != null && mConfig.isOtaWhitelistOnly();
         if (isDeviceWhitelisted()) {
             return INTERVAL_NOW;
         } else if (isDevice(DEVICE_A)) {
@@ -137,7 +137,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     public void schedule() {
-        boolean isOtaEnabledFromServer = mConfig.isOtaEnabledFromServer();
+        boolean isOtaEnabledFromServer = mConfig != null && mConfig.isOtaEnabledFromServer();
         boolean scheduled = mPrefs.getBoolean(Constants.IS_ROLLOUT_SCHEDULED, false);
         if (!isOtaEnabledFromServer) {
             Log.d(TAG, "Not scheduling rollout because ota is disabled from sever");
@@ -190,7 +190,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
             return false;
         }
 
-        boolean isWhitelistOnly = mConfig.isOtaWhitelistOnly();
+        boolean isWhitelistOnly = mConfig != null && mConfig.isOtaWhitelistOnly();
         return !isWhitelistOnly && Stream.of(imeiPrefix).anyMatch(mImei::startsWith);
     }
 
@@ -220,9 +220,11 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
 
     public void setConfiguration(Configuration config) {
         mConfig = config;
-        Log.d(TAG, "Got ota configuration from sever - Ota Enabled: " 
-                + mConfig.isOtaEnabledFromServer() + " Whitelist only: " 
-                + mConfig.isOtaWhitelistOnly());
+        if (mConfig != null) {
+            Log.d(TAG, "Got ota configuration from sever - Ota Enabled: " 
+                    + mConfig.isOtaEnabledFromServer() + " Whitelist only: " 
+                    + mConfig.isOtaWhitelistOnly());
+        }
         schedule();
     }
 
