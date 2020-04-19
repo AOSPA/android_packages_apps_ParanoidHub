@@ -493,7 +493,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             return;
         }
         boolean updateUnavailable = update != null && update.getStatus() == UNAVAILABLE;
-        if (updateUnavailable || forceUnavailable) {
+        if (update == null || updateUnavailable || forceUnavailable) {
             mVersionHeader.setVisibility(View.VISIBLE);
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             long lastChecked = prefs.getLong(Constants.PREF_LAST_UPDATE_CHECK, -1) / 1000;
