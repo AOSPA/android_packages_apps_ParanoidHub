@@ -604,6 +604,9 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         if (allowLocalUpdates) {
             checkForUpdates().show();
         } else {
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            long millis = System.currentTimeMillis();
+            prefs.edit().putLong(Constants.PREF_LAST_UPDATE_CHECK, millis).apply();
             updateMessages(null, CHECK_NORMAL);
             mManager.warmUpMatchMaker(true);
             mManager.beginMatchMaker();

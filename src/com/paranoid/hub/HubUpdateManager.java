@@ -156,9 +156,6 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
                 Log.d(TAG, "Requesting update..");
                 try {
                     syncUpdate(newJson);
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-                    long millis = System.currentTimeMillis();
-                    prefs.edit().putLong(Constants.PREF_LAST_UPDATE_CHECK, millis).apply();
                     if (oldJson.exists() && UpdatePresenter.isNewUpdate(mContext, oldJson, newJson, mRolloutContractor.isReady())) {
                         UpdateCheckReceiver.updateRepeatingUpdatesCheck(mContext);
                     }
