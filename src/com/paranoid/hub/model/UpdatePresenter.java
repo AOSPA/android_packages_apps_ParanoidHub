@@ -63,6 +63,12 @@ public class UpdatePresenter {
         return config;
     }
 
+    private static DeviceConfiguration buildDeviceConfiguration(JSONObject object) throws JSONException {
+        DeviceConfiguration config = new DeviceConfiguration();
+        config.setChangelog(object.getString("info"));
+        return config;
+    }
+
     public static UpdateInfo matchMakeJson(Context context, File file)
             throws IOException, JSONException {
         UpdateInfo update = null;
@@ -109,6 +115,31 @@ public class UpdatePresenter {
             }
             try {
                 config = buildConfiguration(changes.getJSONObject(i));
+            } catch (JSONException e) {
+                Log.d(TAG, "Could not parse configuration object, index=" + i, e);
+            }
+        }
+        newConfig.renameTo(oldConfig);
+        return config;
+    }
+
+    public static DeviceConfiguration matchMakeDeviceConfiguration(File oldConfig, File newConfig)
+            throws IOException, JSONException {
+        DeviceConfiguration config = null;
+        String json = "";
+        try (BufferedReader br = new BufferedReader(new FileReader(newConfig))) {
+            for (String line; (line = br.readLine()) != null;) {
+                json += line;
+            }
+        }
+        JSONObject obj = new JSONObject(json);
+        JSONArray changes = obj.getJSONArray("device_configuration");
+        for (int i = 0; i < changes.length(); i++) {
+            if (changes.isNull(i)) {
+                continue;
+            }
+            try {
+                config = buildDeviceConfiguration(changes.getJSONObject(i));
             } catch (JSONException e) {
                 Log.d(TAG, "Could not parse configuration object, index=" + i, e);
             }

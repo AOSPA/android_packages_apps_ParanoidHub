@@ -89,6 +89,7 @@ import com.paranoid.hub.misc.Constants;
 import com.paranoid.hub.misc.StringGenerator;
 import com.paranoid.hub.misc.Utils;
 import com.paranoid.hub.model.Configuration;
+import com.paranoid.hub.model.DeviceConfiguration;
 import com.paranoid.hub.model.Update;
 import com.paranoid.hub.model.UpdateInfo;
 import com.paranoid.hub.model.UpdatePresenter;
@@ -257,9 +258,21 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                     changelog = isBetaUpdate ? config.getBetaChangelog() : config.getChangelog();
                 }
 
+                DeviceConfiguration deviceConfig = mManager.getDeviceConfiguration();
+                String deviceChangelog = null;
+                if (deviceConfig != null) {
+                    deviceChangelog = deviceConfig.getChangelog();
+                }
+
                 if (changelog != null) {
-                    String description = String.format(getResources().getString(
-                            R.string.update_found_changelog), changelog);
+                    String description = null;
+                    if (deviceChangelog != null) {
+                        description = String.format(getResources().getString(
+                                R.string.update_found_changelog_plus_device), changelog, deviceChangelog);
+                    } else {
+                        description = String.format(getResources().getString(
+                                R.string.update_found_changelog), changelog);
+                    }
                     mUpdateDescription.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
                 } else {
                     mUpdateDescription.setText(getResources().getString(R.string.update_found_changelog_default));
