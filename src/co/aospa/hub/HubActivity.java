@@ -89,6 +89,7 @@ import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.StringGenerator;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Configuration;
+import co.aospa.hub.model.DeviceConfiguration;
 import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateInfo;
 import co.aospa.hub.model.UpdatePresenter;
@@ -249,15 +250,27 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                     changelog = isBetaUpdate ? config.getBetaChangelog() : config.getChangelog();
                 }
 
+                DeviceConfiguration deviceConfig = mManager.getDeviceConfiguration();
+                String deviceChangelog = null;
+                if (deviceConfig != null) {
+                    deviceChangelog = deviceConfig.getChangelog();
+                }
+
                 if (changelog != null && !mIsLocalUpdate) {
-                    String description = String.format(getResources().getString(
+                    String description = null;
+                    if (deviceChangelog != null) {
+                        description = String.format(getResources().getString(
+                            R.string.update_found_changelog_plus_device), changelog, deviceChangelog);
+                    } else {
+                        description = String.format(getResources().getString(
                             R.string.update_found_changelog), changelog);
+                    }
                     mUpdateDescription.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
                 } else {
                     String defaultRes = getResources().getString(R.string.update_found_changelog_default);
                     if (mIsLocalUpdate) {
                         defaultRes = String.format(getResources().getString(
-                                R.string.update_found_changelog_default_local), update.getVersion(), update.getTimestamp());
+                            R.string.update_found_changelog_default_local), update.getVersion(), update.getTimestamp());
                     }
                     mUpdateDescription.setText(defaultRes);
                 }

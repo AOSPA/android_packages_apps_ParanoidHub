@@ -88,6 +88,10 @@ public class Utils {
         return new File(context.getCacheDir(), "configuration.json");
     }
 
+    public static File getCachedDeviceConfiguration(Context context) {
+        return new File(context.getCacheDir(), "device_configuration.json");
+    }
+
     public static boolean canInstall(Context context, Update update) {
         boolean allowDowngradingDefault = context.getResources().getBoolean(R.bool.config_allowDowngradingDefault);
         boolean allowDowngrading = PreferenceManager.getDefaultSharedPreferences(context)
