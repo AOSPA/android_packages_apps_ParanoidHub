@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.paranoid.hub"
+    package="com.aospa.paranoidhub"
     android:versionCode="3"
     android:versionName="3.0">
 
