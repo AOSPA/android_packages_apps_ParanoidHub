@@ -33,6 +33,7 @@ import co.aospa.hub.download.DownloadClient;
 import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Configuration;
+import co.aospa.hub.model.DeviceConfiguration;
 import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateInfo;
 import co.aospa.hub.model.UpdatePresenter;
@@ -49,6 +50,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
 
     private static final String TAG = "HubUpdateManager";
     public static final String DEVICE_FILE = "updates/" + SystemProperties.get(Constants.PROP_DEVICE);
+    private static final String DEVICE_CONFIGURATION_FILE = SystemProperties.get(Constants.PROP_DEVICE) + "_configuration";
     private static final String OTA_CONFIGURATION_FILE = "ota_configuration";
 
     private Context mContext;
@@ -60,9 +62,11 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     private RolloutContractor mRolloutContractor;
 
     private Configuration mConfig;
+    private DeviceConfiguration mDeviceConfig;
 
     private boolean mEnabled;
     private boolean mIsConfigMatchMaking = false;
+    private boolean mIsDeviceConfigMatchMaking = false;
     private boolean mIsUpdateAvailable = false;
     private boolean mUserInitiated;
 
@@ -252,8 +256,24 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         }
     }
 
+    private void fetchOrUpdateDeviceConfig() {
+        if (mEnabled) {
+            File oldJson = Utils.getCachedDeviceConfiguration(mContext);
+            File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
+            String url = Utils.getServerURL(mContext) + DEVICE_CONFIGURATION_FILE;
+            Log.d(TAG, "Updating device configuration from " + url);
+            mConnector.insert(oldJson, newJson, url);
+            mIsDeviceConfigMatchMaking = true;
+            beginMatchMaker();
+        }
+    }
+
     public Configuration getConfiguration() {
         return mConfig;
+    }
+
+    public DeviceConfiguration getDeviceConfiguration() {
+        return mDeviceConfig;
     }
 
     @Override
@@ -283,8 +303,18 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
             } catch (IOException | JSONException e) {}
             mIsConfigMatchMaking = false;
             Log.d(TAG, "Ota configuration Updated!");
+            fetchOrUpdateDeviceConfig();
+        }
+
+        if (mIsDeviceConfigMatchMaking) {
+            try {
+                mDeviceConfig = UpdatePresenter.matchMakeDeviceConfiguration(oldJson, newJson);
+            } catch (IOException | JSONException e) {}
+            mIsDeviceConfigMatchMaking = false;
+            Log.d(TAG, "Device configuration Updated!");
             fetchCachedOrNewUpdates();
         }
+
         requestUpdate(oldJson, newJson);
         if (mHub != null) {
             mMainThread.post(() -> {
