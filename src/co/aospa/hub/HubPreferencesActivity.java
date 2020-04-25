@@ -152,7 +152,7 @@ public class HubPreferencesActivity extends Activity implements
         protected boolean initPreference(Preference preference) {
             switch (preference.getKey()) {
                 case PREF_ALLOW_LOCAL_UPDATES:
-                    return false; // Disabled until working correctly
+                    return true;
                 case PREF_AUTO_DELETE_UPDATES:
                     return true;
                 case PREF_AB_PERF_MODE:
