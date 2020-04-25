@@ -169,15 +169,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 .enableTransitionType(LayoutTransition.CHANGING);
         ((ViewGroup) findViewById(R.id.system_update_footer)).getLayoutTransition()
                 .enableTransitionType(LayoutTransition.CHANGING);
-
-        /*if (ContextCompat.checkSelfPermission(HubActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) 
-                    != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(HubActivity.this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, 
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    1);
-        }*/
     }
 
     @Override
@@ -479,11 +470,21 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         dialog.setNegativeButton(R.string.no_updates_check_local_dialog_button_text, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
-                    updateMessages(null, CHECK_LOCAL);
-                    mManager.beginLocalMatchMaker();
+                    checkPermsAndBegin();
                 }
             });
         return dialog;
+    }
+
+    private void checkPermsAndBegin() {
+        if (ContextCompat.checkSelfPermission(HubActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) 
+                    != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(HubActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, 
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+        }
     }
 
     public void updateSystemStatus(Update update, int checkForUpdates, boolean forceUnavailable) {
@@ -610,6 +611,22 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             updateMessages(null, CHECK_NORMAL);
             mManager.warmUpMatchMaker(true);
             mManager.beginMatchMaker();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    updateMessages(null, CHECK_LOCAL);
+                    mManager.beginLocalMatchMaker();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                break;
         }
     }
 

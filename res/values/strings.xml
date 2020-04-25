@@ -28,7 +28,7 @@
 
     <!-- Directory where the downloads will be exported to.
          The path is relative to the root of the external storage.-->
-    <string name="export_path" translatable="false">/ParanoidHub</string>
+    <string name="export_path" translatable="false">ParanoidHub/</string>
 
     <!-- The sever that hosts the update files -->
     <string name="hub_server_url" translatable="false">"http://api.aospa.co/"</string>

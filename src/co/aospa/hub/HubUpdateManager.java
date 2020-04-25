@@ -138,7 +138,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         }
     }
 
-    public void beginLocalMatchMaker() {
+    public void beginLocalMatchMaker(HubActivity activity) {
         if (mHub != null) {
             mMainThread.post(() -> {
                 mHub.getProgressBar().setVisibility(View.VISIBLE);
@@ -146,7 +146,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
             });
         }
         mThread.postDelayed(() -> {
-            syncLocalUpdate();
+            syncLocalUpdate(activity);
         }, 5000);
     }
 
@@ -195,11 +195,11 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         }
     }
 
-    public void syncLocalUpdate() {
+    public void syncLocalUpdate(HubActivity activity) {
         Log.d(TAG, "Syncing requested local update");
         LocalUpdateController controller = 
                 new LocalUpdateController(mContext, mController);
-        File path = Utils.getExportPath(mContext);
+        File path = Utils.getExportPath(activity);
         File update = controller.getLocalFile(path);
         boolean isValidUpdate = update != null;
         if (isValidUpdate) {
