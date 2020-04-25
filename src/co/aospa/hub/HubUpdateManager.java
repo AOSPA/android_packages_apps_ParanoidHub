@@ -210,6 +210,8 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
             if (updateAvailable) {
                 Log.d(TAG, "Local update: " + localUpdate.getName() + " is available");
             }
+        } else {
+            Log.d(TAG, "No valid local update found");
         }
     }
 
