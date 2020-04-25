@@ -206,10 +206,21 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
             boolean updateAvailable = false;
             UpdateInfo localUpdate = controller.setUpdate(update);
             Log.d(TAG, "Checking if " + localUpdate.getName() + " is available for local upgrade");
-            updateAvailable = mController.isUpdateAvailable(localUpdate, false, true);
-            if (updateAvailable) {
+            updateAvailable = mController.isUpdateAvailable(localUpdate, true, true);
+            if (updateAvailable) {};
+            if (!updateAvailable) {
+                if (mHub != null) {
+                    mMainThread.post(() -> {
+                        mHub.reportMessage(R.string.no_updates_found_snack);
+                    });
+                }
+            } else {
                 Log.d(TAG, "Local update: " + localUpdate.getName() + " is available");
             }
+        } else {
+            Log.d(TAG, "No valid local update found");
+            Update nullUpdate = null;
+            mController.notifyUpdateStatusChanged(nullUpdate, HubController.STATE_STATUS_CHANGED);
         }
     }
 

@@ -70,13 +70,13 @@ public class Utils {
     }
 
     public static File getExportPath(Context context) {
-        File dir = new File(Environment.getExternalStorageDirectory() + 
-                context.getString(R.string.export_path));
+        File dir = context.getExternalFilesDir(null);
         if (!dir.isDirectory()) {
             if (dir.exists() || !dir.mkdirs()) {
                 throw new RuntimeException("Could not create directory");
             }
         }
+        Log.e(TAG, "Got storage export path: " + dir.toString());
         return dir;
     }
 
