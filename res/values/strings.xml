@@ -31,7 +31,7 @@
     <string name="export_path" translatable="false">/ParanoidHub</string>
 
     <!-- The sever that hosts the update files -->
-    <string name="hub_server_url" translatable="false">"http://api.aospa.co/"</string>
+    <string name="hub_server_url" translatable="false">"https://api.aospa.co/"</string>
 
     <plurals name="eta_seconds">
         <item quantity="one">1 second left</item>
