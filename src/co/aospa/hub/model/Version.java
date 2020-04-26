@@ -24,6 +24,8 @@ import co.aospa.hub.R;
 import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.Utils;
 
+import java.lang.ArrayIndexOutOfBoundsException;
+
 public class Version {
 
     private static final String TAG = "Version";
@@ -135,9 +137,14 @@ public class Version {
     }
 
     public boolean isBetaUpdate() {
+        String updateType = null;
         String[] split = mName.split("-");
-        String updateType = split[5];
+        try {
+            updateType = split[5];
+        } catch(ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
         String beta = TYPE_BETA.toLowerCase();
-        return beta.equals(updateType);
+        return updateType != null && beta.equals(updateType);
     }
 }
