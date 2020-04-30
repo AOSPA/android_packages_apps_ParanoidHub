@@ -65,7 +65,8 @@ public class HubController {
     private static final int MAX_REPORT_INTERVAL_MS = 1000;
 
     private final Context mContext;
-    private Handler mHandler;
+    private Handler mUiThread;
+    private Handler mBgThread = new Handler();
     private final LocalBroadcastManager mBroadcastManager;
 
     private final PowerManager.WakeLock mWakeLock;
@@ -96,7 +97,7 @@ public class HubController {
 
     private HubController(Context context) {
         mBroadcastManager = LocalBroadcastManager.getInstance(context);
-        mHandler = new Handler(context.getMainLooper());
+        mUiThread = new Handler(context.getMainLooper());
         mDownloadRoot = Utils.getDownloadPath(context);
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Updater");
@@ -116,7 +117,7 @@ public class HubController {
     }
 
     public void notifyUpdateStatusChanged(Update update, int state) {
-        mHandler.post(new Runnable() {
+        mUiThread.post(new Runnable() {
             @Override
             public void run() {
                 for (StatusListener listener : mListeners) {
@@ -338,7 +339,7 @@ public class HubController {
                     verifyUpdateAsync(update, info.getDownloadId());
                 } else {
                     Log.d(TAG, "Setting update status for local update");
-                    update.setStatus(UpdateStatus.DOWNLOADED, mContext);
+                    update.setStatus(UpdateStatus.LOCAL_UPDATE, mContext);
                 }
             } else {
                 Log.d(TAG, "Setting update status for update");
@@ -351,6 +352,24 @@ public class HubController {
         update.setStatus(status, mContext);
         notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
         return false;
+    }
+
+    public boolean startLocalUpdate(String downloadId) {
+        Log.d(TAG, "Starting local update for " + downloadId);
+        if (!mDownloads.containsKey(downloadId)) {
+            Log.d(TAG, "Local update not registered");
+            return false;
+        }
+
+        Update update = mDownloads.get(downloadId).mUpdate;
+        File destination = Utils.copyUpdateToDir(mDownloadRoot, update.getName());
+        update.setFile(destination);
+        update.setStatus(UpdateStatus.STARTING, mContext);
+        notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
+        mBgThread.postDelayed(() -> {
+            update.setStatus(UpdateStatus.DOWNLOADED, mContext);
+            notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
+        }, 5000);
     }
 
     public boolean startDownload(String downloadId) {

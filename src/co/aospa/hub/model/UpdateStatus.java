@@ -36,11 +36,11 @@ public class UpdateStatus {
     public static final int INSTALLATION_FAILED = 15;
     public static final int INSTALLATION_CANCELLED = 16;
     public static final int INSTALLATION_SUSPENDED = 17;
+    public static final int LOCAL_UPDATE = 18;
 
     public static final class Persistent {
         public static final int UNKNOWN = 0;
         public static final int INCOMPLETE = 1;
         public static final int VERIFIED = 2;
-        public static final int LOCAL_UPDATE = 2;
     }
 }

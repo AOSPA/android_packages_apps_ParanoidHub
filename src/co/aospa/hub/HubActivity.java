@@ -34,6 +34,7 @@ import static co.aospa.hub.model.UpdateStatus.INSTALLED;
 import static co.aospa.hub.model.UpdateStatus.INSTALLATION_FAILED;
 import static co.aospa.hub.model.UpdateStatus.INSTALLATION_CANCELLED;
 import static co.aospa.hub.model.UpdateStatus.INSTALLATION_SUSPENDED;
+import static co.aospa.hub.model.UpdateStatus.LOCAL_UPDATE;
 
 import static co.aospa.hub.model.Version.TYPE_DEV;
 
@@ -169,15 +170,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 .enableTransitionType(LayoutTransition.CHANGING);
         ((ViewGroup) findViewById(R.id.system_update_footer)).getLayoutTransition()
                 .enableTransitionType(LayoutTransition.CHANGING);
-
-        /*if (ContextCompat.checkSelfPermission(HubActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) 
-                    != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(HubActivity.this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, 
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    1);
-        }*/
     }
 
     @Override
@@ -333,6 +325,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 mButton.setText(R.string.button_check_for_update);
                 mButton.setVisibility(View.VISIBLE);
                 break;
+            case LOCAL_UPDATE:
             case AVAILABLE:
                 if (update != null) {
                     mHeaderStatus.setText(getResources().getString(R.string.update_found_title));
@@ -479,11 +472,24 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         dialog.setNegativeButton(R.string.no_updates_check_local_dialog_button_text, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
-                    updateMessages(null, CHECK_LOCAL);
-                    mManager.beginLocalMatchMaker();
+                    checkPermsAndBegin();
                 }
             });
         return dialog;
+    }
+
+    private void checkPermsAndBegin() {
+        if (ContextCompat.checkSelfPermission(HubActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) 
+                    != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(HubActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, 
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+        } else {
+            updateMessages(null, CHECK_LOCAL);
+            mManager.beginLocalMatchMaker();
+        }
     }
 
     public void updateSystemStatus(Update update, int checkForUpdates, boolean forceUnavailable) {
@@ -614,6 +620,22 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    updateMessages(null, CHECK_LOCAL);
+                    mManager.beginLocalMatchMaker();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                break;
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         HubController controller = mUpdateService.getController();
         Update update = controller.getActualUpdate(mDownloadId);
@@ -638,6 +660,13 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             default:
             case UNAVAILABLE:
                 warmUpCheckForUpdates();
+                break;
+            case LOCAL_UPDATE:
+                if (!isBatteryLevelOk()) {
+                    enforceBatteryReq().show();
+                } else {
+                    controller.startLocalUpdate(update.getDownloadId());
+                }
                 break;
             case AVAILABLE:
                 if (Utils.isABDevice()) {

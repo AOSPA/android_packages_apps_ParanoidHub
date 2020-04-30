@@ -72,7 +72,6 @@ public class LocalUpdateController {
         update.setTimestamp(getTimestamp(updateFile.getName()));
         update.setDownloadId(getDummyId(updateFile.getName()));
         update.setVersion(getVersion(updateFile.getName()));
-        update.setPersistentStatus(UpdateStatus.Persistent.LOCAL_UPDATE);
         return update;
     }
 
@@ -87,14 +86,14 @@ public class LocalUpdateController {
     }
 
     private Long getTimestamp(String fileName) {
-        String[] version = fileName.split("-");
-        return Long.parseLong(version[4]);
+        String[] timestamp = fileName.split("-");
+        String[] exactTimestamp = timestamp[4].split("\\.");
+        return Long.parseLong(exactTimestamp[0]);
     }
 
     private String getDummyId(String fileName) {
-        String[] version = fileName.split("-");
-        long timestamp = Long.parseLong(version[4]) * 2;
-        return Long.toString(timestamp);
+        long id = getTimestamp(fileName) * 2;
+        return Long.toString(id);
     }
 
     public File getLocalFile(File path) {
