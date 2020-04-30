@@ -302,13 +302,6 @@ public class ABUpdateController extends UpdateEngineCallback {
                 update.setInstallProgress(0);
                 update.setStatus(UpdateStatus.INSTALLED, mContext);
                 mController.notifyUpdateStatusChanged(update, HubController.STATE_STATUS_CHANGED);
-                SharedPreferences prefs = mContext.getSharedPreferences(Utils.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
-                boolean deleteUpdatesDefault = mContext.getResources().getBoolean(R.bool.config_autoDeleteUpdatesDefault);
-                boolean deleteUpdate = prefs.getBoolean(Constants.PREF_AUTO_DELETE_UPDATES,
-                        deleteUpdatesDefault);
-                if (deleteUpdate) {
-                    mController.deleteUpdate(mDownloadId);
-                }
             }
             break;
             case UpdateEngine.UpdateStatusConstants.IDLE: {

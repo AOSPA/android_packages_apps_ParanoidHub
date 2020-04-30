@@ -639,6 +639,24 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    private void rebootDevice(Update update) {
+        PowerManager pm = (PowerManager) HubActivity.this.getSystemService(Context.POWER_SERVICE);
+        RolloutContractor rolloutContractor = new RolloutContractor(getApplicationContext());
+        update.setStatus(UpdateStatus.UNAVAILABLE, getApplicationContext());
+        rolloutContractor.setReady(false);
+
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(Utils.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
+        boolean deleteUpdatesDefault = getResources().getBoolean(R.bool.config_autoDeleteUpdatesDefault);
+        boolean deleteUpdate = prefs.getBoolean(Constants.PREF_AUTO_DELETE_UPDATES, deleteUpdatesDefault);
+        if (deleteUpdate) {
+            HubController controller = mUpdateService.getController();
+            controller.deleteUpdate(mDownloadId);
+        }
+
+        // Reboot device
+        pm.reboot(null);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
             int[] grantResults) {
@@ -664,15 +682,11 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             return;
         }
 
-        RolloutContractor rolloutContractor = new RolloutContractor(getApplicationContext());
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean needsReboot = prefs.getBoolean(Constants.NEEDS_REBOOT_AFTER_UPDATE, false);
         if (needsReboot) {
-            PowerManager pm = (PowerManager) HubActivity.this.getSystemService(Context.POWER_SERVICE);
-            update.setStatus(UpdateStatus.UNAVAILABLE, getApplicationContext());
             prefs.edit().putBoolean(Constants.NEEDS_REBOOT_AFTER_UPDATE, false).apply();
-            rolloutContractor.setReady(false);
-            pm.reboot(null);
+            rebootDevice(update);
             return;
         }
 
