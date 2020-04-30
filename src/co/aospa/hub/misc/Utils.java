@@ -172,6 +172,13 @@ public class Utils {
         return update;
     }
 
+    public static int setPermissions(String path, int mode, int uid, int gid) {
+        return FileUtils.setPermissions(
+                /* path= */ path,
+                /* mode= */ mode,
+                /* uid= */ uid, /* gid= */ gid);
+    }
+
     public static File copyUpdateToDir(File destination, String name) {
         try {
             File update = createNewFileWithPermissions(destination, name);
