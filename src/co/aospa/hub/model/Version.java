@@ -60,11 +60,6 @@ public class Version {
     }
 
     public boolean isUpdateAvailable() {
-        if (mPersistentStatus == UpdateStatus.Persistent.LOCAL_UPDATE) {
-            Log.d(TAG, mName + " is available for local upgrade");
-            return true;
-        }
-
         if (isDowngrade()) {
             Log.d(TAG, mName + " is available for downgrade");
             return true;

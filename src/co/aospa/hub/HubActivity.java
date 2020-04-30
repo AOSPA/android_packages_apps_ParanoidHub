@@ -34,6 +34,8 @@ import static co.aospa.hub.model.UpdateStatus.INSTALLED;
 import static co.aospa.hub.model.UpdateStatus.INSTALLATION_FAILED;
 import static co.aospa.hub.model.UpdateStatus.INSTALLATION_CANCELLED;
 import static co.aospa.hub.model.UpdateStatus.INSTALLATION_SUSPENDED;
+import static co.aospa.hub.model.UpdateStatus.LOCAL_UPDATE;
+import static co.aospa.hub.model.UpdateStatus.LOCAL_UPDATE_FAILED;
 
 import static co.aospa.hub.model.Version.TYPE_DEV;
 
@@ -116,6 +118,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     private boolean mRefreshUi = false;
     private int mProgress = -1;
     private String mDownloadId;
+    private boolean mIsLocalUpdate = false;
 
     private HubUpdateManager mManager;
     private UpdateService mUpdateService;
@@ -169,15 +172,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 .enableTransitionType(LayoutTransition.CHANGING);
         ((ViewGroup) findViewById(R.id.system_update_footer)).getLayoutTransition()
                 .enableTransitionType(LayoutTransition.CHANGING);
-
-        /*if (ContextCompat.checkSelfPermission(HubActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) 
-                    != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(HubActivity.this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, 
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    1);
-        }*/
     }
 
     @Override
@@ -257,12 +251,17 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                     changelog = isBetaUpdate ? config.getBetaChangelog() : config.getChangelog();
                 }
 
-                if (changelog != null) {
+                if (changelog != null && !mIsLocalUpdate) {
                     String description = String.format(getResources().getString(
                             R.string.update_found_changelog), changelog);
                     mUpdateDescription.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
                 } else {
-                    mUpdateDescription.setText(getResources().getString(R.string.update_found_changelog_default));
+                    String defaultRes = getResources().getString(R.string.update_found_changelog_default);
+                    if (mIsLocalUpdate) {
+                        defaultRes = String.format(getResources().getString(
+                                R.string.update_found_changelog_default_local), update.getVersion(), update.getTimestamp());
+                    }
+                    mUpdateDescription.setText(defaultRes);
                 }
             }
         }
@@ -333,6 +332,14 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 mButton.setText(R.string.button_check_for_update);
                 mButton.setVisibility(View.VISIBLE);
                 break;
+            case LOCAL_UPDATE:
+                if (update != null) {
+                    mHeaderStatus.setText(getResources().getString(R.string.update_found_title_local));
+                    mButton.setText(R.string.button_update_found_local);
+                    mButton.setVisibility(View.VISIBLE);
+                    mIsLocalUpdate = true;
+                }
+                break;
             case AVAILABLE:
                 if (update != null) {
                     mHeaderStatus.setText(getResources().getString(R.string.update_found_title));
@@ -373,6 +380,12 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 mProgressBar.setIndeterminate(true);
                 break;
             case VERIFICATION_FAILED:
+                mHeaderStatus.setText(getResources().getString(R.string.updating_failed_title));
+                mButton.setText(R.string.button_try_again);
+                mButton.setVisibility(View.VISIBLE);
+                reportMessage(R.string.verifying_error_update_notification_title);
+                break;
+            case LOCAL_UPDATE_FAILED:
                 mHeaderStatus.setText(getResources().getString(R.string.updating_failed_title));
                 mButton.setText(R.string.button_try_again);
                 mButton.setVisibility(View.VISIBLE);
@@ -479,11 +492,24 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         dialog.setNegativeButton(R.string.no_updates_check_local_dialog_button_text, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
-                    updateMessages(null, CHECK_LOCAL);
-                    mManager.beginLocalMatchMaker();
+                    checkPermsAndBegin();
                 }
             });
         return dialog;
+    }
+
+    private void checkPermsAndBegin() {
+        if (ContextCompat.checkSelfPermission(HubActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) 
+                    != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(HubActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, 
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+        } else {
+            updateMessages(null, CHECK_LOCAL);
+            mManager.beginLocalMatchMaker();
+        }
     }
 
     public void updateSystemStatus(Update update, int checkForUpdates, boolean forceUnavailable) {
@@ -614,6 +640,22 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    updateMessages(null, CHECK_LOCAL);
+                    mManager.beginLocalMatchMaker();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                break;
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         HubController controller = mUpdateService.getController();
         Update update = controller.getActualUpdate(mDownloadId);
@@ -639,6 +681,13 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             case UNAVAILABLE:
                 warmUpCheckForUpdates();
                 break;
+            case LOCAL_UPDATE:
+                if (!isBatteryLevelOk()) {
+                    enforceBatteryReq().show();
+                } else {
+                    controller.startLocalUpdate(update.getDownloadId());
+                }
+                break;
             case AVAILABLE:
                 if (Utils.isABDevice()) {
                     if (!isBatteryLevelOk()) {
@@ -658,6 +707,10 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case VERIFICATION_FAILED:
                 controller.startDownload(update.getDownloadId());
+                break;
+            case LOCAL_UPDATE_FAILED:
+                controller.startLocalUpdate(update.getDownloadId());
+                break;
             case PAUSED:
                 UpdateInfo pausedUpdateInfo = controller.getUpdate(update.getDownloadId());
                 Update pausedUpdate = new Update(pausedUpdateInfo);
@@ -672,6 +725,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             case INSTALLATION_CANCELLED:
             case INSTALLATION_FAILED:
                 Utils.triggerUpdate(getApplicationContext(), update.getDownloadId());
+                break;
             case DOWNLOADED:
                 final boolean canInstall = Utils.canInstall(getApplicationContext(), update);
                 if (canInstall) {

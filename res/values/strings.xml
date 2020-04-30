@@ -54,6 +54,7 @@
     <!-- Button actions -->
     <string name="button_check_for_update">Check for update</string>
     <string name="button_update_found">Download and install</string>
+    <string name="button_update_found_local">Continue</string>
     <string name="button_pause_update">Pause update</string>
     <string name="button_resume_update">Resume update</string>
     <string name="button_install_update">Restart and install</string>
@@ -76,9 +77,11 @@
 
     <!-- Update available -->
     <string name="update_found_title">System Update Available</string>
+    <string name="update_found_title_local">Local Update Available</string>
     <string name="update_found_subtitle">%1$s %2$s</string>
     <string name="update_found_changelog"><![CDATA[%1$s]]></string>
     <string name="update_found_changelog_default">A new version of Paranoid Android is ready to install. No changes for this update were found.</string>
+    <string name="update_found_changelog_default_local">A new local update has been found, this version is %1$s (%2$s). By tapping continue, you agree to install this update.</string>
     <string name="update_found_size">Update size: %1$s</string>
     <string name="update_found_warning_and_desc">Downloading updates over a cellular network or while roaming may cause additional charges. \n\nThis update requires your device to restart</string>
     <string name="update_found_notification_title">System Update Available</string>

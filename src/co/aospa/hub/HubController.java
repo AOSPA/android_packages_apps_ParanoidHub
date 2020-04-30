@@ -65,7 +65,8 @@ public class HubController {
     private static final int MAX_REPORT_INTERVAL_MS = 1000;
 
     private final Context mContext;
-    private Handler mHandler;
+    private Handler mUiThread;
+    private Handler mBgThread = new Handler();
     private final LocalBroadcastManager mBroadcastManager;
 
     private final PowerManager.WakeLock mWakeLock;
@@ -96,7 +97,7 @@ public class HubController {
 
     private HubController(Context context) {
         mBroadcastManager = LocalBroadcastManager.getInstance(context);
-        mHandler = new Handler(context.getMainLooper());
+        mUiThread = new Handler(context.getMainLooper());
         mDownloadRoot = Utils.getDownloadPath(context);
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Updater");
@@ -116,7 +117,7 @@ public class HubController {
     }
 
     public void notifyUpdateStatusChanged(Update update, int state) {
-        mHandler.post(new Runnable() {
+        mUiThread.post(new Runnable() {
             @Override
             public void run() {
                 for (StatusListener listener : mListeners) {
@@ -168,7 +169,7 @@ public class HubController {
                 Update update = mDownloads.get(downloadId).mUpdate;
                 update.setStatus(UpdateStatus.DOWNLOADED, mContext);
                 removeDownloadClient(mDownloads.get(downloadId));
-                if (!Version.isBuild(TYPE_DEV)) verifyUpdateAsync(update, downloadId);
+                if (!Version.isBuild(TYPE_DEV)) verifyUpdateAsync(update, downloadId, false);
                 notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
                 tryReleaseWakelock();
             }
@@ -223,19 +224,20 @@ public class HubController {
         };
     }
 
-    public void verifyUpdateAsync(Update update, final String downloadId) {
+    public void verifyUpdateAsync(Update update, final String downloadId, boolean isLocalUpdate) {
         update.setStatus(UpdateStatus.VERIFYING, mContext);
+        notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
         mVerifyingUpdates.add(downloadId);
         new Thread(() -> {
             File file = update.getFile();
             if (file.exists() && verifyPackage(file)) {
                 file.setReadable(true, false);
                 update.setPersistentStatus(UpdateStatus.Persistent.VERIFIED);
-                update.setStatus(UpdateStatus.VERIFIED, mContext);
+                update.setStatus(isLocalUpdate ? UpdateStatus.LOCAL_UPDATE : UpdateStatus.VERIFIED, mContext);
             } else {
                 update.setPersistentStatus(UpdateStatus.Persistent.UNKNOWN);
                 update.setProgress(0);
-                update.setStatus(UpdateStatus.VERIFICATION_FAILED, mContext);
+                update.setStatus(isLocalUpdate ? UpdateStatus.LOCAL_UPDATE_FAILED : UpdateStatus.VERIFICATION_FAILED, mContext);
             }
             mVerifyingUpdates.remove(downloadId);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
@@ -335,10 +337,10 @@ public class HubController {
             mDownloads.put(info.getDownloadId(), new DownloadEntry(update));
             if (isLocalUpdate) {
                 if (!Version.isBuild(TYPE_DEV)) {
-                    verifyUpdateAsync(update, info.getDownloadId());
+                    verifyUpdateAsync(update, info.getDownloadId(), true);
                 } else {
                     Log.d(TAG, "Setting update status for local update");
-                    update.setStatus(UpdateStatus.DOWNLOADED, mContext);
+                    update.setStatus(UpdateStatus.LOCAL_UPDATE, mContext);
                 }
             } else {
                 Log.d(TAG, "Setting update status for update");
@@ -351,6 +353,25 @@ public class HubController {
         update.setStatus(status, mContext);
         notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
         return false;
+    }
+
+    public boolean startLocalUpdate(String downloadId) {
+        Log.d(TAG, "Starting local update for " + downloadId);
+        if (!mDownloads.containsKey(downloadId)) {
+            Log.d(TAG, "Local update not registered");
+            return false;
+        }
+
+        Update update = mDownloads.get(downloadId).mUpdate;
+        File destination = Utils.copyUpdateToDir(mDownloadRoot, update.getName());
+        update.setFile(destination);
+        update.setStatus(UpdateStatus.STARTING, mContext);
+        notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
+        mBgThread.postDelayed(() -> {
+            update.setStatus(UpdateStatus.DOWNLOADED, mContext);
+            notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
+        }, 5000);
+        return true;
     }
 
     public boolean startDownload(String downloadId) {
@@ -403,7 +424,7 @@ public class HubController {
         }
         if (file.exists() && update.getFileSize() > 0 && file.length() >= update.getFileSize() && !Version.isBuild(TYPE_DEV)) {
             Log.d(TAG, "File already downloaded, starting verification");
-            if (!Version.isBuild(TYPE_DEV)) verifyUpdateAsync(update, downloadId);
+            if (!Version.isBuild(TYPE_DEV)) verifyUpdateAsync(update, downloadId, false);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
         } else {
             DownloadClient downloadClient;
