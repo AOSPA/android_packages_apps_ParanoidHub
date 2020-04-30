@@ -17,6 +17,8 @@ package co.aospa.hub.controller;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.PowerManager;
+import android.os.Process;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.util.Log;
@@ -32,6 +34,7 @@ import co.aospa.hub.model.UpdateStatus;
 import co.aospa.hub.model.Version;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class UpdateController {
@@ -98,9 +101,23 @@ public class UpdateController {
     }
 
     private void installPackage(File update, String downloadId) {
+        String updateFile = null;
         try {
-            android.os.RecoverySystem.installPackage(mContext, update);
-        } catch (IOException e) {
+            FileOutputStream os = new FileOutputStream(
+                    "/cache/recovery/openrecoveryscript", false);
+            try {
+                updateFile = String.format("install %s", update);
+                os.write(("set tw_signed_zip_verify 0" + "\n").getBytes("UTF-8"));
+                os.write((updateFile + "\n").getBytes("UTF-8"));
+                os.write(("wipe cache" + "\n").getBytes("UTF-8"));
+            } finally {
+                os.close();
+            }
+            Utils.setPermissions("/cache/recovery/openrecoveryscript", 0644,
+                    Process.myUid(), 2001 /* AID_CACHE */);
+            PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+            pm.reboot(PowerManager.REBOOT_RECOVERY);
+        } catch (Exception e) {
             Log.e(TAG, "Could not install update", e);
             mController.getActualUpdate(downloadId)
                     .setStatus(UpdateStatus.INSTALLATION_FAILED, mContext);
