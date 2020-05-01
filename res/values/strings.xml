@@ -140,6 +140,9 @@
     <!-- Verified update -->
     <string name="verified_download_snack">Update verified</string>
 
+    <!-- Preparing -->
+    <string name="preparing_title">Preparing update...</string>
+
     <!-- Install -->
     <string name="install_title">Install Update</string>
     <string name="install_warning_and_desc">Tap the restart button below to apply the update. This process can take 5-10 minutes.</string>
