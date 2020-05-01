@@ -32,6 +32,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
 import co.aospa.hub.controller.ABUpdateController;
+import co.aospa.hub.controller.LocalUpdateController;
 import co.aospa.hub.controller.UpdateController;
 import co.aospa.hub.download.DownloadClient;
 import co.aospa.hub.misc.Constants;
@@ -362,15 +363,9 @@ public class HubController {
             return false;
         }
 
-        Update update = mDownloads.get(downloadId).mUpdate;
-        File destination = Utils.copyUpdateToDir(mDownloadRoot, update.getName());
-        update.setFile(destination);
-        update.setStatus(UpdateStatus.STARTING, mContext);
-        notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
-        mBgThread.postDelayed(() -> {
-            update.setStatus(UpdateStatus.DOWNLOADED, mContext);
-            notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
-        }, 5000);
+        UpdateInfo update = getUpdate(downloadId);
+        LocalUpdateController controller = LocalUpdateController.getInstance(mContext, this);
+        controller.copyUpdateToDir(update);
         return true;
     }
 

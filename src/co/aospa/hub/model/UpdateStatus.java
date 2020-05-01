@@ -38,6 +38,7 @@ public class UpdateStatus {
     public static final int INSTALLATION_SUSPENDED = 17;
     public static final int LOCAL_UPDATE = 18;
     public static final int LOCAL_UPDATE_FAILED = 19;
+    public static final int PREPARING = 20;
 
     public static final class Persistent {
         public static final int UNKNOWN = 0;

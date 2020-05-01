@@ -22,6 +22,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
@@ -32,6 +33,8 @@ import androidx.documentfile.provider.DocumentFile;
 import co.aospa.hub.HubController;
 import co.aospa.hub.R;
 import co.aospa.hub.misc.Constants;
+import co.aospa.hub.misc.FileUtils;
+import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateInfo;
 import co.aospa.hub.model.UpdateStatus;
@@ -47,9 +50,11 @@ public class LocalUpdateController {
     private static final String TAG = "LocalUpdateController";
 
     private static LocalUpdateController sInstance = null;
+    private static String sPreparingUpdate = null;
 
     private final HubController mController;
     private final Context mContext;
+    private Thread mPrepareUpdateThread;
 
     public LocalUpdateController(Context context, HubController controller) {
         mController = controller;
@@ -106,6 +111,72 @@ public class LocalUpdateController {
             }
         } catch (NullPointerException e) {}
         return null;
+    }
+
+    public synchronized void copyUpdateToDir(UpdateInfo update) {
+        String path = Utils.getDownloadPath(mContext) + "/" + update.getName();
+        File updateFile = new File(path);
+        Log.d(TAG, "Copying update to: " + path);
+
+        Runnable copyUpdateRunnable = new Runnable() {
+            private long mLastUpdate = -1;
+
+            FileUtils.ProgressCallBack mProgressCallBack = new FileUtils.ProgressCallBack() {
+                @Override
+                public void update(int progress) {
+                    long now = SystemClock.elapsedRealtime();
+                    if (mLastUpdate < 0 || now - mLastUpdate > 500) {
+                        mController.getActualUpdate(update.getDownloadId())
+                                .setInstallProgress(progress);
+                        mController.getActualUpdate(update.getDownloadId())
+                                .setStatus(UpdateStatus.PREPARING, mContext);
+                        mController.notifyUpdateStatusChanged(mController.getActualUpdate(update.getDownloadId()), HubController.STATE_INSTALL_PROGRESS);
+                        mLastUpdate = now;
+                    }
+
+                    if (progress == 100) {
+                        Utils.setPermissions(updateFile, android.os.FileUtils.S_IRWXU | android.os.FileUtils.S_IRGRP | android.os.FileUtils.S_IROTH, -1, -1);
+                        Log.d(TAG, "Copying local update completed");
+                        mController.getActualUpdate(update.getDownloadId())
+                                .setStatus(UpdateStatus.DOWNLOADED, mContext);
+                        mController.notifyUpdateStatusChanged(mController.getActualUpdate(update.getDownloadId()), HubController.STATE_STATUS_CHANGED);
+                    }
+                }
+            };
+
+            @Override
+            public void run() {
+                try {
+                    FileUtils.copyFile(update.getFile(), updateFile, mProgressCallBack);
+                    mController.getActualUpdate(update.getDownloadId()).setFile(updateFile);
+                    if (mPrepareUpdateThread.isInterrupted()) {
+                        mController.getActualUpdate(update.getDownloadId())
+                                .setStatus(UpdateStatus.UNAVAILABLE, mContext);
+                        mController.getActualUpdate(update.getDownloadId())
+                                .setInstallProgress(0);
+                        updateFile.delete();
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "Could not copy update", e);
+                    updateFile.delete();
+                    mController.getActualUpdate(update.getDownloadId())
+                            .setStatus(UpdateStatus.UNAVAILABLE, mContext);
+                } finally {
+                    synchronized (LocalUpdateController.this) {
+                        mPrepareUpdateThread = null;
+                        sPreparingUpdate = null;
+                    }
+                }
+            }
+        };
+
+        mPrepareUpdateThread = new Thread(copyUpdateRunnable);
+        mPrepareUpdateThread.start();
+        sPreparingUpdate = update.getDownloadId();
+    }
+
+    public static synchronized boolean isPreparing() {
+        return sPreparingUpdate != null;
     }
 
     public static String getRealPath(Context context, Uri uri) {
