@@ -15,12 +15,17 @@
  */
 package co.aospa.hub;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceFragment.OnPreferenceStartFragmentCallback;
@@ -103,6 +108,21 @@ public class HubPreferencesActivity extends Activity implements
         return true;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Utils.getExportPath(getApplicationContext());
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                break;
+        }
+    }
+
     /**
      * This fragment shows the hub preferences.
      */
@@ -110,6 +130,7 @@ public class HubPreferencesActivity extends Activity implements
 
         private String mHighLightKey;
         private boolean mPreferenceHighlighted = false;
+        private SharedPreferences mPrefs;
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -133,6 +154,9 @@ public class HubPreferencesActivity extends Activity implements
                     screen.removePreference(preference);
                 }
             }
+
+            mPrefs = HubPreferencesActivity.this.getApplicationContext().getSharedPreferences(Utils.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
+            mPrefs.registerOnSharedPreferenceChangeListener(this);
         }
 
         @Override
@@ -163,6 +187,27 @@ public class HubPreferencesActivity extends Activity implements
                     return true;
             }
             return true;
+        }
+
+        private void checkPermsAndBegin() {
+            if (ContextCompat.checkSelfPermission(HubPreferencesActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) 
+                        != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(HubPreferencesActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, 
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        1);
+            }
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences pref, String key) {
+            if (PREF_ALLOW_LOCAL_UPDATES.equals(key)) {
+                boolean enabled = mPrefs.getBoolean(PREF_ALLOW_LOCAL_UPDATES, false);
+                if (enabled) {
+                    checkStoragePermissions();
+                }
+            }
         }
 
         @Override
