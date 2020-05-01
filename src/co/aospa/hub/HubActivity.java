@@ -36,6 +36,7 @@ import static co.aospa.hub.model.UpdateStatus.INSTALLATION_CANCELLED;
 import static co.aospa.hub.model.UpdateStatus.INSTALLATION_SUSPENDED;
 import static co.aospa.hub.model.UpdateStatus.LOCAL_UPDATE;
 import static co.aospa.hub.model.UpdateStatus.LOCAL_UPDATE_FAILED;
+import static co.aospa.hub.model.UpdateStatus.PREPARING;
 
 import static co.aospa.hub.model.Version.TYPE_DEV;
 
@@ -426,6 +427,14 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                     mProgressBar.setIndeterminate(false);
                 }
                 break;
+            case PREPARING:
+                if (update != null) {
+                    mHeaderStatus.setText(getResources().getString(R.string.preparing_title));
+                    mButton.setVisibility(View.GONE);
+                    mSecondaryButton.setVisibility(View.GONE);
+                    mProgressBar.setIndeterminate(false);
+                }
+                break;
             case INSTALLING:
                 if (update != null) {
                     mHeaderStatus.setText(getResources().getString(R.string.installing_title));
@@ -544,7 +553,8 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         boolean isChecking = (checkForUpdates == CHECK_LOCAL || checkForUpdates == CHECK_NORMAL);
         boolean progressAllowed = update != null && (update.getStatus() == DOWNLOADING 
                 || update.getStatus() == STARTING || update.getStatus() == PAUSED 
-                || update.getStatus() == VERIFYING || update.getStatus() == INSTALLING);
+                || update.getStatus() == VERIFYING || update.getStatus() == PREPARING
+                || update.getStatus() == INSTALLING);
         mProgressBar.setVisibility((isChecking || progressAllowed) ? View.VISIBLE : View.GONE);
         if (mProgress != -1) {
             mProgressBar.setIndeterminate(false);
