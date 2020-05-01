@@ -90,14 +90,7 @@ public class UpdateController {
                 .putBoolean(Constants.PREF_INSTALL_AGAIN, isReinstalling)
                 .putBoolean(Constants.PREF_INSTALL_NOTIFIED, false)
                 .apply();
-
-        if (Utils.isEncrypted(mContext, update.getFile())) {
-            // uncrypt rewrites the file so that it can be read without mounting
-            // the filesystem, so create a copy of it.
-            prepareForUncryptAndInstall(update);
-        } else {
-            installPackage(update.getFile(), downloadId);
-        }
+        installPackage(update.getFile(), downloadId);
     }
 
     private void installPackage(File update, String downloadId) {
@@ -112,11 +105,11 @@ public class UpdateController {
                 os.write(("wipe cache" + "\n").getBytes("UTF-8"));
             } finally {
                 os.close();
+                Utils.setPermissions("/cache/recovery/openrecoveryscript", 0644,
+                        Process.myUid(), 2001 /* AID_CACHE */);
+                PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+                pm.reboot(PowerManager.REBOOT_RECOVERY);
             }
-            Utils.setPermissions("/cache/recovery/openrecoveryscript", 0644,
-                    Process.myUid(), 2001 /* AID_CACHE */);
-            PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-            pm.reboot(PowerManager.REBOOT_RECOVERY);
         } catch (Exception e) {
             Log.e(TAG, "Could not install update", e);
             mController.getActualUpdate(downloadId)
