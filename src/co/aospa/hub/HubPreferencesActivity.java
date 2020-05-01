@@ -15,12 +15,18 @@
  */
 package co.aospa.hub;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceFragment.OnPreferenceStartFragmentCallback;
@@ -35,7 +41,8 @@ import co.aospa.hub.misc.PreferenceHighlighter;
 import co.aospa.hub.misc.Utils;
 
 public class HubPreferencesActivity extends Activity implements
-        OnPreferenceStartFragmentCallback, OnPreferenceStartScreenCallback {
+        OnPreferenceStartFragmentCallback, OnPreferenceStartScreenCallback,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String EXTRA_FRAGMENT_ARG_KEY = ":settings:fragment_args_key";
     public static final String EXTRA_SHOW_FRAGMENT_ARGS = ":settings:show_fragment_args";
@@ -47,6 +54,8 @@ public class HubPreferencesActivity extends Activity implements
     public static final String PREF_ALLOW_DOWNGRADING = Constants.PREF_ALLOW_DOWNGRADING;
     public static final String PREF_ALLOW_LOCAL_UPDATES = Constants.PREF_ALLOW_LOCAL_UPDATES;
     public static final String PREF_ALLOW_BETA_UPDATES = Constants.PREF_ALLOW_BETA_UPDATES;
+
+    private SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +76,9 @@ public class HubPreferencesActivity extends Activity implements
                     .replace(android.R.id.content, f)
                     .commit();
         }
+
+        mPrefs = getApplicationContext().getSharedPreferences(Utils.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
+        mPrefs.registerOnSharedPreferenceChangeListener(this);
     }
 
     private boolean startFragment(String fragment, Bundle args, String key) {
@@ -101,6 +113,48 @@ public class HubPreferencesActivity extends Activity implements
     public boolean onNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public void onDestroy() {
+        mPrefs.unregisterOnSharedPreferenceChangeListener(this);
+        super.onDestroy();
+    }
+
+    private void checkStoragePermissions() {
+        if (ContextCompat.checkSelfPermission(HubPreferencesActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) 
+                    != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(HubPreferencesActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, 
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences pref, String key) {
+        if (PREF_ALLOW_LOCAL_UPDATES.equals(key)) {
+            boolean enabled = mPrefs.getBoolean(PREF_ALLOW_LOCAL_UPDATES, false);
+            if (enabled) {
+                checkStoragePermissions();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Utils.getExportPath(getApplicationContext());
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                break;
+        }
     }
 
     /**
