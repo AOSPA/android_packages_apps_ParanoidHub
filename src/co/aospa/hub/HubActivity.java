@@ -490,7 +490,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         dialog.setPositiveButton(R.string.no_updates_check_dialog_button_text, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
-                    final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+                    final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     long millis = System.currentTimeMillis();
                     pref.edit().putLong(Constants.PREF_LAST_UPDATE_CHECK, millis).apply();
                     updateMessages(null, CHECK_NORMAL);
@@ -517,7 +517,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         boolean updateUnavailable = update != null && update.getStatus() == UNAVAILABLE;
         if (updateUnavailable || forceUnavailable) {
             mVersionHeader.setVisibility(View.VISIBLE);
-            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             long lastChecked = prefs.getLong(Constants.PREF_LAST_UPDATE_CHECK, -1) / 1000;
             mVersionHeader.setTypeface(mVersionHeader.getTypeface(), Typeface.NORMAL);
             mVersionHeader.setText(String.format(
