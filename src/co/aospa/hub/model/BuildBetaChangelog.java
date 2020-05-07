@@ -15,11 +15,13 @@
  */
 package co.aospa.hub.model;
 
-public class DeviceConfiguration {
+public class BuildBetaChangelog {
 
     private String mChangelog;
+    private String mVersion;
+    private String mDevice;
 
-    public DeviceConfiguration() {
+    public BuildBetaChangelog() {
     }
 
     public void setChangelog(String changelog) {
@@ -28,5 +30,21 @@ public class DeviceConfiguration {
 
     public String getChangelog() {
         return mChangelog;
+    }
+
+    public void setVersion(String version) {
+        mVersion = version;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setDevice(String device) {
+        mDevice = device;
+    }
+
+    public String getDevice() {
+        return mDevice;
     }
 }
