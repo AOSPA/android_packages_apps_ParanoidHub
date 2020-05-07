@@ -19,32 +19,22 @@ public class Configuration {
 
     private boolean mEnabled;
     private boolean mWhitelistOnly;
-    private String mChangelog;
-    private String mBetaChangelog;
 
     public Configuration() {
     }
 
     public void setOtaEnabled(String enabled) {
-        boolean otaEnabled = Boolean.parseBoolean(enabled); 
+        boolean otaEnabled = Boolean.parseBoolean(enabled);
         if (otaEnabled != mEnabled) {
             mEnabled = otaEnabled;
         }
     }
 
     public void setOtaWhitelistOnly(String enabled) {
-        boolean whitelistOnly = Boolean.parseBoolean(enabled); 
+        boolean whitelistOnly = Boolean.parseBoolean(enabled);
         if (whitelistOnly != mWhitelistOnly) {
             mWhitelistOnly = whitelistOnly;
         }
-    }
-
-    public void setChangelog(String changelog) {
-        mChangelog = changelog;
-    }
-
-    public void setBetaChangelog(String betaChangelog) {
-        mBetaChangelog = betaChangelog;
     }
 
     public boolean isOtaEnabledFromServer() {
@@ -53,13 +43,5 @@ public class Configuration {
 
     public boolean isOtaWhitelistOnly() {
         return mWhitelistOnly;
-    }
-
-    public String getChangelog() {
-        return mChangelog;
-    }
-
-    public String getBetaChangelog() {
-        return mBetaChangelog;
     }
 }
