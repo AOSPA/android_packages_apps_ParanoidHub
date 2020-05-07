@@ -89,7 +89,7 @@ import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.StringGenerator;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Configuration;
-import co.aospa.hub.model.DeviceConfiguration;
+import co.aospa.hub.model.DeviceChangelog;
 import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateInfo;
 import co.aospa.hub.model.UpdatePresenter;
@@ -244,16 +244,23 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                         Formatter.formatShortFileSize(this, update.getFileSize())));
 
                 mUpdateDescription.setMovementMethod(LinkMovementMethod.getInstance());
-                Configuration config = mManager.getConfiguration();
+                BuildChangelog buildChangelog = mManager.getBuildChangelog();
+                BuildBetaChangelog buildBetaChangelog = mManager.getBuildBetaChangelog();
                 String changelog = null;
-                if (config != null) {
-                    changelog = isBetaUpdate ? config.getBetaChangelog() : config.getChangelog();
+                if (isBetaUpdate && buildBetaChangelog != null) {
+                    if (buildBetaChangelog.getVersion() > update.getVersion()) {
+                        changelog = buildBetaChangelog.getChangelog();
+                    }
+                } else if (buildChangelog =! null) {
+                    if (buildChangelog.getVersion() > update.getVersion()) {
+                        changelog = buildChangelog.getChangelog();
+                    }
                 }
 
-                DeviceConfiguration deviceConfig = mManager.getDeviceConfiguration();
+                DeviceChangelog deviceBuildChangelog = mManager.getDeviceChangelog();
                 String deviceChangelog = null;
-                if (deviceConfig != null) {
-                    deviceChangelog = deviceConfig.getChangelog();
+                if (deviceBuildChangelog != null) {
+                    deviceChangelog = deviceBuildChangelog.getChangelog();
                 }
 
                 if (changelog != null && !mIsLocalUpdate) {
