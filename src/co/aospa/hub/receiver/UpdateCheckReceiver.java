@@ -95,7 +95,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
             scheduleUpdatesCheck(context, true);
             return;
         }
-        updateDeviceConfiguration();
+        updateDeviceChangelog();
     }
 
     private static void showNotification(Context context, Update update) {
@@ -176,10 +176,10 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
 
     private void updateConfigurations() {
         mRolloutContractor.setupDevice();
-        updateDeviceConfiguration();
+        updateDeviceChangelog();
     }
 
-    private void updateDeviceConfiguration() {
+    private void updateDeviceChangelog() {
         File oldJson = Utils.getCachedUpdateList(mContext);
         File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
         String url = Utils.getServerURL(mContext) + HubUpdateManager.DEVICE_FILE;
