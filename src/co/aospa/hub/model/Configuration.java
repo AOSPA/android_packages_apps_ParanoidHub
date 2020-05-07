@@ -19,8 +19,6 @@ public class Configuration {
 
     private boolean mEnabled;
     private boolean mWhitelistOnly;
-    private String mChangelog;
-    private String mBetaChangelog;
 
     public Configuration() {
     }
@@ -39,27 +37,11 @@ public class Configuration {
         }
     }
 
-    public void setChangelog(String changelog) {
-        mChangelog = changelog;
-    }
-
-    public void setBetaChangelog(String betaChangelog) {
-        mBetaChangelog = betaChangelog;
-    }
-
     public boolean isOtaEnabledFromServer() {
         return mEnabled;
     }
 
     public boolean isOtaWhitelistOnly() {
         return mWhitelistOnly;
-    }
-
-    public String getChangelog() {
-        return mChangelog;
-    }
-
-    public String getBetaChangelog() {
-        return mBetaChangelog;
     }
 }
