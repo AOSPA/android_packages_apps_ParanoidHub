@@ -60,6 +60,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.SystemProperties;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.format.Formatter;
@@ -88,8 +89,10 @@ import co.aospa.hub.download.DownloadClient;
 import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.StringGenerator;
 import co.aospa.hub.misc.Utils;
+import co.aospa.hub.model.BuildBetaChangelog;
+import co.aospa.hub.model.BuildChangelog;
 import co.aospa.hub.model.Configuration;
-import co.aospa.hub.model.DeviceConfiguration;
+import co.aospa.hub.model.DeviceChangelog;
 import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateInfo;
 import co.aospa.hub.model.UpdatePresenter;
@@ -244,21 +247,32 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                         Formatter.formatShortFileSize(this, update.getFileSize())));
 
                 mUpdateDescription.setMovementMethod(LinkMovementMethod.getInstance());
-                Configuration config = mManager.getConfiguration();
                 String changelog = null;
-                if (config != null) {
-                    changelog = isBetaUpdate ? config.getBetaChangelog() : config.getChangelog();
+                if (isBetaUpdate) {
+                    BuildBetaChangelog buildBetaChangelog = mManager.getBetaChangelog();
+                    if (buildBetaChangelog != null) {
+                        if (buildBetaChangelog.getVersion() == update.getVersion() && buildBetaChangelog.getDevice() == SystemProperties.get(Constants.PROP_DEVICE)) {
+                            changelog = buildBetaChangelog.getChangelog();
+                        }
+                    }
+                } else {
+                    BuildChangelog buildChangelog = mManager.getChangelog();
+                    if (buildChangelog != null) {
+                        if (buildChangelog.getVersion() == update.getVersion()) {
+                            changelog = buildChangelog.getChangelog();
+                        }
+                    }
                 }
 
-                DeviceConfiguration deviceConfig = mManager.getDeviceConfiguration();
+                DeviceChangelog deviceBuildChangelog = mManager.getDeviceChangelog();
                 String deviceChangelog = null;
-                if (deviceConfig != null) {
-                    deviceChangelog = deviceConfig.getChangelog();
+                if (deviceBuildChangelog != null) {
+                    deviceChangelog = deviceBuildChangelog.getChangelog();
                 }
 
                 if (changelog != null && !mIsLocalUpdate) {
                     String description = null;
-                    if (deviceChangelog != null) {
+                    if (deviceChangelog != null && deviceBuildChangelog.getVersion() == update.getVersion()) {
                         description = String.format(getResources().getString(
                             R.string.update_found_changelog_plus_device), changelog, deviceChangelog);
                     } else {

@@ -58,13 +58,27 @@ public class UpdatePresenter {
         Configuration config = new Configuration();
         config.setOtaEnabled(object.getString("enabled"));
         config.setOtaWhitelistOnly(object.getString("whitelist_only"));
-        config.setChangelog(object.getString("info"));
-        config.setBetaChangelog(object.getString("info_beta"));
         return config;
     }
 
-    private static DeviceConfiguration buildDeviceConfiguration(JSONObject object) throws JSONException {
-        DeviceConfiguration config = new DeviceConfiguration();
+    private static BuildChangelog buildChangelog(JSONObject object) throws JSONException {
+        BuildChangelog config = new BuildChangelog();
+        config.setVersion(object.getString("version"));
+        config.setChangelog(object.getString("info"));
+        return config;
+    }
+
+    private static BuildBetaChangelog buildBetaChangelog(JSONObject object) throws JSONException {
+        BuildBetaChangelog config = new BuildBetaChangelog();
+        config.setVersion(object.getString("version"));
+        config.setChangelog(object.getString("info"));
+        config.setDevice(object.getString("device"));
+        return config;
+    }
+
+    private static DeviceChangelog buildDeviceChangelog(JSONObject object) throws JSONException {
+        DeviceChangelog config = new DeviceChangelog();
+        config.setVersion(object.getString("version"));
         config.setChangelog(object.getString("info"));
         return config;
     }
@@ -123,9 +137,59 @@ public class UpdatePresenter {
         return config;
     }
 
-    public static DeviceConfiguration matchMakeDeviceConfiguration(File oldConfig, File newConfig)
+    public static BuildChangelog matchMakeBuildChangelog(File oldConfig, File newConfig)
             throws IOException, JSONException {
-        DeviceConfiguration config = null;
+        BuildChangelog config = null;
+        String json = "";
+        try (BufferedReader br = new BufferedReader(new FileReader(newConfig))) {
+            for (String line; (line = br.readLine()) != null;) {
+                json += line;
+            }
+        }
+        JSONObject obj = new JSONObject(json);
+        JSONArray changes = obj.getJSONArray("changelog");
+        for (int i = 0; i < changes.length(); i++) {
+            if (changes.isNull(i)) {
+                continue;
+            }
+            try {
+                config = buildChangelog(changes.getJSONObject(i));
+            } catch (JSONException e) {
+                Log.d(TAG, "Could not parse configuration object, index=" + i, e);
+            }
+        }
+        newConfig.renameTo(oldConfig);
+        return config;
+    }
+
+    public static BuildBetaChangelog matchMakeBuildBetaChangelog(File oldConfig, File newConfig)
+            throws IOException, JSONException {
+        BuildBetaChangelog config = null;
+        String json = "";
+        try (BufferedReader br = new BufferedReader(new FileReader(newConfig))) {
+            for (String line; (line = br.readLine()) != null;) {
+                json += line;
+            }
+        }
+        JSONObject obj = new JSONObject(json);
+        JSONArray changes = obj.getJSONArray("beta_changelog");
+        for (int i = 0; i < changes.length(); i++) {
+            if (changes.isNull(i)) {
+                continue;
+            }
+            try {
+                config = buildBetaChangelog(changes.getJSONObject(i));
+            } catch (JSONException e) {
+                Log.d(TAG, "Could not parse configuration object, index=" + i, e);
+            }
+        }
+        newConfig.renameTo(oldConfig);
+        return config;
+    }
+
+    public static DeviceChangelog matchMakeDeviceChangelog(File oldConfig, File newConfig)
+            throws IOException, JSONException {
+        DeviceChangelog config = null;
         String json = "";
         try (BufferedReader br = new BufferedReader(new FileReader(newConfig))) {
             for (String line; (line = br.readLine()) != null;) {
@@ -139,7 +203,7 @@ public class UpdatePresenter {
                 continue;
             }
             try {
-                config = buildDeviceConfiguration(changes.getJSONObject(i));
+                config = buildDeviceChangelog(changes.getJSONObject(i));
             } catch (JSONException e) {
                 Log.d(TAG, "Could not parse configuration object, index=" + i, e);
             }
