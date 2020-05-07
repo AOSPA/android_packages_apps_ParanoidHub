@@ -88,8 +88,16 @@ public class Utils {
         return new File(context.getCacheDir(), "configuration.json");
     }
 
-    public static File getCachedDeviceConfiguration(Context context) {
-        return new File(context.getCacheDir(), "device_configuration.json");
+    public static File getCachedBuildChangelog(Context context) {
+        return new File(context.getCacheDir(), "changelog.json");
+    }
+
+    public static File getCachedBuildBetaChangelog(Context context) {
+        return new File(context.getCacheDir(), "beta_changelog.json");
+    }
+
+    public static File getCachedDeviceChangelog(Context context) {
+        return new File(context.getCacheDir(), "device_changelog.json");
     }
 
     public static boolean canInstall(Context context, Update update) {
