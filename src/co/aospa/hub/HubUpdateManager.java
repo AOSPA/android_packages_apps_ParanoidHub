@@ -32,8 +32,10 @@ import co.aospa.hub.download.ClientConnector;
 import co.aospa.hub.download.DownloadClient;
 import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.Utils;
+import co.aospa.hub.model.BuildBetaChangelog;
+import co.aospa.hub.model.BuildChangelog;
 import co.aospa.hub.model.Configuration;
-import co.aospa.hub.model.DeviceConfiguration;
+import co.aospa.hub.model.DeviceChangelog;
 import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateInfo;
 import co.aospa.hub.model.UpdatePresenter;
@@ -50,8 +52,10 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
 
     private static final String TAG = "HubUpdateManager";
     public static final String DEVICE_FILE = "updates/" + SystemProperties.get(Constants.PROP_DEVICE);
-    private static final String DEVICE_CONFIGURATION_FILE = SystemProperties.get(Constants.PROP_DEVICE) + "_configuration";
+    private static final String DEVICE_CHANGELOG_FILE = SystemProperties.get(Constants.PROP_DEVICE) + "_changelog";
     private static final String OTA_CONFIGURATION_FILE = "ota_configuration";
+    private static final String OTA_CHANGELOG_FILE = "changelog";
+    private static final String OTA_BETA_CHANGELOG_FILE = "beta_changelog";
 
     private Context mContext;
     private ClientConnector mConnector;
@@ -62,11 +66,15 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     private RolloutContractor mRolloutContractor;
 
     private Configuration mConfig;
-    private DeviceConfiguration mDeviceConfig;
+    private BuildChangelog mChangelog;
+    private BuildBetaChangelog mBetaChangelog;
+    private DeviceChangelog mDeviceChangelog;
 
     private boolean mEnabled;
     private boolean mIsConfigMatchMaking = false;
-    private boolean mIsDeviceConfigMatchMaking = false;
+    private boolean mIsBuildChangelogMatchMaking = false;
+    private boolean mIsBuildBetaChangelogMatchMaking = false;
+    private boolean mIsDeviceChangelogMatchMaking = false;
     private boolean mIsUpdateAvailable = false;
     private boolean mUserInitiated;
 
@@ -256,11 +264,35 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         }
     }
 
-    private void fetchOrUpdateDeviceConfig() {
+    private void fetchOrUpdateChangelog() {
         if (mEnabled) {
-            File oldJson = Utils.getCachedDeviceConfiguration(mContext);
+            File oldJson = Utils.getCachedBuildChangelog(mContext);
             File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
-            String url = Utils.getServerURL(mContext) + DEVICE_CONFIGURATION_FILE;
+            String url = Utils.getServerURL(mContext) + OTA_CHANGELOG_FILE;
+            Log.d(TAG, "Updating changelog from " + url);
+            mConnector.insert(oldJson, newJson, url);
+            mIsBuildChangelogMatchMaking = true;
+            beginMatchMaker();
+        }
+    }
+
+    private void fetchOrUpdateBetaChangelog() {
+        if (mEnabled) {
+            File oldJson = Utils.getCachedBuildBetaChangelog(mContext);
+            File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
+            String url = Utils.getServerURL(mContext) + OTA_BETA_CHANGELOG_FILE;
+            Log.d(TAG, "Updating beta changelog from " + url);
+            mConnector.insert(oldJson, newJson, url);
+            mIsBuildBetaChangelogMatchMaking = true;
+            beginMatchMaker();
+        }
+    }
+
+    private void fetchOrUpdateDeviceChangelog() {
+        if (mEnabled) {
+            File oldJson = Utils.getCachedDeviceChangelog(mContext);
+            File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
+            String url = Utils.getServerURL(mContext) + DEVICE_CHANGELOG_FILE;
             Log.d(TAG, "Updating device configuration from " + url);
             mConnector.insert(oldJson, newJson, url);
             mIsDeviceConfigMatchMaking = true;
@@ -272,8 +304,16 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         return mConfig;
     }
 
-    public DeviceConfiguration getDeviceConfiguration() {
-        return mDeviceConfig;
+    public BuildChangelog getChangelog() {
+        return mChangelog;
+    }
+
+    public BuildBetaChangelog getBetaChangelog() {
+        return mBetaChangelog;
+    }
+
+    public DeviceChangelog getDeviceChangelog() {
+        return mDeviceChangelog;
     }
 
     @Override
@@ -303,15 +343,33 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
             } catch (IOException | JSONException e) {}
             mIsConfigMatchMaking = false;
             Log.d(TAG, "Ota configuration Updated!");
-            fetchOrUpdateDeviceConfig();
+            fetchOrUpdateDeviceChangelog();
         }
 
-        if (mIsDeviceConfigMatchMaking) {
+        if (mIsBuildChangelogMatchMaking) {
             try {
-                mDeviceConfig = UpdatePresenter.matchMakeDeviceConfiguration(oldJson, newJson);
+                mChangelog = UpdatePresenter.matchMakeBuildChangelog(oldJson, newJson);
             } catch (IOException | JSONException e) {}
-            mIsDeviceConfigMatchMaking = false;
-            Log.d(TAG, "Device configuration Updated!");
+            mIsBuildChangelogMatchMaking = false;
+            Log.d(TAG, "Changelog Updated!");
+            fetchCachedOrNewUpdates();
+        }
+
+        if (mIsBuildBetaChangelogMatchMaking) {
+            try {
+                mChangelog = UpdatePresenter.matchMakeBuildBetaChangelog(oldJson, newJson);
+            } catch (IOException | JSONException e) {}
+            mIsBuildBetaChangelogMatchMaking = false;
+            Log.d(TAG, "Beta changelog Updated!");
+            fetchCachedOrNewUpdates();
+        }
+
+        if (mIsDeviceChangelogMatchMaking) {
+            try {
+                mDeviceChangelog = UpdatePresenter.matchMakeDeviceChangelog(oldJson, newJson);
+            } catch (IOException | JSONException e) {}
+            mIsDeviceChangelogMatchMaking = false;
+            Log.d(TAG, "Device changelog Updated!");
             fetchCachedOrNewUpdates();
         }
 
