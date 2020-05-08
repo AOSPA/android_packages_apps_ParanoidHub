@@ -17,19 +17,6 @@
     <string name="os_name">Paranoid Android</string>
     <string name="join_two_unrelated_items"><xliff:g id="first_item">%1$s</xliff:g>, <xliff:g id="second_item">%2$s</xliff:g></string>
 
-    <string name="app_preferences_class">co.aospa.hub.HubPreferencesActivity$HubSettingsFragment</string>
-
-    <!-- Directory where the update files will be downloaded and stored.
-         WARNING: The application can and will delete any unknown file. -->
-    <string name="download_path" translatable="false">/hub_updates</string>
-
-    <!-- Directory where the downloads will be exported to.
-         The path is relative to the root of the external storage.-->
-    <string name="export_path" translatable="false">/ParanoidHub</string>
-
-    <!-- The sever that hosts the update files -->
-    <string name="hub_server_url" translatable="false">"http://api.aospa.co/"</string>
-
     <plurals name="eta_seconds">
         <item quantity="one">Queda 1 segundo</item>
         <item quantity="other">Queda(n) <xliff:g id="count">%d</xliff:g> segundos</item>
