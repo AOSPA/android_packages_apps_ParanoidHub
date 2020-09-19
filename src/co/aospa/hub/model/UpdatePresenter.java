@@ -51,6 +51,7 @@ public class UpdatePresenter {
         update.setFileSize(object.getLong("size"));
         update.setDownloadUrl(object.getString("url"));
         update.setDownloadId(object.getString("md5"));
+        update.setDeviceChangelog(object.getString("changelog"));
         return update;
     }
 

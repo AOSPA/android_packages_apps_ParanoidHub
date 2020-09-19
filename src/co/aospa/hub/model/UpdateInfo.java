@@ -37,4 +37,6 @@ public interface UpdateInfo extends UpdateBaseInfo {
     boolean getAvailableOnline();
 
     boolean getFinalizing();
+
+    String getDeviceChangelog();
 }

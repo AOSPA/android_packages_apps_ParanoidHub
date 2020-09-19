@@ -250,8 +250,15 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 }
 
                 if (changelog != null && !mIsLocalUpdate) {
-                    String description = String.format(getResources().getString(
+                    String deviceChangelog = update.getDeviceChangelog();
+                    String description = null;
+                    if (deviceChangelog != null) {
+                        description = String.format(getResources().getString(
+                            R.string.update_found_changelogs), changelog, deviceChangelog);
+                    } else {
+                        description = String.format(getResources().getString(
                             R.string.update_found_changelog), changelog);
+                    }
                     mUpdateDescription.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
                 } else {
                     String defaultRes = getResources().getString(R.string.update_found_changelog_default);
