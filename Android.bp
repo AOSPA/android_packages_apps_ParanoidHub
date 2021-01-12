@@ -25,8 +25,16 @@ android_app {
     ],
     platform_apis: true,
     privileged: true,
+    required: "privapp_whitelist_co.aospa.hub.xml",
     system_ext_specific: true,
     optimize: {
         proguard_flags_files: ["proguard.flags"],
     },
+}
+
+prebuilt_etc {
+    name: "privapp_whitelist_co.aospa.hub.xml",
+    src: "privapp_whitelist_co.aospa.hub.xml",
+    sub_dir: "permissions",
+    system_ext_specific: true,
 }
