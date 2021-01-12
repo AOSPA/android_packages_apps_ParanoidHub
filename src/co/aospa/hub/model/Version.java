@@ -44,6 +44,8 @@ public class Version {
     private boolean mAllowBetaUpdates;
     private boolean mAllowDowngrading;
 
+    private static boolean isBetaUpdate;
+
     public Version() {
     }
 
@@ -51,7 +53,7 @@ public class Version {
         mContext = context;
         SharedPreferences prefs = context.getSharedPreferences(Utils.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
         mAllowBetaUpdates = prefs.getBoolean(Constants.PREF_ALLOW_BETA_UPDATES, false);
-        mAllowDowngrading = prefs.getBoolean(Constants.PREF_ALLOW_DOWNGRADING, 
+        mAllowDowngrading = prefs.getBoolean(Constants.PREF_ALLOW_DOWNGRADING,
                 context.getResources().getBoolean(R.bool.config_allowDowngradingDefault));
         mName = update.getName();
         mVersion = update.getVersion();
@@ -60,13 +62,15 @@ public class Version {
     }
 
     public boolean isUpdateAvailable() {
+        isBetaUpdate = isBetaUpdate();
+
         if (isDowngrade()) {
             Log.d(TAG, mName + " is available for downgrade");
             return true;
         }
 
         if (isIncremental()) {
-            if (isBetaUpdate() && !mAllowBetaUpdates) {
+            if (isBetaUpdate && !mAllowBetaUpdates) {
                 Log.d(TAG, mName + " is a beta but the user is not opted in");
                 return false;
             }
@@ -75,21 +79,20 @@ public class Version {
         }
 
         if (isNewUpdate()) {
-            if (isBetaUpdate() && !mAllowBetaUpdates) {
+            if (isBetaUpdate && !mAllowBetaUpdates) {
                 Log.d(TAG, mName + " is a beta but the user is not opted in");
                 return false;
             }
             Log.d(TAG, mName + " is available for update");
             return true;
         }
-        Log.d(TAG, mName + " Verson:" + mVersion 
-                + "Build:" + Long.toString(mTimestamp) 
+        Log.d(TAG, mName + " Verson:" + mVersion + "Build:" + Long.toString(mTimestamp)
                 + " is older than current Paranoid Android version");
         return false;
     }
 
     public boolean isNewUpdate() {
-        return Float.valueOf(mVersion) > Float.valueOf(getCurrentVersion()) 
+        return Float.valueOf(mVersion) > Float.valueOf(getCurrentVersion())
                 && mTimestamp > getCurrentTimestamp();
     }
 
@@ -99,7 +102,7 @@ public class Version {
     }
 
     public boolean isDowngrade() {
-        return mAllowDowngrading && 
+        return mAllowDowngrading &&
                 Float.valueOf(mVersion) < Float.valueOf(getCurrentVersion());
     }
 
@@ -114,7 +117,11 @@ public class Version {
     public static long getCurrentTimestamp() {
         String version = SystemProperties.get(Constants.PROP_VERSION);
         String[] split = version.split("-");
-        String date = split[3];
+        if (isBetaUpdate) {
+           String date = split[5];
+        } else {
+           String date = split[4];
+        }
         return Long.valueOf(date);
     }
 
@@ -135,7 +142,7 @@ public class Version {
         String updateType = null;
         String[] split = mName.split("-");
         try {
-            updateType = split[5];
+            updateType = split[2];
         } catch(ArrayIndexOutOfBoundsException e) {
             return false;
         }
