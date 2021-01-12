@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Paranoid Android
+ * Copyright (C) 2021 Paranoid Android
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ public class Version {
         mContext = context;
         SharedPreferences prefs = context.getSharedPreferences(Utils.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
         mAllowBetaUpdates = prefs.getBoolean(Constants.PREF_ALLOW_BETA_UPDATES, false);
-        mAllowDowngrading = prefs.getBoolean(Constants.PREF_ALLOW_DOWNGRADING, 
+        mAllowDowngrading = prefs.getBoolean(Constants.PREF_ALLOW_DOWNGRADING,
                 context.getResources().getBoolean(R.bool.config_allowDowngradingDefault));
         mName = update.getName();
         mVersion = update.getVersion();
@@ -60,6 +60,7 @@ public class Version {
     }
 
     public boolean isUpdateAvailable() {
+
         if (isDowngrade()) {
             Log.d(TAG, mName + " is available for downgrade");
             return true;
@@ -82,14 +83,13 @@ public class Version {
             Log.d(TAG, mName + " is available for update");
             return true;
         }
-        Log.d(TAG, mName + " Verson:" + mVersion 
-                + "Build:" + Long.toString(mTimestamp) 
+        Log.d(TAG, mName + " Version:" + mVersion + "Build:" + Long.toString(mTimestamp)
                 + " is older than current Paranoid Android version");
         return false;
     }
 
     public boolean isNewUpdate() {
-        return Float.valueOf(mVersion) > Float.valueOf(getCurrentVersion()) 
+        return Float.valueOf(mVersion) > Float.valueOf(getCurrentVersion())
                 && mTimestamp > getCurrentTimestamp();
     }
 
@@ -99,7 +99,7 @@ public class Version {
     }
 
     public boolean isDowngrade() {
-        return mAllowDowngrading && 
+        return mAllowDowngrading &&
                 Float.valueOf(mVersion) < Float.valueOf(getCurrentVersion());
     }
 
@@ -112,9 +112,14 @@ public class Version {
     }
 
     public static long getCurrentTimestamp() {
+        String date;
         String version = SystemProperties.get(Constants.PROP_VERSION);
         String[] split = version.split("-");
-        String date = split[3];
+        if (TYPE_BETA.toLowerCase().equals(getCurrentFlavor().toLowerCase()) {
+           date = split[5];
+        } else {
+           date = split[4];
+        }
         return Long.valueOf(date);
     }
 
@@ -135,7 +140,7 @@ public class Version {
         String updateType = null;
         String[] split = mName.split("-");
         try {
-            updateType = split[5];
+            updateType = split[2];
         } catch(ArrayIndexOutOfBoundsException e) {
             return false;
         }
