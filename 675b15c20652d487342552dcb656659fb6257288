@@ -16,6 +16,24 @@
       "message": "No need to extract this to a member variable. The existing use of function calls is fine",
       "revId": "675b15c20652d487342552dcb656659fb6257288",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9010ac96_3d4cea5f",
+        "filename": "src/co/aospa/hub/model/Version.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2021-01-13T01:33:51Z",
+      "side": 1,
+      "message": "We need it for getCurrentTimmestamp, that\u0027s why I saved it.\n\nYou can\u0027t call a non static method from a static one, and the other solution would be calling a new instance in that method and then reading from method.\n\nAs isUpdateAvailable is the method that gets called from other classes I think this approach is easier.",
+      "parentUuid": "16ba5480_0040ef24",
+      "revId": "675b15c20652d487342552dcb656659fb6257288",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     }
   ]
 }
