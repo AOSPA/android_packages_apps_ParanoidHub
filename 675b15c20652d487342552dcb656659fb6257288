@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16ba5480_0040ef24",
+        "filename": "src/co/aospa/hub/model/Version.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-01-13T01:29:43Z",
+      "side": 1,
+      "message": "No need to extract this to a member variable. The existing use of function calls is fine",
+      "revId": "675b15c20652d487342552dcb656659fb6257288",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    }
+  ]
+}
