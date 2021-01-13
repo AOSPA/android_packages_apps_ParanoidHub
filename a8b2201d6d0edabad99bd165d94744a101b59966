@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fe34633_b0c2d819",
+        "filename": "src/co/aospa/hub/HubActivity.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-01-13T05:49:04Z",
+      "side": 1,
+      "message": "The logic here is contrary to the logic described in the commit message. As written, \"Release\" would show in the version text, but never alpha or beta.",
+      "revId": "a8b2201d6d0edabad99bd165d94744a101b59966",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8eae1d0a_bcdba686",
+        "filename": "src/co/aospa/hub/HubActivity.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-01-13T05:49:04Z",
+      "side": 1,
+      "message": "Syntax errors in the else block.",
+      "revId": "a8b2201d6d0edabad99bd165d94744a101b59966",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    }
+  ]
+}
