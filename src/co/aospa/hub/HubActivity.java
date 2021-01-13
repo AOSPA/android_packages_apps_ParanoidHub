@@ -520,10 +520,18 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             long lastChecked = prefs.getLong(Constants.PREF_LAST_UPDATE_CHECK, -1) / 1000;
             mVersionHeader.setTypeface(mVersionHeader.getTypeface(), Typeface.NORMAL);
-            mVersionHeader.setText(String.format(
-                    getResources().getString(R.string.no_updates_text), 
-                    Version.getCurrentFlavor(), Version.getCurrentVersion(), 
-                    StringGenerator.getTimeLocalized(this, lastChecked)));
+            if (Version.getBuildType != "Release") {
+                    mVersionHeader.setText(String.format(
+                            getResources().getString(R.string.no_updates_text), 
+                            Version.getCurrentFlavor(), Version.getBuildType(),
+                            Version.getCurrentVersion(),
+                            StringGenerator.getTimeLocalized(this, lastChecked)));
+            } else {}
+                mVersionHeader.setText(String.format(
+                        getResources().getString(R.string.no_updates_text),
+                        Version.getCurrentFlavor(), Version.getCurrentVersion(),
+                        StringGenerator.getTimeLocalized(this, lastChecked)));
+            ]
         }
     }
 
