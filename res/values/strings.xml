@@ -64,6 +64,7 @@
     <!-- Up To Date -->
     <string name="no_updates_title">Your System is Up To Date</string>
     <string name="no_updates_text">Paranoid Android Version: %1$s %2$s \nLast checked: %3$s</string>
+    <string name="no_updates_text_no_release">Paranoid Android Version: %1$s %2$s %3$s \nLast checked: %4$s</string>
     <string name="no_updates_last_checked">Last checked: %1$s</string>
     <string name="no_updates_current_version">Version: %1$s %2$s</string>
     <string name="no_updates_found_snack">No new updates found</string>
