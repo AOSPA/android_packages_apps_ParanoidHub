@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9cc424e_6b57398f",
+        "filename": "src/co/aospa/hub/model/Version.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-01-13T06:48:32Z",
+      "side": 1,
+      "message": "packages/apps/ParanoidHub/src/co/aospa/hub/model/Version.java:122: error: \u0027)\u0027 expected\n        if (TYPE_BETA.toLowerCase().equals(getBuildType().toLowerCase()) {",
+      "range": {
+        "startLine": 122,
+        "startChar": 69,
+        "endLine": 122,
+        "endChar": 74
+      },
+      "revId": "7b743f8a31f891e534ea85debe02ff7d5a0693e5",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    }
+  ]
+}
