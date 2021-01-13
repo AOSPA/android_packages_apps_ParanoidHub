@@ -34,6 +34,24 @@
       "parentUuid": "16ba5480_0040ef24",
       "revId": "675b15c20652d487342552dcb656659fb6257288",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9f5d20e_50aa5cb7",
+        "filename": "src/co/aospa/hub/model/Version.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-01-13T01:51:38Z",
+      "side": 1,
+      "message": "I see, it\u0027s actually worse than what I commented about then. The getCurrentVersion function examines the system version, not the version represented by the current instance of the Version object. As such, when determining if beta version status inside of getCurrentVersion, you should use the getBuildType function. The one line in isBetaUpdate along with the call to getBuildType in getCurrentVersion is the only code that needs to change.",
+      "parentUuid": "9010ac96_3d4cea5f",
+      "revId": "675b15c20652d487342552dcb656659fb6257288",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     }
   ]
 }
