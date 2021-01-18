@@ -44,14 +44,18 @@ public class UpdatePresenter {
     // This should really return an UpdateBaseInfo object, but currently this only
     // used to initialize UpdateInfo objects
     private static UpdateInfo buildUpdate(Context context, JSONObject object) throws JSONException {
-        Update update = new Update(context);
-        update.setName(object.getString("name"));
-        update.setVersion(object.getString("version"));
-        update.setTimestamp(object.getLong("build"));
-        update.setFileSize(object.getLong("size"));
-        update.setDownloadUrl(object.getString("url"));
-        update.setDownloadId(object.getString("md5"));
-        return update;
+        try {
+            Update update = new Update(context);
+            update.setName(object.getString("name"));
+            update.setVersion(object.getString("version"));
+            update.setTimestamp(object.getLong("build"));
+            update.setFileSize(object.getLong("size"));
+            update.setDownloadUrl(object.getString("url"));
+            update.setDownloadId(object.getString("md5"));
+            return update;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private static Configuration buildConfiguration(JSONObject object) throws JSONException {
