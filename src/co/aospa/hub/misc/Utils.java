@@ -20,14 +20,17 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.BatteryManager;
 import android.os.Environment;
 import android.os.SystemProperties;
 import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,20 +40,24 @@ import org.json.JSONObject;
 import co.aospa.hub.R;
 import co.aospa.hub.UpdatesDbHelper;
 import co.aospa.hub.controller.UpdaterService;
+import co.aospa.hub.download.DownloadClient;
 import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateBaseInfo;
 import co.aospa.hub.model.UpdateInfo;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -58,22 +65,15 @@ public class Utils {
 
     private static final String TAG = "Utils";
 
+    private static final int BATTERY_PLUGGED_ANY = BatteryManager.BATTERY_PLUGGED_AC
+            | BatteryManager.BATTERY_PLUGGED_USB
+            | BatteryManager.BATTERY_PLUGGED_WIRELESS;
+
     private Utils() {
     }
 
     public static File getDownloadPath(Context context) {
         return new File(context.getString(R.string.download_path));
-    }
-
-    public static File getExportPath(Context context) {
-        File dir = new File(Environment.getExternalStorageDirectory(),
-                context.getString(R.string.export_path));
-        if (!dir.isDirectory()) {
-            if (dir.exists() || !dir.mkdirs()) {
-                throw new RuntimeException("Could not create directory");
-            }
-        }
-        return dir;
     }
 
     public static File getCachedUpdateList(Context context) {
@@ -95,7 +95,11 @@ public class Utils {
     }
 
     public static boolean isCompatible(UpdateBaseInfo update) {
-        if (update.getVersion().compareTo(SystemProperties.get(Constants.PROP_BUILD_VERSION)) < 0) {
+        String[] signedBuilds = new String[]{"alpha", "beta", "release"};
+        List<String> signed = Arrays.asList(signedBuilds);
+        String[] upgradeVersion = update.getVersion().split("-");
+        String[] currentVersion = SystemProperties.get(Constants.PROP_VERSION_CODE).split("-");
+        if (upgradeVersion[0].equalsIgnoreCase(currentVersion[0]) && upgradeVersion[1].compareToIgnoreCase(currentVersion[1]) > -1) {
             Log.d(TAG, update.getName() + " is older than current Android version");
             return false;
         }
@@ -104,7 +108,7 @@ public class Utils {
             Log.d(TAG, update.getName() + " is older than/equal to the current build");
             return false;
         }
-        if (!update.getType().equalsIgnoreCase(SystemProperties.get(Constants.PROP_RELEASE_TYPE))) {
+        if (!(signed.contains(upgradeVersion[4]) && signed.contains(upgradeVersion[4]))) {
             Log.d(TAG, update.getName() + " has type " + update.getType());
             return false;
         }
@@ -114,8 +118,7 @@ public class Utils {
     public static boolean canInstall(UpdateBaseInfo update) {
         return (SystemProperties.getBoolean(Constants.PROP_UPDATER_ALLOW_DOWNGRADING, false) ||
                 update.getTimestamp() > SystemProperties.getLong(Constants.PROP_BUILD_DATE, 0)) &&
-                update.getVersion().equalsIgnoreCase(
-                        SystemProperties.get(Constants.PROP_BUILD_VERSION));
+                isCompatible(update);
     }
 
     public static List<UpdateInfo> parseJson(File file, boolean compatibleOnly)
@@ -151,7 +154,7 @@ public class Utils {
     }
 
     public static String getServerURL(Context context) {
-        String incrementalVersion = SystemProperties.get(Constants.PROP_BUILD_VERSION_INCREMENTAL);
+        String version = SystemProperties.get(Constants.PROP_BUILD_VERSION).toLowerCase(Locale.ROOT);
         String device = SystemProperties.get(Constants.PROP_DEVICE);
         String type = SystemProperties.get(Constants.PROP_RELEASE_TYPE).toLowerCase(Locale.ROOT);
 
@@ -161,18 +164,30 @@ public class Utils {
         }
 
         return serverUrl.replace("{device}", device)
-                .replace("{type}", type)
-                .replace("{incr}", incrementalVersion);
+                .replace("{version}", version)
+                .replace("{type}", type);
     }
 
-    public static String getUpgradeBlockedURL(Context context) {
-        String device = SystemProperties.get(Constants.PROP_DEVICE);
-        return context.getString(R.string.blocked_update_info_url, device);
-    }
-
-    public static String getChangelogURL(Context context) {
-        String device = SystemProperties.get(Constants.PROP_DEVICE);
-        return context.getString(R.string.menu_changelog_url, device);
+    public static String parseChangelogJson(File toRead) {
+        String ret = "";
+        try (BufferedReader br = new BufferedReader(new FileReader(toRead))) {
+            for (String line; (line = br.readLine()) != null;) {
+                ret += line;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, e.toString());
+            Log.e(TAG, "Could not parse file text.");
+        }
+        try {
+            JSONObject obj = new JSONObject(ret);
+            JSONArray arr = obj.getJSONArray("ota_configuration");
+            String changelog = arr.getJSONObject(0).getString("info");
+            toRead.delete();
+            return Html.fromHtml(changelog, Html.FROM_HTML_MODE_COMPACT).toString();
+        } catch (JSONException e) {
+            Log.e(TAG, "Could not parse changelog json.");
+        }
+        return ret;
     }
 
     public static void triggerUpdate(Context context, String downloadId) {
@@ -401,5 +416,20 @@ public class Utils {
 
     public static boolean isRecoveryUpdateExecPresent() {
         return new File(Constants.UPDATE_RECOVERY_EXEC).exists();
+    }
+
+    public static boolean isBatteryLevelOk(Context context) {
+        Intent intent = context.registerReceiver(null,
+                new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        if (!intent.getBooleanExtra(BatteryManager.EXTRA_PRESENT, false)) {
+            return true;
+        }
+        int percent = Math.round(100.f * intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 100) /
+                intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100));
+        int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
+        int required = (plugged & BATTERY_PLUGGED_ANY) != 0 ?
+                context.getResources().getInteger(R.integer.battery_ok_percentage_charging) :
+                context.getResources().getInteger(R.integer.battery_ok_percentage_discharging);
+        return percent >= required;
     }
 }

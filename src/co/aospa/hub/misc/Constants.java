@@ -40,7 +40,6 @@ public final class Constants {
     public static final String PROP_AB_DEVICE = "ro.build.ab_update";
     public static final String PROP_BUILD_DATE = "ro.build.date.utc";
     public static final String PROP_BUILD_VERSION = "ro.pa.version.flavor";
-    public static final String PROP_BUILD_VERSION_INCREMENTAL = "ro.build.version.incremental";
     public static final String PROP_DEVICE = "ro.pa.device";
     public static final String PROP_RELEASE_TYPE = "ro.pa.build.variant";
     public static final String PROP_VERSION_CODE = "ro.pa.version.code";

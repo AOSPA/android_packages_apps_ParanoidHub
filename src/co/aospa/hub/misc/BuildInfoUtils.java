@@ -17,6 +17,10 @@ package co.aospa.hub.misc;
 
 import android.os.SystemProperties;
 
+import java.util.HashMap;
+
+import co.aospa.hub.model.UpdateInfo;
+
 public final class BuildInfoUtils {
 
     private BuildInfoUtils() {
@@ -31,5 +35,15 @@ public final class BuildInfoUtils {
         String versionCode = SystemProperties.get(Constants.PROP_VERSION_CODE);
         String variant = SystemProperties.get(Constants.PROP_RELEASE_TYPE);
         return majorVersion + " " + versionCode + " " + variant;
+    }
+
+    public static String getUpdateVersion(UpdateInfo update) {
+        String majorVersion = SystemProperties.get(Constants.PROP_BUILD_VERSION);
+        HashMap<String, String> variants = new HashMap<>();
+        variants.put("beta", "Beta");
+        variants.put("alpha", "Alpha");
+        variants.put("release", "Release");
+        String[] upgradeVersion = update.getVersion().split("-");
+        return majorVersion + " " + upgradeVersion[1] + " " + variants.get(upgradeVersion[4]);
     }
 }

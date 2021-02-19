@@ -1,102 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_container"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
+    <FrameLayout
+        android:id="@+id/download_header"
+        android:orientation="vertical"
+        android:showDividers="end"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="256dp"
+            android:orientation="vertical"
+            android:showDividers="end"
+            android:background="@color/scrim_background">
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:id="@+id/toolbar"
+                android:elevation="0dp"
+                android:layout_height="?attr/actionBarSize" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingStart="16dp"
+                            android:paddingBottom="16dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:id="@+id/header_msg"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="System Update"
+                                    android:textColor="?android:textColorPrimary"
+                                    android:textSize="18sp"
+                                    tools:fontFamily="sans-serif-medium" />
+                                <TextView
+                                    android:id="@+id/version_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="PA11B"
+                                    android:textColor="?android:textColorSecondary"
+                                    android:textSize="12sp"
+                                    tools:fontFamily="sans-serif"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:orientation="vertical">
+                                <com.google.android.material.button.MaterialButton
+                                    style="?attr/materialButtonOutlinedStyle"
+                                    android:id="@+id/control_button"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:insetTop="0dp"
+                                    android:insetBottom="0dp"
+                                    android:text="Download"
+                                    app:iconGravity="textStart"
+                                    app:iconTint="@*android:color/accent_device_default"
+                                    android:textColor="@*android:color/accent_device_default"
+                                    app:strokeColor="@*android:color/accent_device_default"
+                                    app:rippleColor="#00796b"
+                                    app:icon="@drawable/ic_download"
+                                    app:iconSize="18dp" />
+                            </LinearLayout>
+                        </FrameLayout>
+                    </LinearLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="-24dp">
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@drawable/ui_phone"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginEnd="16dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintDimensionRatio="9:16"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:translationY="24dp">
+                            <co.aospa.hub.ui.UpdateProgressView
+                                android:id="@+id/progress"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:layout_gravity="center" />
+                            <View
+                                android:id="@+id/idle_placeholder"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:background="@drawable/ic_group"
+                                android:layout_gravity="center" />
+                            <TextView
+                                android:id="@+id/progress_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="google-sans-medium"
+                                android:text="0%"
+                                android:textColor="@color/theme_accent"
+                                android:textSize="20sp"
+                                android:fontFeatureSettings="tnum"
+                                tools:fontFamily="sans-serif" />
+                        </FrameLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:alpha="0.12"
+            android:background="@color/divider_color" />
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/changelog_strip"
+        android:layout_below="@id/download_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        app:layout_behavior="co.aospa.hub.ui.FlingBehavior">
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Changelog"
+            android:textSize="12sp"
+            android:textFontWeight="500"
+            android:letterSpacing="0.15"
+            android:textColor="@color/inverted"
+            android:textAllCaps="true"
+            tools:font="Roboto"/>
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            app:collapsedTitleTextAppearance="@style/TextAppearanceInverted"
-            app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleTextAppearance="@style/TextAppearanceTransparent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="86dp"
-                android:paddingBottom="16dp"
-                android:paddingEnd="16dp"
-                android:paddingStart="16dp"
-                app:layout_collapseMode="parallax">
-
-                <TextView
-                    android:id="@+id/header_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:paddingBottom="16dp"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="56sp" />
-
-                <TextView
-                    android:id="@+id/header_build_version"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/header_title"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/header_build_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/header_build_version"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/header_last_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/header_build_date"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="12sp" />
-            </RelativeLayout>
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:textColor="?android:attr/textColorPrimary"
-                app:layout_collapseMode="pin" />
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/no_new_updates_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="46dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/upgrade_version"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/list_no_updates"
-            android:textColor="?android:textColorSecondary" />
-    </androidx.core.widget.NestedScrollView>
+            android:textSize="12sp"
+            android:textFontWeight="500"
+            android:letterSpacing="0.15"
+            android:textAllCaps="true"
+            tools:font="Roboto"
+            tools:text="Version: PA11B" />
+    </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <TextView
+        android:layout_below="@id/changelog_strip"
+        android:id="@+id/changelog"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="5dp"
-        android:scrollbars="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_marginTop="10dp"
+        tools:text="Initial beta build" />
+
+</RelativeLayout>

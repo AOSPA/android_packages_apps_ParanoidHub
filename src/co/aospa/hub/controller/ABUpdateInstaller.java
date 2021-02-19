@@ -85,6 +85,7 @@ class ABUpdateInstaller {
                 break;
 
                 case UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT: {
+                    Log.d(TAG, "Update complete!");
                     installationDone(true);
                     update.setInstallProgress(0);
                     update.setStatus(UpdateStatus.INSTALLED);
