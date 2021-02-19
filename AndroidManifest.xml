@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.lineageos.updater"
+    package="co.aospa.hub"
     android:versionCode="1">
 
     <uses-permission android:name="android.permission.ACCESS_CACHE_FILESYSTEM" />
@@ -22,7 +22,7 @@
         android:usesCleartextTraffic="false">
 
         <activity
-            android:name=".UpdatesActivity"
+            android:name="co.aospa.hub.UpdatesActivity"
             android:excludeFromRecents="true"
             android:label="@string/display_name"
             android:theme="@style/AppTheme.NoActionBar"
@@ -41,16 +41,16 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".controller.UpdaterService" />
-        <service android:name=".ExportUpdateService" />
+        <service android:name="co.aospa.hub.controller.UpdaterService" />
+        <service android:name="co.aospa.hub.ExportUpdateService" />
 
-        <receiver android:name=".UpdaterReceiver" android:exported="false">
+        <receiver android:name="co.aospa.hub.UpdaterReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".UpdatesCheckReceiver">
+        <receiver android:name="co.aospa.hub.UpdatesCheckReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>

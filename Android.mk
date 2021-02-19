@@ -19,18 +19,18 @@ LOCAL_STATIC_ANDROID_LIBRARIES := \
 LOCAL_RESOURCE_DIR := \
     $(LOCAL_PATH)/res
 
-LOCAL_PACKAGE_NAME := Updater
+LOCAL_PACKAGE_NAME := ParanoidHub
 LOCAL_PRIVATE_PLATFORM_APIS := true
 LOCAL_PRIVILEGED_MODULE := true
 LOCAL_CERTIFICATE := platform
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
-LOCAL_REQUIRED_MODULES := privapp_whitelist_org.lineageos.updater.xml
+LOCAL_REQUIRED_MODULES := privapp_whitelist_co.aospa.hub.xml
 
 include $(BUILD_PACKAGE)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := privapp_whitelist_org.lineageos.updater.xml
+LOCAL_MODULE := privapp_whitelist_co.aospa.hub.xml
 LOCAL_MODULE_CLASS := ETC
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/permissions
