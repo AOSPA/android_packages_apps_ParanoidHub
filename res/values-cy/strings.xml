@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Dileu diweddariadau ar ôl eu gosod</string>
     <string name="menu_delete_update">Dileu</string>
     <string name="menu_copy_url">Copïo\'r URL</string>
-    <string name="menu_export_update">Allforio\'r diweddariad</string>
     <string name="menu_show_changelog">Dangos log newid</string>
     <string name="menu_ab_perf_mode">Blaenoriaethu\'r broses diweddaru</string>
     <string name="snack_updates_found">Mae yna ddiweddariad(au) newydd</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Diddymu\'r gosod?</string>
     <string name="label_download_url">URL lawrlwytho</string>
     <string name="toast_download_url_copied">Copïwyd yr URL</string>
-    <string name="dialog_export_title">Yn allforio\'r diweddariad</string>
-    <string name="notification_export_success">Allforiwyd y diweddariad</string>
-    <string name="notification_export_fail">Gwall allforio</string>
-    <string name="toast_already_exporting">Eisoes yn allforio diweddariad</string>
     <plurals name="eta_seconds">
         <item quantity="zero"><xliff:g id="count">%d</xliff:g> eiliadau yn weddill</item>
         <item quantity="one"><xliff:g id="count">%d</xliff:g> eiliad yn weddill</item>
@@ -118,7 +113,6 @@
     <string name="menu_mobile_data_warning">Rhybudd data symudol</string>
     <string name="blocked_update_dialog_title">Rhwystrwyd y diweddariad</string>
     <string name="blocked_update_dialog_message">Ni ellir gosod y diweddariad hwn gyda\'r ap diweddarydd. Gweler <xliff:g id="info_url">%1$s</xliff:g> am wybodaeth bellach.</string>
-    <string name="export_channel_title">Cwblhawyd allforio</string>
     <string name="new_updates_channel_title">Diweddariadau newydd</string>
     <string name="ongoing_channel_title">Llwythi sy\'n parhau</string>
     <string name="update_failed_channel_title">Methodd y diweddariad</string>

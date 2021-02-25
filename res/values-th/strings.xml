@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">ลบการอัปเดตเมื่อติดตั้งเสร็จสิ้น</string>
     <string name="menu_delete_update">ลบ</string>
     <string name="menu_copy_url">คัดลอก URL</string>
-    <string name="menu_export_update">ส่งออกการอัปเดต</string>
     <string name="menu_show_changelog">แสดงการเปลี่ยนแปลง</string>
     <string name="menu_ab_perf_mode">จัดลำดับความสำคัญของกระบวนการอัพเดต</string>
     <string name="snack_updates_found">ไม่พบการอัปเดตใหม่</string>
@@ -80,10 +79,6 @@
     <string name="cancel_installation_dialog_message">ยกเลิกการติดตั้งหรือไม่</string>
     <string name="label_download_url">ดาวน์โหลด URL</string>
     <string name="toast_download_url_copied">คัดลอก URL แล้ว</string>
-    <string name="dialog_export_title">กำลังส่งออกการอัปเดต</string>
-    <string name="notification_export_success">การอัปเดตถูกส่งออกแล้ว</string>
-    <string name="notification_export_fail">การส่งออกเกิดข้อผิดพลาด</string>
-    <string name="toast_already_exporting">ดำเนินการส่งออกอัปเดตเรียบร้อยแล้ว</string>
     <plurals name="eta_seconds">
         <item quantity="other">เหลือ <xliff:g id="count">%d</xliff:g> วินาที</item>
     </plurals>
@@ -99,7 +94,6 @@
     <string name="menu_mobile_data_warning">คำเตือนการใช้งานข้อมูลมือถือ</string>
     <string name="blocked_update_dialog_title">การอัปเดตถูกปิดกั้น</string>
     <string name="blocked_update_dialog_message">ไม่สามารถติดตั้งอัปเดตนี้ด้วยแอปอัปเดต  กรุณาอ่านที่ <xliff:g id="info_url">%1$s</xliff:g> สำหรับข้อมูลเพิ่มเติม</string>
-    <string name="export_channel_title">ส่งออกเสร็จสมบูรณ์</string>
     <string name="new_updates_channel_title">การอัปเดตใหม่</string>
     <string name="ongoing_channel_title">การดาวน์โหลดที่กำลังดำเนินอยู่</string>
     <string name="update_failed_channel_title">การอัปเดตล้มเหลว</string>

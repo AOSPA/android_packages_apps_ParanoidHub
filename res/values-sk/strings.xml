@@ -48,7 +48,6 @@
     <string name="menu_auto_delete_updates">Vymazať aktualizácie po nainštalovaní</string>
     <string name="menu_delete_update">Vymazať</string>
     <string name="menu_copy_url">Kopírovať URL</string>
-    <string name="menu_export_update">Export aktualizácie</string>
     <string name="menu_show_changelog">Zobraziť zoznam zmien</string>
     <string name="menu_ab_perf_mode">Uprednostňovať proces aktualizácie</string>
     <string name="snack_updates_found">Našli sa nové aktualizácie</string>
@@ -82,10 +81,6 @@
     <string name="cancel_installation_dialog_message">Zrušiť inštaláciu?</string>
     <string name="label_download_url">URL adresa</string>
     <string name="toast_download_url_copied">URL skopírované</string>
-    <string name="dialog_export_title">Export aktualizácie</string>
-    <string name="notification_export_success">Aktualizácia exportovaná</string>
-    <string name="notification_export_fail">Chyba exportu</string>
-    <string name="toast_already_exporting">Aktualizácia sa už exportuje</string>
     <plurals name="eta_seconds">
         <item quantity="one">Zostáva 1 sekunda</item>
         <item quantity="few">Zostávajú <xliff:g id="count">%d</xliff:g> sekundy</item>
@@ -110,7 +105,6 @@
     <string name="menu_mobile_data_warning">Upozornenie mobilných dát</string>
     <string name="blocked_update_dialog_title">Aktualizácia bola zablokovaná</string>
     <string name="blocked_update_dialog_message">Táto aktualizácia sa nedá nainštalovať pomocou aplikácie aktualizátora.  Prečítajte si <xliff:g id="info_url">%1$s </xliff:g> pre viac informácií.</string>
-    <string name="export_channel_title">Dokončenie exportu</string>
     <string name="new_updates_channel_title">Nové aktualizácie</string>
     <string name="ongoing_channel_title">Prebiehajúce sťahovania</string>
     <string name="update_failed_channel_title">Aktualizácia zlyhala</string>

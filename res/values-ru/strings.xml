@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Удалить файлы обновления после установки</string>
     <string name="menu_delete_update">Удалить</string>
     <string name="menu_copy_url">Копировать URL-адрес</string>
-    <string name="menu_export_update">Экспорт обновлений</string>
     <string name="menu_show_changelog">Показать журнал изменений</string>
     <string name="menu_ab_perf_mode">Приоритет процесса обновления</string>
     <string name="snack_updates_found">Доступно обновление</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Отменить установку?</string>
     <string name="label_download_url">Ссылка для скачивания</string>
     <string name="toast_download_url_copied">URL скопирован в буфер обмена</string>
-    <string name="dialog_export_title">Экспорт обновлений</string>
-    <string name="notification_export_success">Обновление экспортировано</string>
-    <string name="notification_export_fail">Ошибка экспорта</string>
-    <string name="toast_already_exporting">Экспорт уже выполняется</string>
     <plurals name="eta_seconds">
         <item quantity="one">осталась <xliff:g id="count">%d</xliff:g> секунда</item>
         <item quantity="few">осталось <xliff:g id="count">%d</xliff:g> секунды</item>
@@ -112,7 +107,6 @@
     <string name="menu_mobile_data_warning">Предупрежд. о моб. данных</string>
     <string name="blocked_update_dialog_title">Обновление заблокировано</string>
     <string name="blocked_update_dialog_message">Эту сборку нельзя установить с помощью встроенной системы обновления. Для получения дополнительной информации ознакомьтесь с <xliff:g id="info_url">%1$s</xliff:g>.</string>
-    <string name="export_channel_title">Экспорт завершен</string>
     <string name="new_updates_channel_title">Доступны обновления</string>
     <string name="ongoing_channel_title">Текущие загрузки</string>
     <string name="update_failed_channel_title">Сбой обновления</string>

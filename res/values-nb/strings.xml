@@ -42,7 +42,6 @@
     <string name="menu_auto_delete_updates">Slett oppdateringer når installert</string>
     <string name="menu_delete_update">Slett</string>
     <string name="menu_copy_url">Kopier nettadresse</string>
-    <string name="menu_export_update">Eksporter oppdatering</string>
     <string name="snack_updates_found">Nye oppdateringer funnet</string>
     <string name="snack_no_updates_found">Ingen nye oppdateringer funnet</string>
     <string name="snack_updates_check_failed">Oppdateringssjekken mislyktes. Sjekk din internettilkobling og prøv igjen senere.</string>
@@ -73,10 +72,6 @@
     <string name="cancel_installation_dialog_message">Vil du avbryte installasjonen?</string>
     <string name="label_download_url">Last ned nettadresse</string>
     <string name="toast_download_url_copied">Nettadresse kopiert</string>
-    <string name="dialog_export_title">Eksporterer oppdatering</string>
-    <string name="notification_export_success">Oppdatering eksportert</string>
-    <string name="notification_export_fail">Eksporteringsfeil</string>
-    <string name="toast_already_exporting">Eksporterer allerede en oppdatering</string>
     <string name="update_on_mobile_data_title">Advarsel</string>
     <string name="update_on_mobile_data_message">Du er i ferd med å laste ned en oppdateringspakke ved bruk av mobildata, noe som antagelig vil forårsake høy databruk. Ønsker du å fortsette?</string>
     <string name="checkbox_mobile_data_warning">Ikke vis igjen</string>

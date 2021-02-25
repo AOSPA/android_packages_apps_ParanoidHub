@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Excluir pacotes instalados</string>
     <string name="menu_delete_update">Excluir</string>
     <string name="menu_copy_url">Copiar URL</string>
-    <string name="menu_export_update">Exportar atualização</string>
     <string name="menu_show_changelog">Mostrar alterações</string>
     <string name="menu_ab_perf_mode">Priorizar o processo de atualização</string>
     <string name="snack_updates_found">Nova atualização disponível</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Deseja cancelar a instalação?</string>
     <string name="label_download_url">URL de Download</string>
     <string name="toast_download_url_copied">URL copiado</string>
-    <string name="dialog_export_title">Exportando atualização</string>
-    <string name="notification_export_success">Atualização exportada</string>
-    <string name="notification_export_fail">Falha ao exportar</string>
-    <string name="toast_already_exporting">Uma atualização já está sendo exportada</string>
     <plurals name="eta_seconds">
         <item quantity="one">1 segundo restante</item>
         <item quantity="other"><xliff:g id="count">%d</xliff:g> segundos restantes</item>
@@ -106,7 +101,6 @@
     <string name="menu_mobile_data_warning">Aviso de dados móveis</string>
     <string name="blocked_update_dialog_title">Atualização bloqueada</string>
     <string name="blocked_update_dialog_message">Esta atualização não pode ser instalada pelo Atualizador. Leia <xliff:g id="info_url">%1$s</xliff:g> para obter mais informações.</string>
-    <string name="export_channel_title">Exportação concluída</string>
     <string name="new_updates_channel_title">Novas atualizações</string>
     <string name="ongoing_channel_title">Downloads em andamento</string>
     <string name="update_failed_channel_title">Falha ao atualizar</string>

@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">安裝後刪除更新檔案</string>
     <string name="menu_delete_update">移除</string>
     <string name="menu_copy_url">複製網址</string>
-    <string name="menu_export_update">匯出更新</string>
     <string name="menu_show_changelog">顯示更新日誌</string>
     <string name="menu_ab_perf_mode">優先更新過程</string>
     <string name="snack_updates_found">發現新的更新</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">取消安裝？</string>
     <string name="label_download_url">下載網址</string>
     <string name="toast_download_url_copied">網址已複製</string>
-    <string name="dialog_export_title">匯出更新</string>
-    <string name="notification_export_success">已匯出更新</string>
-    <string name="notification_export_fail">匯出錯誤</string>
-    <string name="toast_already_exporting">已匯出更新</string>
     <plurals name="eta_seconds">
         <item quantity="other">還剩 <xliff:g id="count">%d</xliff:g> 秒鐘</item>
     </plurals>
@@ -103,7 +98,6 @@
     <string name="menu_mobile_data_warning">行動數據警告</string>
     <string name="blocked_update_dialog_title">更新已被封鎖</string>
     <string name="blocked_update_dialog_message">無法使用更新應用程式安裝此更新。 有關詳細資訊，請閱讀 <xliff:g id="info_url">%1$s </xliff:g> 。</string>
-    <string name="export_channel_title">匯出完成</string>
     <string name="new_updates_channel_title">有新的更新</string>
     <string name="ongoing_channel_title">目前下載</string>
     <string name="update_failed_channel_title">更新失敗</string>

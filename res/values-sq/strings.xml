@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Fshi përditësimet pas instalimit</string>
     <string name="menu_delete_update">Fshije</string>
     <string name="menu_copy_url">Kopjo URL</string>
-    <string name="menu_export_update">Eksporto përditësimin</string>
     <string name="menu_show_changelog">Shfaq ndryshimet</string>
     <string name="menu_ab_perf_mode">Jepi përparësi përditësimit</string>
     <string name="snack_updates_found">Ka përditësime të reja</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Anullo instalimin?</string>
     <string name="label_download_url">Shkarko URL</string>
     <string name="toast_download_url_copied">URL u kopjua</string>
-    <string name="dialog_export_title">Duke exportuar përditësimin</string>
-    <string name="notification_export_success">Përditësimi u eksportua</string>
-    <string name="notification_export_fail">Problem në exportim</string>
-    <string name="toast_already_exporting">Aktualisht po exporton një përditësim</string>
     <plurals name="eta_seconds">
         <item quantity="one">1 sekondë e mbetur</item>
         <item quantity="other"><xliff:g id="count">%d</xliff:g> sekonda të mbetura</item>
@@ -106,7 +101,6 @@
     <string name="menu_mobile_data_warning">Paralajmërim për përdorim nga rrjeti telefonik</string>
     <string name="blocked_update_dialog_title">Përditësimi është bllokuar</string>
     <string name="blocked_update_dialog_message">Ky përditësim nuk mund të instalohet me app e përditësuesit. Për më shumë informacion ju lutem lexoni <xliff:g id="info_url">%1$s</xliff:g>.</string>
-    <string name="export_channel_title">Eksporto përfundimin</string>
     <string name="new_updates_channel_title">Përditësime të reja</string>
     <string name="ongoing_channel_title">Shkarkimet në proces</string>
     <string name="update_failed_channel_title">Përditësimi dështoi</string>

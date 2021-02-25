@@ -44,7 +44,6 @@
     <string name="menu_auto_delete_updates">Xóa bản cập nhật khi cài đặt hoàn tất</string>
     <string name="menu_delete_update">Xóa</string>
     <string name="menu_copy_url">Sao chép URL</string>
-    <string name="menu_export_update">Xuất bản cập nhật</string>
     <string name="menu_show_changelog">Hiển thị nhật ký thay đổi</string>
     <string name="menu_ab_perf_mode">Ưu tiên quá trình cập nhật</string>
     <string name="snack_updates_found">Đã tìm thấy bản cập nhật mới</string>
@@ -78,10 +77,6 @@
     <string name="cancel_installation_dialog_message">Huỷ cài đặt?</string>
     <string name="label_download_url">Tải xuống URL</string>
     <string name="toast_download_url_copied">Đã sao chép URL</string>
-    <string name="dialog_export_title">Đang xuất bản cập nhật</string>
-    <string name="notification_export_success">Đã xuất bản cập nhật</string>
-    <string name="notification_export_fail">Lỗi xuất</string>
-    <string name="toast_already_exporting">Đã xuất một bản cập nhật</string>
     <plurals name="eta_seconds">
         <item quantity="other">Còn lại <xliff:g id="count">%d</xliff:g> giây</item>
     </plurals>
@@ -97,7 +92,6 @@
     <string name="menu_mobile_data_warning">Cảnh báo dữ liệu di động</string>
     <string name="blocked_update_dialog_title">Cập nhật bị chặn</string>
     <string name="blocked_update_dialog_message">Bản cập nhật này không thể được cài đặt bằng ứng dụng trình cập nhật. Vui lòng đọc <xliff:g id="info_url">%1$s</xliff:g> để biết thêm thông tin.</string>
-    <string name="export_channel_title">Hoàn thành xuất</string>
     <string name="new_updates_channel_title">Bản cập nhật mới</string>
     <string name="ongoing_channel_title">Đang tải xuống</string>
     <string name="update_failed_channel_title">Cập nhật thất bại</string>

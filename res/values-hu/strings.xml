@@ -51,7 +51,6 @@ illetve, ha éppen tölt, akkor még <xliff:g id="percent_charging">%2$d</xliff:
     <string name="menu_auto_delete_updates">A frissítőcsomag törlése telepítés után</string>
     <string name="menu_delete_update">Törlés</string>
     <string name="menu_copy_url">A webcím másolása</string>
-    <string name="menu_export_update">A frissítés exportálása</string>
     <string name="menu_show_changelog">A változások listájának megjelenítése</string>
     <string name="menu_ab_perf_mode">Állítsa fontossági sorrendbe a frissítési folyamatot</string>
     <string name="snack_updates_found">Új frissítés érhető el</string>
@@ -85,10 +84,6 @@ illetve, ha éppen tölt, akkor még <xliff:g id="percent_charging">%2$d</xliff:
     <string name="cancel_installation_dialog_message">Megszakítja a telepítést?</string>
     <string name="label_download_url">Az URL letöltése</string>
     <string name="toast_download_url_copied">Az URL másolva</string>
-    <string name="dialog_export_title">A frissítés exportálása</string>
-    <string name="notification_export_success">A frissítés exportálva</string>
-    <string name="notification_export_fail">Exportálás hiba</string>
-    <string name="toast_already_exporting">Egy frissítés exportálása már folyamatban van</string>
     <plurals name="eta_seconds">
         <item quantity="one">1 másodperc van hátra</item>
         <item quantity="other"><xliff:g id="count">%d</xliff:g> másodperc van hátra</item>
@@ -107,7 +102,6 @@ illetve, ha éppen tölt, akkor még <xliff:g id="percent_charging">%2$d</xliff:
     <string name="menu_mobile_data_warning">Mobiladat-használati figyelmeztetés</string>
     <string name="blocked_update_dialog_title">A frissítés blokkolva</string>
     <string name="blocked_update_dialog_message">Ez a frissítés nem telepíthető a Frissítés alkalmazással. További információért olvassa el a következőt: <xliff:g id="info_url">%1$s</xliff:g></string>
-    <string name="export_channel_title">Exportálás-véglegesítés</string>
     <string name="new_updates_channel_title">Új frissítések</string>
     <string name="ongoing_channel_title">Folyamatban lévő letöltések</string>
     <string name="update_failed_channel_title">A frissítés sikertelen</string>

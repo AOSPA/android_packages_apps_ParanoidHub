@@ -36,6 +36,5 @@
         <item quantity="one">೧ ಗಂಟೆ ಬಾಕಿ</item>
         <item quantity="other"><xliff:g id="count">%d</xliff:g> ಗಂಟೆ ಬಾಕಿ</item>
     </plurals>
-    <string name="export_channel_title">ನಿರ್ಯಾತ ಪೂರ್ಣತೆ</string>
     <string name="ongoing_channel_title">ಪ್ರಗತಿಯಲ್ಲಿರುವ ಕೆಳಭರಿತಗಳು</string>
 </resources>

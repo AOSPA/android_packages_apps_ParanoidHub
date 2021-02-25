@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Poista päivitykset asennuksen jälkeen</string>
     <string name="menu_delete_update">Poista</string>
     <string name="menu_copy_url">Kopioi URL-osoite</string>
-    <string name="menu_export_update">Vie päivitys</string>
     <string name="menu_show_changelog">Näytä muutosloki</string>
     <string name="menu_ab_perf_mode">Priorisoi päivitysprosessi</string>
     <string name="snack_updates_found">Uusia päivityksiä löytyi</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Peruuta asennus?</string>
     <string name="label_download_url">Lataussivun URL-osoite</string>
     <string name="toast_download_url_copied">URL-osoite kopioitu</string>
-    <string name="dialog_export_title">Viedään päivitystä</string>
-    <string name="notification_export_success">Päivitys viety</string>
-    <string name="notification_export_fail">Vienti epäonnistui</string>
-    <string name="toast_already_exporting">Päivityksen vieminen jo käynnissä</string>
     <plurals name="eta_seconds">
         <item quantity="one">1 sekunti jäljellä</item>
         <item quantity="other"><xliff:g id="count">%d</xliff:g> sekuntia jäljellä</item>
@@ -106,7 +101,6 @@
     <string name="menu_mobile_data_warning">Mobiilidatavaroitus</string>
     <string name="blocked_update_dialog_title">Päivitys estetty</string>
     <string name="blocked_update_dialog_message">Tätä päivitystä ei voida asentaa päivitys-sovelluksella. Lue <xliff:g id="info_url">%1$s</xliff:g> saadaksesi lisätietoja.</string>
-    <string name="export_channel_title">Vienti valmis</string>
     <string name="new_updates_channel_title">Uudet päivitykset</string>
     <string name="ongoing_channel_title">Käynnissä olevat lataukset</string>
     <string name="update_failed_channel_title">Päivitys epäonnistui</string>

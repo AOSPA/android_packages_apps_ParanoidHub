@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Hapus pembaruan saat dipasang</string>
     <string name="menu_delete_update">Hapus</string>
     <string name="menu_copy_url">Salin URL</string>
-    <string name="menu_export_update">Ekspor pembaruan</string>
     <string name="menu_show_changelog">Tampilkan catatan perubahan</string>
     <string name="menu_ab_perf_mode">Prioritaskan proses pembaruan</string>
     <string name="snack_updates_found">Pembaruan baru ditemukan</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Batalkan pemasangan?</string>
     <string name="label_download_url">URL Unduh</string>
     <string name="toast_download_url_copied">URL disalin</string>
-    <string name="dialog_export_title">Mengekspor pembaruan</string>
-    <string name="notification_export_success">Pembaruan diekspor</string>
-    <string name="notification_export_fail">Kesalahan saat mengekspor</string>
-    <string name="toast_already_exporting">Sudah mengekspor pembaruan</string>
     <plurals name="eta_seconds">
         <item quantity="other"><xliff:g id="count">%d</xliff:g> detik tersisa</item>
     </plurals>
@@ -103,7 +98,6 @@
     <string name="menu_mobile_data_warning">Peringatan data seluler</string>
     <string name="blocked_update_dialog_title">Pembaruan diblokir</string>
     <string name="blocked_update_dialog_message">Pembaruan ini tidak dapat dipasang menggunakan aplikasi pembaruan.  Baca <xliff:g id="info_url">%1$s</xliff:g> untuk informasi lebih lanjut.</string>
-    <string name="export_channel_title">Penyelesaian ekspor</string>
     <string name="new_updates_channel_title">Pembaruan baru</string>
     <string name="ongoing_channel_title">Unduhan sedang berlangsung</string>
     <string name="update_failed_channel_title">Pembaruan gagal</string>

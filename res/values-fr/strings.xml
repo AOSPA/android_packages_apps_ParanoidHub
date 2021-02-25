@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Supprimer les mises à jour une fois installées</string>
     <string name="menu_delete_update">Supprimer</string>
     <string name="menu_copy_url">Copier l\'URL</string>
-    <string name="menu_export_update">Exporter la mise à jour</string>
     <string name="menu_show_changelog">Afficher l\'historique des modifications</string>
     <string name="menu_ab_perf_mode">Privilégier le processus de mise à jour</string>
     <string name="snack_updates_found">Nouvelles mises à jour disponibles</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Annuler l\'installation ?</string>
     <string name="label_download_url">URL de téléchargement</string>
     <string name="toast_download_url_copied">URL copiée</string>
-    <string name="dialog_export_title">Exportation de la mise à jour en cours</string>
-    <string name="notification_export_success">Mise à jour exportée</string>
-    <string name="notification_export_fail">Erreur lors de l\'exportation</string>
-    <string name="toast_already_exporting">Une mise à jour est déjà en cours d\'export</string>
     <plurals name="eta_seconds">
         <item quantity="one">temps restant : 1 seconde</item>
         <item quantity="other">temps restant : <xliff:g id="count">%d</xliff:g> secondes</item>
@@ -106,7 +101,6 @@
     <string name="menu_mobile_data_warning">Avertissement d\'usage des données mobiles</string>
     <string name="blocked_update_dialog_title">Mise à jour bloquée</string>
     <string name="blocked_update_dialog_message">Cette mise à jour ne peut pas être installée en utilisant le gestionnaire de mise à jour.  Veuillez lire <xliff:g id="info_url">%1$s</xliff:g> pour plus d’information.</string>
-    <string name="export_channel_title">Fin de l\'exportation</string>
     <string name="new_updates_channel_title">Nouvelles mises à jour</string>
     <string name="ongoing_channel_title">Téléchargements en cours</string>
     <string name="update_failed_channel_title">Échec de la mise à jour</string>

@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Updates nach Installation löschen</string>
     <string name="menu_delete_update">Löschen</string>
     <string name="menu_copy_url">URL in Zwischenablage kopieren</string>
-    <string name="menu_export_update">Update exportieren</string>
     <string name="menu_show_changelog">Changelog anzeigen</string>
     <string name="menu_ab_perf_mode">Updateprozess priorisieren</string>
     <string name="snack_updates_found">Neue Updates gefunden</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Installation abbrechen?</string>
     <string name="label_download_url">Download URL</string>
     <string name="toast_download_url_copied">URL wurde kopiert</string>
-    <string name="dialog_export_title">Update wird exportiert</string>
-    <string name="notification_export_success">Update wurde exportiert</string>
-    <string name="notification_export_fail">Fehler beim Export</string>
-    <string name="toast_already_exporting">Update wird bereits exportiert</string>
     <plurals name="eta_seconds">
         <item quantity="one">noch 1 Sekunde</item>
         <item quantity="other">noch <xliff:g id="count">%d</xliff:g> Sekunden</item>
@@ -106,7 +101,6 @@
     <string name="menu_mobile_data_warning">Mobildaten-Warnung</string>
     <string name="blocked_update_dialog_title">Update blockiert</string>
     <string name="blocked_update_dialog_message">Dieses Update kann mit der Updater-App nicht installiert werden. Für weitere Informationen lesen Sie bitte <xliff:g id="info_url">%1$s </xliff:g>.</string>
-    <string name="export_channel_title">Export abgeschlossen</string>
     <string name="new_updates_channel_title">Neue Updates</string>
     <string name="ongoing_channel_title">Laufende Downloads</string>
     <string name="update_failed_channel_title">Update fehlgeschlagen</string>

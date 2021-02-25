@@ -41,7 +41,6 @@
     <string name="menu_auto_delete_updates">Borrar actualizaciones luego de instalar</string>
     <string name="menu_delete_update">Borrar</string>
     <string name="menu_copy_url">Copiar URL</string>
-    <string name="menu_export_update">Exportar actualización</string>
     <string name="menu_show_changelog">Mostrar registro de cambios</string>
     <string name="snack_updates_found">Se encontraron nuevas actualizaciones</string>
     <string name="snack_no_updates_found">No se encontraron nuevas actualizaciones</string>
@@ -72,17 +71,12 @@
     <string name="cancel_installation_dialog_message">¿Cancelar la instalación?</string>
     <string name="label_download_url">URL de descarga</string>
     <string name="toast_download_url_copied">URL copiada</string>
-    <string name="dialog_export_title">Exportando actualización</string>
-    <string name="notification_export_success">Actualización exportada</string>
-    <string name="notification_export_fail">Error de exportación</string>
-    <string name="toast_already_exporting">Ya se está exportando una actualización</string>
     <string name="update_on_mobile_data_title">Advertencia</string>
     <string name="update_on_mobile_data_message">Se descargará un paquete de actualización usando los datos móviles, que probablemente ocasione un alto consumo de datos. ¿Quieres continuar?</string>
     <string name="checkbox_mobile_data_warning">No mostrar de nuevo</string>
     <string name="menu_mobile_data_warning">Advertencia de datos móviles</string>
     <string name="blocked_update_dialog_title">Actualización bloqueada</string>
     <string name="blocked_update_dialog_message">Esta actualización no puede instalarse usando la aplicación «Actualizador».  Lea <xliff:g id="info_url">%1$s</xliff:g> para más información.</string>
-    <string name="export_channel_title">Exportación finalizada</string>
     <string name="new_updates_channel_title">Nuevas actualizaciones</string>
     <string name="ongoing_channel_title">Descargas en curso</string>
 </resources>

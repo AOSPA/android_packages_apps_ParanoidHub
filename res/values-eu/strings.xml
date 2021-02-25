@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Ezabatu eguneraketak instalatutakoan</string>
     <string name="menu_delete_update">Ezabatu</string>
     <string name="menu_copy_url">Kopiatu URL-a</string>
-    <string name="menu_export_update">Esportatu eguneraketa</string>
     <string name="menu_show_changelog">Erakutsi aldaketa-egunkaria</string>
     <string name="menu_ab_perf_mode">Eman lehentasuna eguneraketa prozesuari</string>
     <string name="snack_updates_found">Eguneraketa berriak aurkitu dira</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Ezeztatu instalazioa?</string>
     <string name="label_download_url">Deskargaren URL-s</string>
     <string name="toast_download_url_copied">URL-a kopiatuta</string>
-    <string name="dialog_export_title">Eguneraketa esportatzen</string>
-    <string name="notification_export_success">Eguneraketa esportatuta</string>
-    <string name="notification_export_fail">Esportazio errorea</string>
-    <string name="toast_already_exporting">Eguneraketa bat esportatzen dagoeneko</string>
     <plurals name="eta_seconds">
         <item quantity="one">Segundo 1 geratzen da</item>
         <item quantity="other"><xliff:g id="count">%d</xliff:g> segundo geratzen dira</item>
@@ -106,7 +101,6 @@
     <string name="menu_mobile_data_warning">Datu mugikorren abisua</string>
     <string name="blocked_update_dialog_title">Eguneraketa blokeatuta</string>
     <string name="blocked_update_dialog_message">Eguneraketa hau ezin da eguneratze-aplikazioarekin instalatu. Irakurri <xliff:g id="info_url">%1$s</xliff:g> informazio gehiagorako.</string>
-    <string name="export_channel_title">Esportazioaren osaketa</string>
     <string name="new_updates_channel_title">Eguneraketa berriak</string>
     <string name="ongoing_channel_title">Deskargak abian</string>
     <string name="update_failed_channel_title">Eguneraketak huts egin du</string>

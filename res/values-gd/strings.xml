@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Sguab às na h-ùrachaidhean às dèidh an stàladh</string>
     <string name="menu_delete_update">Sguab às</string>
     <string name="menu_copy_url">Dèan lethbhreac dhen URL</string>
-    <string name="menu_export_update">Às-phortaich an ùrachadh</string>
     <string name="menu_show_changelog">Seall loga nan atharraichean</string>
     <string name="menu_ab_perf_mode">Cuir prìomhachas air pròiseas an ùrachaidh</string>
     <string name="snack_updates_found">Chaidh ùrachadh a lorg</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">An sguir thu dhen stàladh?</string>
     <string name="label_download_url">Luchdaich a-nuas URL</string>
     <string name="toast_download_url_copied">Chaidh lethbhreac dhen URL a dhèanamh</string>
-    <string name="dialog_export_title">Ag às-phortadh an ùrachaidh</string>
-    <string name="notification_export_success">Chaidh an t-ùrachadh às-phortadh</string>
-    <string name="notification_export_fail">Mearachd leis an às-phortadh</string>
-    <string name="toast_already_exporting">Tha thu ag às-phortadh ùrachadh mu thràth</string>
     <plurals name="eta_seconds">
         <item quantity="one"><xliff:g id="count">%d</xliff:g> diog air fhàgail</item>
         <item quantity="two"><xliff:g id="count">%d</xliff:g> dhiog air fhàgail</item>
@@ -112,7 +107,6 @@
     <string name="menu_mobile_data_warning">Rabhadh mu dhàta mobile</string>
     <string name="blocked_update_dialog_title">Cha an t-ùrachadh a bhacadh</string>
     <string name="blocked_update_dialog_message">Cha ghabh an t-ùrachadh seo stàladh le aplacaid an ùraicheir. Leugh <xliff:g id="info_url">%1$s</xliff:g> airson barrachd fiosrachaidh.</string>
-    <string name="export_channel_title">Coileanadh an às-phortaidh</string>
     <string name="new_updates_channel_title">Ùrachaidhean</string>
     <string name="ongoing_channel_title">’Ga luchdadh a-nuas</string>
     <string name="update_failed_channel_title">Dh’fhàillig leis an ùrachadh</string>

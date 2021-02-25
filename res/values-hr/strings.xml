@@ -40,7 +40,6 @@
     <string name="menu_auto_delete_updates">Izbriši ažuriranja nakon instalacije</string>
     <string name="menu_delete_update">Izbriši</string>
     <string name="menu_copy_url">Kopiraj URL</string>
-    <string name="menu_export_update">Izvezi ažuriranje</string>
     <string name="menu_show_changelog">Prikaži promjene</string>
     <string name="snack_updates_found">Pronađena su nova ažuriranja</string>
     <string name="snack_no_updates_found">Nema pronađenih novih ažuriranja</string>
@@ -65,17 +64,12 @@
     <string name="cancel_installation_dialog_message">Prekinuti instalaciju?</string>
     <string name="label_download_url">Preuzmi URL</string>
     <string name="toast_download_url_copied">URL kopiran</string>
-    <string name="dialog_export_title">Izvoz ažuriranja</string>
-    <string name="notification_export_success">Ažuriranje je izvezeno</string>
-    <string name="notification_export_fail">Pogreška izvoza</string>
-    <string name="toast_already_exporting">Ažuriranje se već izvozi</string>
     <string name="update_on_mobile_data_title">Upozorenje</string>
     <string name="update_on_mobile_data_message">Upravo ćete preuzeti paket ažuriranja pomoću mobilnih podataka koji će vjerojatno uzrokovati visoku upotrebu podataka. Želite li nastaviti?</string>
     <string name="checkbox_mobile_data_warning">Ne prikazuj ponovno</string>
     <string name="menu_mobile_data_warning">Upozorenje o mobilnim podacima</string>
     <string name="blocked_update_dialog_title">Ažuriranje je blokirano</string>
     <string name="blocked_update_dialog_message">Ovo se ažuriranje ne može instalirati pomoću aplikacije za ažuriranje.  Molimo pročitajte <xliff:g id="info_url">%1$s</xliff:g> za više informacija.</string>
-    <string name="export_channel_title">Kraj izvoza</string>
     <string name="new_updates_channel_title">Nova ažuriranja</string>
     <string name="ongoing_channel_title">Preuzimanja u tijeku</string>
 </resources>

@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">حذف التحديثات بعد التثبيت</string>
     <string name="menu_delete_update">حذف</string>
     <string name="menu_copy_url">نسخ الرابط</string>
-    <string name="menu_export_update">تصدير التحديث</string>
     <string name="menu_show_changelog">إظهار التغييرات</string>
     <string name="menu_ab_perf_mode">إعطاء الأولوية لعملية التحديث</string>
     <string name="snack_updates_found">تم العثور على تحديثات جديدة</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">إلغاء التثبيت؟</string>
     <string name="label_download_url">عنوان التنزيل</string>
     <string name="toast_download_url_copied">تم نسخ الرابط</string>
-    <string name="dialog_export_title">تصدير التحديث</string>
-    <string name="notification_export_success">تم تصدير التحديث</string>
-    <string name="notification_export_fail">خطأ في التصدير</string>
-    <string name="toast_already_exporting">جاري تصدير تحديث بالفعل</string>
     <plurals name="eta_seconds">
         <item quantity="zero"><xliff:g id="count">%d</xliff:g> ثانية متبقية</item>
         <item quantity="one"><xliff:g id="count">%d</xliff:g> ثانية متبقية</item>
@@ -118,7 +113,6 @@
     <string name="menu_mobile_data_warning">تحذير البيانات</string>
     <string name="blocked_update_dialog_title">التحديث محظور</string>
     <string name="blocked_update_dialog_message">لا يمكن تثبيت التحديث باستخدام تطبيق المُحدث. برجاء قراءة <xliff:g id="info_url">%1$s </xliff:g> للحصول على مزيد من المعلومات.</string>
-    <string name="export_channel_title">اكتمال التصدير</string>
     <string name="new_updates_channel_title">تحديثات جديدة</string>
     <string name="ongoing_channel_title">التنزيلات الحالية</string>
     <string name="update_failed_channel_title">فشل التحديث</string>

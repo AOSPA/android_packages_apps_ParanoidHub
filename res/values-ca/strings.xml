@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Elimina les actualitzacions una vegada s\'hagin instal·lat</string>
     <string name="menu_delete_update">Elimina</string>
     <string name="menu_copy_url">Copia l\'URL</string>
-    <string name="menu_export_update">Exporta l\'actualització</string>
     <string name="menu_show_changelog">Mostra el registre de canvis</string>
     <string name="menu_ab_perf_mode">Prioritza el procés d\'actualització</string>
     <string name="snack_updates_found">No s\'han trobat noves actualitzacions</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Voleu cancel·lar la instal·lació?</string>
     <string name="label_download_url">URL de baixada</string>
     <string name="toast_download_url_copied">URL copiada</string>
-    <string name="dialog_export_title">S\'està exportant l\'actualització</string>
-    <string name="notification_export_success">Actualització exportada</string>
-    <string name="notification_export_fail">Ha fallat l\'exportació</string>
-    <string name="toast_already_exporting">Ja s\'està exportant una actualització</string>
     <plurals name="eta_seconds">
         <item quantity="one">Falta 1 segon</item>
         <item quantity="other">Falten <xliff:g id="count">%d</xliff:g> segons</item>
@@ -106,7 +101,6 @@
     <string name="menu_mobile_data_warning">Avís d\'ús de dades</string>
     <string name="blocked_update_dialog_title">Actualització bloquejada</string>
     <string name="blocked_update_dialog_message">Aquesta actualització no es pot instal·lar mitjançant l\'aplicació actualitzador. Per obtenir més informació, llegiu <xliff:g id="info_url">%1$s</xliff:g>.</string>
-    <string name="export_channel_title">Exportació completada</string>
     <string name="new_updates_channel_title">Noves actualitzacions</string>
     <string name="ongoing_channel_title">Baixades en curs</string>
     <string name="update_failed_channel_title">Actualització fallida</string>

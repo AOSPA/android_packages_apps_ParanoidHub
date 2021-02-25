@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Διαγραφή αρχείου μετά την ενημέρωση</string>
     <string name="menu_delete_update">Διαγραφή</string>
     <string name="menu_copy_url">Αντιγραφή URL</string>
-    <string name="menu_export_update">Εξαγωγή ενημέρωσης</string>
     <string name="menu_show_changelog">Εμφάνιση αλλαγών</string>
     <string name="menu_ab_perf_mode">Επιτάχυνση διαδικασίας ενημέρωσης</string>
     <string name="snack_updates_found">Βρέθηκαν νέες ενημερώσεις</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Ακύρωση της εγκατάστασης;</string>
     <string name="label_download_url">Λήψη συνδέσμου</string>
     <string name="toast_download_url_copied">Ο σύνδεσμος αντιγράφηκε</string>
-    <string name="dialog_export_title">Εξαγωγή ενημέρωσης</string>
-    <string name="notification_export_success">Η ενημέρωση εξάχθηκε</string>
-    <string name="notification_export_fail">Σφάλμα εξαγωγής</string>
-    <string name="toast_already_exporting">Εξάγεται ήδη μία ενημέρωση</string>
     <plurals name="eta_seconds">
         <item quantity="one">απομένει 1 δευτερόλεπτο</item>
         <item quantity="other">απομένουν <xliff:g id="count">%d</xliff:g> δευτερόλεπτα</item>
@@ -106,7 +101,6 @@
     <string name="menu_mobile_data_warning">Προειδοποίηση δεδομένων κινητής τηλ.</string>
     <string name="blocked_update_dialog_title">Η ενημέρωση μπλοκαρίστηκε</string>
     <string name="blocked_update_dialog_message">Αυτή η ενημέρωση δεν μπορεί να εγκατασταθεί χρησιμοποιώντας την εφαρμογή ενημέρωσης.  Παρακαλούμε διαβάστε το <xliff:g id="info_url">%1$s </xliff:g> για περισσότερες πληροφορίες.</string>
-    <string name="export_channel_title">Ολοκλήρωση εξαγωγής</string>
     <string name="new_updates_channel_title">Νέες ενημερώσεις</string>
     <string name="ongoing_channel_title">Λήψεις σε εξέλιξη</string>
     <string name="update_failed_channel_title">Η ενημέρωση απέτυχε</string>

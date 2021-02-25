@@ -42,7 +42,6 @@
         </activity>
 
         <service android:name="co.aospa.hub.controller.UpdaterService" />
-        <service android:name="co.aospa.hub.ExportUpdateService" />
 
         <receiver android:name="co.aospa.hub.UpdaterReceiver" android:exported="false">
             <intent-filter>

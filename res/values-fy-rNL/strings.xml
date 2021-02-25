@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Fernijingen fuortsmite neidat se ynstallearre binne</string>
     <string name="menu_delete_update">Fuortsmite</string>
     <string name="menu_copy_url">URL kopiearje</string>
-    <string name="menu_export_update">Fernijing eksportearje</string>
     <string name="menu_show_changelog">Changelog toane</string>
     <string name="menu_ab_perf_mode">Fernijingsproses prioriteit jaan</string>
     <string name="snack_updates_found">Nije fernijingen fûn</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Ynstallaasje annulearje?</string>
     <string name="label_download_url">Download-URL</string>
     <string name="toast_download_url_copied">URL kopiearre</string>
-    <string name="dialog_export_title">Fernijing eksportearje</string>
-    <string name="notification_export_success">Fernijing eksportearre</string>
-    <string name="notification_export_fail">Flater by eksportearjen</string>
-    <string name="toast_already_exporting">Der wurdt al in fernijing eksportearre</string>
     <plurals name="eta_seconds">
         <item quantity="one">1 sekonde restearjend</item>
         <item quantity="other"><xliff:g id="count">%d</xliff:g> sekonden restearjend</item>
@@ -106,7 +101,6 @@
     <string name="menu_mobile_data_warning">Warskôging mobile gegevens</string>
     <string name="blocked_update_dialog_title">Fernijing blokkearre</string>
     <string name="blocked_update_dialog_message">Dizze fernijing kin net ynstallearre wurde mei heulp fan de fernijings-app. Lês <xliff:g id="info_url">%1$s</xliff:g> foar mear ynformaasje.</string>
-    <string name="export_channel_title">Eksportearjen foltôge</string>
     <string name="new_updates_channel_title">Nije fernijingen</string>
     <string name="ongoing_channel_title">Aktuele downloads</string>
     <string name="update_failed_channel_title">Fernijing mislearre</string>

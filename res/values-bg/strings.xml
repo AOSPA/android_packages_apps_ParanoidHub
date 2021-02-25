@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Изтриване на актуализациите след инсталиране</string>
     <string name="menu_delete_update">Изтриване</string>
     <string name="menu_copy_url">Копирай адреса</string>
-    <string name="menu_export_update">Експортиране на актуализация</string>
     <string name="menu_show_changelog">Покажи промените</string>
     <string name="menu_ab_perf_mode">Приоритет на процеса на актуализиране</string>
     <string name="snack_updates_found">Намерена е нова актуализация</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Анулиране на инсталирането?</string>
     <string name="label_download_url">Изтеглете URL</string>
     <string name="toast_download_url_copied">URL Копиран</string>
-    <string name="dialog_export_title">Експортиране на актуализация</string>
-    <string name="notification_export_success">Актуализацията е експортирана</string>
-    <string name="notification_export_fail">Грешка при експортиране</string>
-    <string name="toast_already_exporting">Вече изнася актуализация</string>
     <plurals name="eta_seconds">
         <item quantity="one">остава 1 секунда</item>
         <item quantity="other">остават <xliff:g id="count">%d</xliff:g> секунди</item>
@@ -106,7 +101,6 @@
     <string name="menu_mobile_data_warning">Предупреждение за мобилни данни</string>
     <string name="blocked_update_dialog_title">Актуализацията е блокирана</string>
     <string name="blocked_update_dialog_message">Тази актуализация не може да бъде инсталирана посредством приложението за актуализации. Моля прочетете <xliff:g id="info_url">%1$s</xliff:g> за повече информация.</string>
-    <string name="export_channel_title">Експортирането приключи</string>
     <string name="new_updates_channel_title">Нови актуализации</string>
     <string name="ongoing_channel_title">Текущи изтегляния</string>
     <string name="update_failed_channel_title">Актуализацията прекратена</string>

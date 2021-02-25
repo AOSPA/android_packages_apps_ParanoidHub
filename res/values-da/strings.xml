@@ -38,7 +38,6 @@
     <string name="menu_auto_delete_updates">Slet opdateringer, når installeret</string>
     <string name="menu_delete_update">Slet</string>
     <string name="menu_copy_url">Kopiér URL</string>
-    <string name="menu_export_update">Eksportér opdatering</string>
     <string name="snack_updates_found">Nye opdateringer fundet</string>
     <string name="snack_no_updates_found">Ingen nye opdateringer fundet</string>
     <string name="snack_updates_check_failed">Opdateringskontrollen fejlede. Kontrollér venligst din internetforbindelse og prøv igen senere.</string>
@@ -66,10 +65,6 @@
     <string name="cancel_installation_dialog_message">Afbryd installeringen?</string>
     <string name="label_download_url">Hent URL</string>
     <string name="toast_download_url_copied">URL kopieret</string>
-    <string name="dialog_export_title">Eksporterer opdatering</string>
-    <string name="notification_export_success">Opdatering eksporteret</string>
-    <string name="notification_export_fail">Eksportfejl</string>
-    <string name="toast_already_exporting">Eksporterer allerede en opdatering</string>
     <string name="update_on_mobile_data_title">Advarsel</string>
     <string name="update_on_mobile_data_message">Du er ved at hente en opdateringspakke vha. mobildata, hvilket sandsynligvis vil forårsage højt dataforbrug. Ønsker du at fortsætte?</string>
     <string name="checkbox_mobile_data_warning">Vis ikke igen</string>

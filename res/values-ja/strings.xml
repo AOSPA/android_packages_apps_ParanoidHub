@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">インストール後にアップデートを削除する</string>
     <string name="menu_delete_update">削除</string>
     <string name="menu_copy_url">URL のコピー</string>
-    <string name="menu_export_update">アップデートのエクスポート</string>
     <string name="menu_show_changelog">更新履歴の表示</string>
     <string name="menu_ab_perf_mode">更新プロセスを優先する</string>
     <string name="snack_updates_found">アップデートが見つかりました</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">インストールをキャンセルしますか？</string>
     <string name="label_download_url">ダウンロード URL</string>
     <string name="toast_download_url_copied">URL をコピーしました</string>
-    <string name="dialog_export_title">アップデートのエクスポート中</string>
-    <string name="notification_export_success">アップデートのエクスポート</string>
-    <string name="notification_export_fail">エラー出力</string>
-    <string name="toast_already_exporting">すでにアップデートをエクスポートしています。</string>
     <plurals name="eta_seconds">
         <item quantity="other">残り<xliff:g id="count">%d</xliff:g>秒</item>
     </plurals>
@@ -103,7 +98,6 @@
     <string name="menu_mobile_data_warning">モバイルデータの警告</string>
     <string name="blocked_update_dialog_title">更新をブロックしました</string>
     <string name="blocked_update_dialog_message">このアップデートはアプリからインストールできません。詳しくは <xliff:g id="info_url">%1$s</xliff:g> をご覧ください。</string>
-    <string name="export_channel_title">エクスポート完了</string>
     <string name="new_updates_channel_title">新しいアップデート</string>
     <string name="ongoing_channel_title">ダウンロード中</string>
     <string name="update_failed_channel_title">更新に失敗しました</string>

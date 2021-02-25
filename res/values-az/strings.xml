@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Quraşdırılanda yeniləmələri sil</string>
     <string name="menu_delete_update">Sil</string>
     <string name="menu_copy_url">URL-ni Kopyala</string>
-    <string name="menu_export_update">Yeniləməni köçür</string>
     <string name="menu_show_changelog">Dəyişiklik jurnalını göstər</string>
     <string name="menu_ab_perf_mode">Üstünlüyü yeniləmə prosesinə ver</string>
     <string name="snack_updates_found">Yeniləmə tapıldı</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Quraşdırmadan imtina edilsin?</string>
     <string name="label_download_url">Endirmə bağlantısı</string>
     <string name="toast_download_url_copied">Bağlantı kopyalandı</string>
-    <string name="dialog_export_title">Yeniləmə köçürülür</string>
-    <string name="notification_export_success">Yeniləmə köçürüldü</string>
-    <string name="notification_export_fail">Köçürmə xətası</string>
-    <string name="toast_already_exporting">Artıq bir yeniləmə köçürülür</string>
     <plurals name="eta_seconds">
         <item quantity="one">1 saniyə qaldı</item>
         <item quantity="other"><xliff:g id="count">%d</xliff:g> saniyə qaldı</item>
@@ -106,7 +101,6 @@
     <string name="menu_mobile_data_warning">Mobil verilənlər xəbərdarlığı</string>
     <string name="blocked_update_dialog_title">Yeniləmə əngəlləndi</string>
     <string name="blocked_update_dialog_message">Bu yeniləmə, tətbiq yeniləyici istifadə edilərək quraşdırıla bilməz. Ətraflı məlumat üçün zəhmət olmasa <xliff:g id="info_url">%1$s</xliff:g> ünvanını oxuyun.</string>
-    <string name="export_channel_title">Köçürmə tamamlandı</string>
     <string name="new_updates_channel_title">Ən son yeniləmələr</string>
     <string name="ongoing_channel_title">Davam edən endirmələr</string>
     <string name="update_failed_channel_title">Yeniləmə uğursuz oldu</string>

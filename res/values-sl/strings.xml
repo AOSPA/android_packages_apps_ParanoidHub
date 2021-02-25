@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Izbriši posodobitve po namestitvi</string>
     <string name="menu_delete_update">Izbriši</string>
     <string name="menu_copy_url">Kopiraj URL</string>
-    <string name="menu_export_update">Izvozi posodobitev</string>
     <string name="menu_show_changelog">Prikaži dnevnik sprememb</string>
     <string name="menu_ab_perf_mode">Daj prednost posodobitvenemu procesu</string>
     <string name="snack_updates_found">Najdene nove posodobitve</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Prekliči nameščanje?</string>
     <string name="label_download_url">URL prenosa</string>
     <string name="toast_download_url_copied">URL kopiran</string>
-    <string name="dialog_export_title">Izvažanje posodobitve</string>
-    <string name="notification_export_success">Posodobitev izvožena</string>
-    <string name="notification_export_fail">Napaka pri izvozu</string>
-    <string name="toast_already_exporting">Posodobitev se že izvaža</string>
     <plurals name="eta_seconds">
         <item quantity="one"><xliff:g id="count">%d</xliff:g> sekunda preostala</item>
         <item quantity="two"><xliff:g id="count">%d</xliff:g> sekundi preostali</item>
@@ -112,7 +107,6 @@
     <string name="menu_mobile_data_warning">Opozorilo mobilnih podatkov</string>
     <string name="blocked_update_dialog_title">Posodobitev blokirana</string>
     <string name="blocked_update_dialog_message">Te posodobitve ni mogoče namestiti z uporabo aplikacije za posodabljanje. Za več informacij preberite <xliff:g id="info_url">%1$s</xliff:g>.</string>
-    <string name="export_channel_title">Zaključek izvoza</string>
     <string name="new_updates_channel_title">Nove posodobitve</string>
     <string name="ongoing_channel_title">Prenosi v teku</string>
     <string name="update_failed_channel_title">Posodobitev je spodletela</string>

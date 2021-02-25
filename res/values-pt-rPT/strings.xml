@@ -50,7 +50,6 @@
     <string name="menu_auto_delete_updates">Apagar atualizações depois de instaladas</string>
     <string name="menu_delete_update">Apagar</string>
     <string name="menu_copy_url">Copiar URL</string>
-    <string name="menu_export_update">Exportar atualização</string>
     <string name="menu_show_changelog">Mostrar registo de alterações</string>
     <string name="menu_ab_perf_mode">Priorizar o processo de atualização</string>
     <string name="snack_updates_found">Não foram encontradas atualizações</string>
@@ -84,10 +83,6 @@
     <string name="cancel_installation_dialog_message">Cancelar a instalação?</string>
     <string name="label_download_url">URL de transferência</string>
     <string name="toast_download_url_copied">URL copiado</string>
-    <string name="dialog_export_title">A exportar a atualização</string>
-    <string name="notification_export_success">Atualização exportada</string>
-    <string name="notification_export_fail">Erro de exportação</string>
-    <string name="toast_already_exporting">Já está a exportar uma atualização</string>
     <plurals name="eta_seconds">
         <item quantity="one">1 segundo restante</item>
         <item quantity="other"><xliff:g id="count">%d</xliff:g> segundos restantes</item>
@@ -106,7 +101,6 @@
     <string name="menu_mobile_data_warning">Aviso de dados móveis</string>
     <string name="blocked_update_dialog_title">Atualização bloqueada</string>
     <string name="blocked_update_dialog_message">Esta atualização não pode ser instalada usando a aplicação do atualizador.  Por favor, leia <xliff:g id="info_url">%1$s </xliff:g> para mais informações.</string>
-    <string name="export_channel_title">Conclusão da exportação</string>
     <string name="new_updates_channel_title">Novas atualizações</string>
     <string name="ongoing_channel_title">Transferências em curso</string>
     <string name="update_failed_channel_title">A atualização falhou</string>
