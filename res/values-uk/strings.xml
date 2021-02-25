@@ -38,8 +38,6 @@
     <string name="menu_refresh">Оновити</string>
     <string name="menu_auto_updates_check">Автоматична перевірка оновлень</string>
     <string name="menu_auto_delete_updates">Видалити файли оновлення після інсталяції</string>
-    <string name="menu_delete_update">Видалити</string>
-    <string name="menu_copy_url">Копіювати URL</string>
     <string name="snack_updates_found">Знайдено оновлення</string>
     <string name="snack_no_updates_found">Оновлень не знайдено</string>
     <string name="snack_updates_check_failed">Перевірка оновлення не вдалася. Будь-ласка перевірте з’єднання з мережею і спробуйте ще раз.</string>

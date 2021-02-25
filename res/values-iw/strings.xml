@@ -42,9 +42,6 @@
     <string name="menu_preferences">העדפות</string>
     <string name="menu_auto_updates_check">בדיקת עדכונים אוטומטית</string>
     <string name="menu_auto_delete_updates">מחק קובצי עדכון לאחר התקנתם</string>
-    <string name="menu_delete_update">מחק</string>
-    <string name="menu_copy_url">העתק כתובת אינטרנט</string>
-    <string name="menu_show_changelog">הצג רשימת שינויים</string>
     <string name="menu_ab_perf_mode">תעדף תהליכי עדכון</string>
     <string name="snack_updates_found">נמצאו עדכונים חדשים</string>
     <string name="snack_no_updates_found">לא נמצאו עדכונים חדשים</string>

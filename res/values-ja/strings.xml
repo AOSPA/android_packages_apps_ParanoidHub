@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">1か月に1回</string>
     <string name="menu_auto_updates_check_interval_never">なし</string>
     <string name="menu_auto_delete_updates">インストール後にアップデートを削除する</string>
-    <string name="menu_delete_update">削除</string>
-    <string name="menu_copy_url">URL のコピー</string>
-    <string name="menu_show_changelog">更新履歴の表示</string>
     <string name="menu_ab_perf_mode">更新プロセスを優先する</string>
     <string name="snack_updates_found">アップデートが見つかりました</string>
     <string name="snack_no_updates_found">新しいアップデートはありません</string>

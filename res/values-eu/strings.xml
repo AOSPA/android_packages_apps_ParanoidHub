@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Hilabetean behin</string>
     <string name="menu_auto_updates_check_interval_never">Inoiz ez</string>
     <string name="menu_auto_delete_updates">Ezabatu eguneraketak instalatutakoan</string>
-    <string name="menu_delete_update">Ezabatu</string>
-    <string name="menu_copy_url">Kopiatu URL-a</string>
-    <string name="menu_show_changelog">Erakutsi aldaketa-egunkaria</string>
     <string name="menu_ab_perf_mode">Eman lehentasuna eguneraketa prozesuari</string>
     <string name="snack_updates_found">Eguneraketa berriak aurkitu dira</string>
     <string name="snack_no_updates_found">Ez da eguneraketa berririk aurkitu</string>

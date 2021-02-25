@@ -36,9 +36,6 @@
     <string name="menu_auto_updates_check_interval_weekly">En gång i veckan</string>
     <string name="menu_auto_updates_check_interval_monthly">En gång i månaden</string>
     <string name="menu_auto_updates_check_interval_never">Aldrig</string>
-    <string name="menu_delete_update">Ta bort</string>
-    <string name="menu_copy_url">Kopiera webbadress</string>
-    <string name="menu_show_changelog">Visa ändringslogg</string>
     <string name="snack_updates_found">Nya uppdateringar hittades</string>
     <string name="snack_no_updates_found">Inga nya uppdateringar hittades</string>
     <string name="snack_download_verified">Nedladdningen är slutförd.</string>

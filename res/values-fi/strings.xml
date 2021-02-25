@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Kerran kuukaudessa</string>
     <string name="menu_auto_updates_check_interval_never">Ei koskaan</string>
     <string name="menu_auto_delete_updates">Poista päivitykset asennuksen jälkeen</string>
-    <string name="menu_delete_update">Poista</string>
-    <string name="menu_copy_url">Kopioi URL-osoite</string>
-    <string name="menu_show_changelog">Näytä muutosloki</string>
     <string name="menu_ab_perf_mode">Priorisoi päivitysprosessi</string>
     <string name="snack_updates_found">Uusia päivityksiä löytyi</string>
     <string name="snack_no_updates_found">Uusia päivityksiä ei löytynyt</string>

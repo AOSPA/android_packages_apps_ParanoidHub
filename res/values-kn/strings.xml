@@ -21,7 +21,6 @@
     <string name="menu_auto_updates_check_interval_weekly">ವಾರಕ್ಕೊಮ್ಮೆ</string>
     <string name="menu_auto_updates_check_interval_monthly">ತಿಂಗಳಿಗೊಮ್ಮೆ</string>
     <string name="menu_auto_updates_check_interval_never">ಎಂದಿಗೂ ಬೇಡ</string>
-    <string name="menu_show_changelog">ಬದಲಾವಣೆಗಳನ್ನು	ತೋರಿಸು</string>
     <string name="menu_ab_perf_mode">ನವೀಕರಣಕ್ಕೆ ಆದ್ಯತೆ ಕೊಡು</string>
     <string name="list_download_progress_eta_new"><xliff:g id="filesize_without_unit" example="310 MB">%2$s</xliff:g> ರಲ್ಲಿ <xliff:g id="filesize_without_unit" example="12.2">%1$s</xliff:g> (<xliff:g id="eta" example="3 minutes left">%3$s</xliff:g>) • <xliff:g id="percentage" example="56">%4$s</xliff:g></string>
     <plurals name="eta_seconds">

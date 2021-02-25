@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Sebulan sekali</string>
     <string name="menu_auto_updates_check_interval_never">Jangan pernah</string>
     <string name="menu_auto_delete_updates">Hapus pembaruan saat dipasang</string>
-    <string name="menu_delete_update">Hapus</string>
-    <string name="menu_copy_url">Salin URL</string>
-    <string name="menu_show_changelog">Tampilkan catatan perubahan</string>
     <string name="menu_ab_perf_mode">Prioritaskan proses pembaruan</string>
     <string name="snack_updates_found">Pembaruan baru ditemukan</string>
     <string name="snack_no_updates_found">Tidak ada pembaruan baru ditemukan</string>

@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">한달에 한 번</string>
     <string name="menu_auto_updates_check_interval_never">사용 안 함</string>
     <string name="menu_auto_delete_updates">설치한 뒤 업데이트 파일 삭제</string>
-    <string name="menu_delete_update">삭제</string>
-    <string name="menu_copy_url">URL 복사</string>
-    <string name="menu_show_changelog">변경 사항 보기</string>
     <string name="menu_ab_perf_mode">우선 업데이트</string>
     <string name="snack_updates_found">새 업데이트 발견</string>
     <string name="snack_no_updates_found">새로운 업데이트 없음</string>

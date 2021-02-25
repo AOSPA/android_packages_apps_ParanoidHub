@@ -38,9 +38,6 @@
     <string name="menu_refresh">Osvježi</string>
     <string name="menu_auto_updates_check">Provjeri ažuriranja automatski</string>
     <string name="menu_auto_delete_updates">Izbriši ažuriranja nakon instalacije</string>
-    <string name="menu_delete_update">Izbriši</string>
-    <string name="menu_copy_url">Kopiraj URL</string>
-    <string name="menu_show_changelog">Prikaži promjene</string>
     <string name="snack_updates_found">Pronađena su nova ažuriranja</string>
     <string name="snack_no_updates_found">Nema pronađenih novih ažuriranja</string>
     <string name="snack_updates_check_failed">Provjera ažuriranja nije uspjela. Provjerite internetsku vezu i pokušajte ponovo kasnije.</string>

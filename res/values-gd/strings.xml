@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Gach mìos</string>
     <string name="menu_auto_updates_check_interval_never">Chan ann idir</string>
     <string name="menu_auto_delete_updates">Sguab às na h-ùrachaidhean às dèidh an stàladh</string>
-    <string name="menu_delete_update">Sguab às</string>
-    <string name="menu_copy_url">Dèan lethbhreac dhen URL</string>
-    <string name="menu_show_changelog">Seall loga nan atharraichean</string>
     <string name="menu_ab_perf_mode">Cuir prìomhachas air pròiseas an ùrachaidh</string>
     <string name="snack_updates_found">Chaidh ùrachadh a lorg</string>
     <string name="snack_no_updates_found">Cha deach ùrachadh a lorg</string>

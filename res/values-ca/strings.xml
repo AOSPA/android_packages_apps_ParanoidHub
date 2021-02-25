@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Un cop al mes</string>
     <string name="menu_auto_updates_check_interval_never">Mai</string>
     <string name="menu_auto_delete_updates">Elimina les actualitzacions una vegada s\'hagin instal·lat</string>
-    <string name="menu_delete_update">Elimina</string>
-    <string name="menu_copy_url">Copia l\'URL</string>
-    <string name="menu_show_changelog">Mostra el registre de canvis</string>
     <string name="menu_ab_perf_mode">Prioritza el procés d\'actualització</string>
     <string name="snack_updates_found">No s\'han trobat noves actualitzacions</string>
     <string name="snack_no_updates_found">No s\'han trobat noves actualitzacions</string>

@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Einmal pro Monat</string>
     <string name="menu_auto_updates_check_interval_never">Niemals</string>
     <string name="menu_auto_delete_updates">Updates nach Installation löschen</string>
-    <string name="menu_delete_update">Löschen</string>
-    <string name="menu_copy_url">URL in Zwischenablage kopieren</string>
-    <string name="menu_show_changelog">Changelog anzeigen</string>
     <string name="menu_ab_perf_mode">Updateprozess priorisieren</string>
     <string name="snack_updates_found">Neue Updates gefunden</string>
     <string name="snack_no_updates_found">Keine neuen Updates gefunden</string>

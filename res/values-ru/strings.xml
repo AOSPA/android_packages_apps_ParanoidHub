@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Раз в месяц</string>
     <string name="menu_auto_updates_check_interval_never">Никогда</string>
     <string name="menu_auto_delete_updates">Удалить файлы обновления после установки</string>
-    <string name="menu_delete_update">Удалить</string>
-    <string name="menu_copy_url">Копировать URL-адрес</string>
-    <string name="menu_show_changelog">Показать журнал изменений</string>
     <string name="menu_ab_perf_mode">Приоритет процесса обновления</string>
     <string name="snack_updates_found">Доступно обновление</string>
     <string name="snack_no_updates_found">Обновлений не найдено</string>

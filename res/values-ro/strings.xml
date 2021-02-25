@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Odată pe lună</string>
     <string name="menu_auto_updates_check_interval_never">Niciodată</string>
     <string name="menu_auto_delete_updates">Şterge actualizările atunci când sunt instalate</string>
-    <string name="menu_delete_update">Șterge</string>
-    <string name="menu_copy_url">Copiază URL</string>
-    <string name="menu_show_changelog">Arată changelog</string>
     <string name="menu_ab_perf_mode">Proces update prioritar</string>
     <string name="snack_updates_found">Noi actualizări găsite</string>
     <string name="snack_no_updates_found">Nu s-au găsit actualizări noi</string>

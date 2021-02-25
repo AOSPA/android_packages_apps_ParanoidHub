@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Μία φορά το μήνα</string>
     <string name="menu_auto_updates_check_interval_never">Ποτέ</string>
     <string name="menu_auto_delete_updates">Διαγραφή αρχείου μετά την ενημέρωση</string>
-    <string name="menu_delete_update">Διαγραφή</string>
-    <string name="menu_copy_url">Αντιγραφή URL</string>
-    <string name="menu_show_changelog">Εμφάνιση αλλαγών</string>
     <string name="menu_ab_perf_mode">Επιτάχυνση διαδικασίας ενημέρωσης</string>
     <string name="snack_updates_found">Βρέθηκαν νέες ενημερώσεις</string>
     <string name="snack_no_updates_found">Δεν βρέθηκαν νέες ενημερώσεις</string>

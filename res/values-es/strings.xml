@@ -39,9 +39,6 @@
     <string name="menu_preferences">Preferencias</string>
     <string name="menu_auto_updates_check">Comprobación de actualizaciones automática</string>
     <string name="menu_auto_delete_updates">Borrar actualizaciones luego de instalar</string>
-    <string name="menu_delete_update">Borrar</string>
-    <string name="menu_copy_url">Copiar URL</string>
-    <string name="menu_show_changelog">Mostrar registro de cambios</string>
     <string name="snack_updates_found">Se encontraron nuevas actualizaciones</string>
     <string name="snack_no_updates_found">No se encontraron nuevas actualizaciones</string>
     <string name="snack_updates_check_failed">Error en la comprobación de actualizaciones. Por favor, verifique la conexión a Internet e inténtalo nuevamente.</string>

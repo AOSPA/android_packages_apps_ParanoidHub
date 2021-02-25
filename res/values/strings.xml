@@ -61,9 +61,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Once a month</string>
     <string name="menu_auto_updates_check_interval_never">Never</string>
     <string name="menu_auto_delete_updates">Delete updates when installed</string>
-    <string name="menu_delete_update">Delete</string>
-    <string name="menu_copy_url">Copy URL</string>
-    <string name="menu_show_changelog">Show changelog</string>
     <string name="menu_changelog_url" translatable="false">http://api.aospa.co/ota_configuration</string>
     <string name="menu_ab_perf_mode">Prioritize update process</string>
     <string name="menu_update_recovery">Update recovery</string>

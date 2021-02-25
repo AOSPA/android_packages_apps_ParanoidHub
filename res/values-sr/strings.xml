@@ -42,9 +42,6 @@
     <string name="menu_preferences">Подешавања</string>
     <string name="menu_auto_updates_check">Аутоматски провери ажурирања</string>
     <string name="menu_auto_delete_updates">Обриши ажурирања након инсталације</string>
-    <string name="menu_delete_update">Обриши</string>
-    <string name="menu_copy_url">Копирај URL</string>
-    <string name="menu_show_changelog">Прикажи дневник измена</string>
     <string name="menu_ab_perf_mode">Приоритет процеса ажурирања</string>
     <string name="snack_updates_found">Ново ажурирање пронађено</string>
     <string name="snack_no_updates_found">Нису пронађена нова ажурирања</string>

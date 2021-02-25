@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Unha vez ao mes</string>
     <string name="menu_auto_updates_check_interval_never">Nunca</string>
     <string name="menu_auto_delete_updates">Eliminar a actualización cando estea instalada</string>
-    <string name="menu_delete_update">Eliminar</string>
-    <string name="menu_copy_url">Copiar URL</string>
-    <string name="menu_show_changelog">Amosar o rexistro de cambios</string>
     <string name="menu_ab_perf_mode">Dar prioridade ao proceso de actualización</string>
     <string name="snack_updates_found">Atopáronse novas actualizacións</string>
     <string name="snack_no_updates_found">Non se atoparon novas actualizacións</string>

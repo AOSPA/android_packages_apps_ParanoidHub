@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Ayda bir defa</string>
     <string name="menu_auto_updates_check_interval_never">Asla</string>
     <string name="menu_auto_delete_updates">Yüklendiğinde güncellemeleri sil</string>
-    <string name="menu_delete_update">Sil</string>
-    <string name="menu_copy_url">URL adresini kopyala</string>
-    <string name="menu_show_changelog">Değişiklikleri göster</string>
     <string name="menu_ab_perf_mode">Güncelleme sürecini öncelikli hale getir</string>
     <string name="snack_updates_found">Yeni güncelleştirmeler bulundu</string>
     <string name="snack_no_updates_found">Yeni güncelleme bulunamadı</string>

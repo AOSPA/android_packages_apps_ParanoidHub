@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">مرة في الشهر</string>
     <string name="menu_auto_updates_check_interval_never">مطلقًا</string>
     <string name="menu_auto_delete_updates">حذف التحديثات بعد التثبيت</string>
-    <string name="menu_delete_update">حذف</string>
-    <string name="menu_copy_url">نسخ الرابط</string>
-    <string name="menu_show_changelog">إظهار التغييرات</string>
     <string name="menu_ab_perf_mode">إعطاء الأولوية لعملية التحديث</string>
     <string name="snack_updates_found">تم العثور على تحديثات جديدة</string>
     <string name="snack_no_updates_found">لا توجد تحديثات جديدة</string>

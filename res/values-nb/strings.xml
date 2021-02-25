@@ -40,8 +40,6 @@
     <string name="menu_preferences">Innstillinger</string>
     <string name="menu_auto_updates_check">Auto-oppdateringssjekk</string>
     <string name="menu_auto_delete_updates">Slett oppdateringer når installert</string>
-    <string name="menu_delete_update">Slett</string>
-    <string name="menu_copy_url">Kopier nettadresse</string>
     <string name="snack_updates_found">Nye oppdateringer funnet</string>
     <string name="snack_no_updates_found">Ingen nye oppdateringer funnet</string>
     <string name="snack_updates_check_failed">Oppdateringssjekken mislyktes. Sjekk din internettilkobling og prøv igjen senere.</string>

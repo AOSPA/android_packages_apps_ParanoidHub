@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">เดือนละครั้ง</string>
     <string name="menu_auto_updates_check_interval_never">ไม่เลย</string>
     <string name="menu_auto_delete_updates">ลบการอัปเดตเมื่อติดตั้งเสร็จสิ้น</string>
-    <string name="menu_delete_update">ลบ</string>
-    <string name="menu_copy_url">คัดลอก URL</string>
-    <string name="menu_show_changelog">แสดงการเปลี่ยนแปลง</string>
     <string name="menu_ab_perf_mode">จัดลำดับความสำคัญของกระบวนการอัพเดต</string>
     <string name="snack_updates_found">ไม่พบการอัปเดตใหม่</string>
     <string name="snack_no_updates_found">ไม่พบการอัปเดตใหม่</string>

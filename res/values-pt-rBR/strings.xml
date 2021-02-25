@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Mensalmente</string>
     <string name="menu_auto_updates_check_interval_never">Nunca</string>
     <string name="menu_auto_delete_updates">Excluir pacotes instalados</string>
-    <string name="menu_delete_update">Excluir</string>
-    <string name="menu_copy_url">Copiar URL</string>
-    <string name="menu_show_changelog">Mostrar alterações</string>
     <string name="menu_ab_perf_mode">Priorizar o processo de atualização</string>
     <string name="snack_updates_found">Nova atualização disponível</string>
     <string name="snack_no_updates_found">Não foram encontradas novas atualizações</string>

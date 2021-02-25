@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">每月一次</string>
     <string name="menu_auto_updates_check_interval_never">永不</string>
     <string name="menu_auto_delete_updates">安裝後刪除更新檔案</string>
-    <string name="menu_delete_update">移除</string>
-    <string name="menu_copy_url">複製網址</string>
-    <string name="menu_show_changelog">顯示更新日誌</string>
     <string name="menu_ab_perf_mode">優先更新過程</string>
     <string name="snack_updates_found">發現新的更新</string>
     <string name="snack_no_updates_found">沒有找到新的更新</string>

@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Jednou měsíčně</string>
     <string name="menu_auto_updates_check_interval_never">Nikdy</string>
     <string name="menu_auto_delete_updates">Odstranit aktualizace po instalaci</string>
-    <string name="menu_delete_update">Odstranit</string>
-    <string name="menu_copy_url">Kopírovat URL</string>
-    <string name="menu_show_changelog">Zobrazit seznam změn</string>
     <string name="menu_ab_perf_mode">Upřednostňovat proces aktualizace</string>
     <string name="snack_updates_found">Nalezeny nové aktualizace</string>
     <string name="snack_no_updates_found">Nové aktualizace nenalezeny</string>

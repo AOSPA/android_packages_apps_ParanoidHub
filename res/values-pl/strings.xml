@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Raz w miesiącu</string>
     <string name="menu_auto_updates_check_interval_never">Nigdy</string>
     <string name="menu_auto_delete_updates">Usuń pliki aktualizacji po zainstalowaniu</string>
-    <string name="menu_delete_update">Usuń</string>
-    <string name="menu_copy_url">Kopiuj adres URL</string>
-    <string name="menu_show_changelog">Pokaż listę zmian</string>
     <string name="menu_ab_perf_mode">Nadaj wyższy priorytet procesowi aktualizacji</string>
     <string name="snack_updates_found">Znaleziono nowe aktualizacje</string>
     <string name="snack_no_updates_found">Nie znaleziono nowych aktualizacji</string>

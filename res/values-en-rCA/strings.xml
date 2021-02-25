@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Once a month</string>
     <string name="menu_auto_updates_check_interval_never">Never</string>
     <string name="menu_auto_delete_updates">Delete updates when installed</string>
-    <string name="menu_delete_update">Delete</string>
-    <string name="menu_copy_url">Copy URL</string>
-    <string name="menu_show_changelog">Show changelog</string>
     <string name="menu_ab_perf_mode">Prioritize update process</string>
     <string name="snack_updates_found">New updates found</string>
     <string name="snack_no_updates_found">No new updates found</string>

@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Ien kear yn de moanne</string>
     <string name="menu_auto_updates_check_interval_never">Nea</string>
     <string name="menu_auto_delete_updates">Fernijingen fuortsmite neidat se ynstallearre binne</string>
-    <string name="menu_delete_update">Fuortsmite</string>
-    <string name="menu_copy_url">URL kopiearje</string>
-    <string name="menu_show_changelog">Changelog toane</string>
     <string name="menu_ab_perf_mode">Fernijingsproses prioriteit jaan</string>
     <string name="snack_updates_found">Nije fernijingen fûn</string>
     <string name="snack_no_updates_found">Gjin nije fernijingen fûn</string>

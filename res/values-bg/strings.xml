@@ -48,9 +48,6 @@
     <string name="menu_auto_updates_check_interval_monthly">Ежемесечно</string>
     <string name="menu_auto_updates_check_interval_never">Никога</string>
     <string name="menu_auto_delete_updates">Изтриване на актуализациите след инсталиране</string>
-    <string name="menu_delete_update">Изтриване</string>
-    <string name="menu_copy_url">Копирай адреса</string>
-    <string name="menu_show_changelog">Покажи промените</string>
     <string name="menu_ab_perf_mode">Приоритет на процеса на актуализиране</string>
     <string name="snack_updates_found">Намерена е нова актуализация</string>
     <string name="snack_no_updates_found">Няма нови актуализации</string>
