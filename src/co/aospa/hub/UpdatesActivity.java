@@ -487,7 +487,6 @@ public class UpdatesActivity extends AppCompatActivity {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         autoCheckInterval.setSelection(Utils.getUpdateCheckSetting(this));
-        autoDelete.setChecked(prefs.getBoolean(Constants.PREF_AUTO_DELETE_UPDATES, false));
         dataWarning.setChecked(prefs.getBoolean(Constants.PREF_MOBILE_DATA_WARNING, true));
         abPerfMode.setChecked(prefs.getBoolean(Constants.PREF_AB_PERF_MODE, false));
 
@@ -526,8 +525,6 @@ public class UpdatesActivity extends AppCompatActivity {
                     prefs.edit()
                             .putInt(Constants.PREF_AUTO_UPDATES_CHECK_INTERVAL,
                                     autoCheckInterval.getSelectedItemPosition())
-                            .putBoolean(Constants.PREF_AUTO_DELETE_UPDATES,
-                                    autoDelete.isChecked())
                             .putBoolean(Constants.PREF_MOBILE_DATA_WARNING,
                                     dataWarning.isChecked())
                             .putBoolean(Constants.PREF_AB_PERF_MODE,
