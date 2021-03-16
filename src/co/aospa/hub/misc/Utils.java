@@ -154,6 +154,7 @@ public class Utils {
     }
 
     public static String getServerURL(Context context) {
+        String incrementalVersion = SystemProperties.get(Constants.PROP_BUILD_VERSION_INCREMENTAL);
         String version = SystemProperties.get(Constants.PROP_BUILD_VERSION).toLowerCase(Locale.ROOT);
         String device = SystemProperties.get(Constants.PROP_DEVICE);
         String type = SystemProperties.get(Constants.PROP_RELEASE_TYPE).toLowerCase(Locale.ROOT);
@@ -165,7 +166,8 @@ public class Utils {
 
         return serverUrl.replace("{device}", device)
                 .replace("{version}", version)
-                .replace("{type}", type);
+                .replace("{type}", type)
+                .replace("{incr}", incrementalVersion);
     }
 
     public static String parseChangelogJson(File toRead) {
