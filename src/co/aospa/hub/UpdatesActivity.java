@@ -25,7 +25,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.icu.text.DateFormat;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -55,6 +54,13 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import co.aospa.hub.controller.UpdaterController;
 import co.aospa.hub.controller.UpdaterService;
 import co.aospa.hub.download.DownloadClient;
@@ -65,12 +71,6 @@ import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.UpdateInfo;
 import co.aospa.hub.model.UpdateStatus;
 import co.aospa.hub.ui.UpdateProgressView;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class UpdatesActivity extends AppCompatActivity {
 

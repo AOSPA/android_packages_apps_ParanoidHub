@@ -26,7 +26,6 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.BatteryManager;
-import android.os.Environment;
 import android.os.SystemProperties;
 import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
@@ -37,17 +36,9 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import co.aospa.hub.R;
-import co.aospa.hub.UpdatesDbHelper;
-import co.aospa.hub.controller.UpdaterService;
-import co.aospa.hub.download.DownloadClient;
-import co.aospa.hub.model.Update;
-import co.aospa.hub.model.UpdateBaseInfo;
-import co.aospa.hub.model.UpdateInfo;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,9 +48,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import co.aospa.hub.R;
+import co.aospa.hub.UpdatesDbHelper;
+import co.aospa.hub.controller.UpdaterService;
+import co.aospa.hub.model.Update;
+import co.aospa.hub.model.UpdateBaseInfo;
+import co.aospa.hub.model.UpdateInfo;
 
 public class Utils {
 
