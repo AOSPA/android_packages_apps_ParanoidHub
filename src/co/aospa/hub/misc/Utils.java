@@ -99,6 +99,7 @@ public class Utils {
         List<String> signed = Arrays.asList(signedBuilds);
         String[] upgradeVersion = update.getVersion().split("-");
         String[] currentVersion = SystemProperties.get(Constants.PROP_VERSION_CODE).split("-");
+        String curType = SystemProperties.get(Constants.PROP_RELEASE_TYPE).toLowerCase();
         if (upgradeVersion[0].equalsIgnoreCase(currentVersion[0]) && upgradeVersion[1].compareToIgnoreCase(currentVersion[1]) > -1) {
             Log.d(TAG, update.getName() + " is older than current Android version");
             return false;
@@ -108,7 +109,7 @@ public class Utils {
             Log.d(TAG, update.getName() + " is older than/equal to the current build");
             return false;
         }
-        if (!(signed.contains(upgradeVersion[4]) && signed.contains(upgradeVersion[4]))) {
+        if (!(signed.contains(update.getType()) && signed.contains(curType))) {
             Log.d(TAG, update.getName() + " has type " + update.getType());
             return false;
         }
