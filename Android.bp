@@ -9,6 +9,7 @@ android_app {
     ],
     platform_apis: true,
     privileged: true,
+    system_ext_specific: true,
     required: [
         "permissions_co.aospa.hub.xml",
         "whitelist_co.aospa.hub.xml"
@@ -20,6 +21,7 @@ prebuilt_etc {
     sub_dir: "permissions",
     src: "permissions_co.aospa.hub.xml",
     filename_from_src: true,
+    system_ext_specific: true,
 }
 
 prebuilt_etc {
@@ -27,4 +29,5 @@ prebuilt_etc {
     sub_dir: "sysconfig",
     src: "whitelist_co.aospa.hub.xml",
     filename_from_src: true,
+    system_ext_specific: true,
 }
