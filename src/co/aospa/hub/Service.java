@@ -1,4 +1,4 @@
-package app.seamlessupdate.client;
+package co.aospa.hub;
 
 import static android.os.Build.DEVICE;
 import static android.os.Build.FINGERPRINT;

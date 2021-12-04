@@ -1,4 +1,4 @@
-package app.seamlessupdate.client;
+package co.aospa.hub;
 
 import android.app.job.JobInfo;
 import android.app.job.JobParameters;
