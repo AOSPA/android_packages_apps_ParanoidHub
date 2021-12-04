@@ -1,4 +1,4 @@
-package app.seamlessupdate.client;
+package co.aospa.hub;
 
 import android.app.Notification;
 import android.app.NotificationChannel;

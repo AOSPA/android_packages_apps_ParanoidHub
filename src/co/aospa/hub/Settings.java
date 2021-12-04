@@ -1,4 +1,4 @@
-package app.seamlessupdate.client;
+package co.aospa.hub;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -1,5 +1,5 @@
 android_app {
-    name: "Updater",
+    name: "ParanoidHub",
     srcs: ["src/**/*.java"],
     resource_dirs: ["res"],
     static_libs: [
@@ -10,21 +10,21 @@ android_app {
     platform_apis: true,
     privileged: true,
     required: [
-        "permissions_app.seamlessupdate.client.xml",
-        "whitelist_app.seamlessupdate.client.xml"
+        "permissions_co.aospa.hub.xml",
+        "whitelist_co.aospa.hub.xml"
     ]
 }
 
 prebuilt_etc {
-    name: "permissions_app.seamlessupdate.client.xml",
+    name: "permissions_co.aospa.hub.xml",
     sub_dir: "permissions",
-    src: "permissions_app.seamlessupdate.client.xml",
+    src: "permissions_co.aospa.hub.xml",
     filename_from_src: true,
 }
 
 prebuilt_etc {
-    name: "whitelist_app.seamlessupdate.client.xml",
+    name: "whitelist_co.aospa.hub.xml",
     sub_dir: "sysconfig",
-    src: "whitelist_app.seamlessupdate.client.xml",
+    src: "whitelist_co.aospa.hub.xml",
     filename_from_src: true,
 }
