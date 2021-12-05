@@ -87,25 +87,6 @@ public class NotificationHandler {
                 .setSmallIcon(R.drawable.ic_system_update_white_24dp).build());
     }
 
-    void showUpdatedNotification(final String channel) {
-        final String channelText;
-        if ("stable".equals(channel)) {
-            channelText = service.getString(R.string.channel_stable);
-        } else if ("beta".equals(channel)) {
-            channelText = service.getString(R.string.channel_beta);
-        } else {
-            channelText = channel;
-        }
-
-        notificationManager.notify(NOTIFICATION_ID_UPDATED, new Notification.Builder(service, NOTIFICATION_CHANNEL_ID_UPDATED)
-                .setContentIntent(getPendingSettingsIntent())
-                .setContentTitle(service.getString(R.string.notification_updated_title))
-                .setContentText(service.getString(R.string.notification_updated_text, channelText))
-                .setShowWhen(true)
-                .setSmallIcon(R.drawable.ic_system_update_white_24dp)
-                .build());
-    }
-
     void showDownloadNotification(int progress, int max) {
         phase = Phase.DOWNLOAD;
         notificationManager.notify(NOTIFICATION_ID_PROGRESS,

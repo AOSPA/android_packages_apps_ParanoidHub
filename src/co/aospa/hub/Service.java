@@ -115,7 +115,7 @@ public class Service extends IntentService {
         return entry;
     }
 
-    private void onDownloadFinished(final boolean streaming, final long targetBuildDate, final String channel) throws IOException, GeneralSecurityException {
+    private void onDownloadFinished(final boolean streaming, final long targetBuildDate) throws IOException, GeneralSecurityException {
         try {
             notificationHandler.showVerifyNotification(0);
             RecoverySystem.verifyPackage(UPDATE_PATH, (int progress) -> {
@@ -201,9 +201,6 @@ public class Service extends IntentService {
         PeriodicJob.cancel(this);
         final SharedPreferences preferences = Settings.getPreferences(this);
         preferences.edit().putBoolean(Settings.KEY_WAITING_FOR_REBOOT, true).apply();
-        if (Settings.getIdleReboot(this)) {
-            IdleReboot.schedule(this);
-        }
         notificationHandler.showRebootNotification();
     }
 
@@ -229,10 +226,8 @@ public class Service extends IntentService {
             mUpdating = true;
             notificationHandler.start();
 
-            final String channel = SystemProperties.get("sys.update.channel", Settings.getChannel(this));
-
-            Log.d(TAG, "fetching metadata for " + DEVICE + "-" + channel);
-            connection = fetchData(DEVICE + "-" + channel);
+            Log.d(TAG, "fetching metadata for " + DEVICE);
+            connection = fetchData(DEVICE);
             InputStream input = connection.getInputStream();
             final BufferedReader reader = new BufferedReader(new InputStreamReader(input));
             final String[] metadata = reader.readLine().split(" ");
@@ -242,14 +237,9 @@ public class Service extends IntentService {
             final long targetBuildDate = Long.parseLong(metadata[1]);
             final long sourceBuildDate = SystemProperties.getLong("ro.build.date.utc", 0);
             if (targetBuildDate <= sourceBuildDate) {
-                notificationHandler.showUpdatedNotification(channel);
                 Log.d(TAG, "targetBuildDate: " + targetBuildDate + " not higher than sourceBuildDate: " + sourceBuildDate);
                 mUpdating = false;
                 return;
-            }
-            final String targetChannel = metadata[3];
-            if (!targetChannel.equals(channel)) {
-                throw new GeneralSecurityException("targetChannel: " + targetChannel + " does not match channel: " + channel);
             }
 
             notificationHandler.showDownloadNotification(0, 100);
@@ -270,7 +260,7 @@ public class Service extends IntentService {
                 connection.setRequestProperty("Range", "bytes=" + downloaded + "-");
                 if (connection.getResponseCode() == HTTP_RANGE_NOT_SATISFIABLE) {
                     Log.d(TAG, "download completed previously");
-                    onDownloadFinished(streaming, targetBuildDate, channel);
+                    onDownloadFinished(streaming, targetBuildDate);
                     return;
                 }
                 contentLength = connection.getContentLength() + (int) downloaded;
@@ -314,7 +304,7 @@ public class Service extends IntentService {
             }
 
             Log.d(TAG, "download completed");
-            onDownloadFinished(streaming, targetBuildDate, channel);
+            onDownloadFinished(streaming, targetBuildDate);
         } catch (GeneralSecurityException | IOException e) {
             Log.e(TAG, "failed to download and install update", e);
             notificationHandler.showFailureNotification(e.getMessage());
