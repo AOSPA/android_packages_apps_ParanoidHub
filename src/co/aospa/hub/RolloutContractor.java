@@ -133,7 +133,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     private PendingIntent getRolloutIntent() {
         Intent intent = new Intent(mContext, UpdateCheckReceiver.class);
         intent.setAction(ROLLOUT_ACTION);
-        return PendingIntent.getBroadcast(mContext, 0, intent, 0);
+        return PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
     }
 
     public void schedule() {
