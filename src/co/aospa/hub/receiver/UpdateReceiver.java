@@ -56,7 +56,7 @@ public class UpdateReceiver extends BroadcastReceiver {
         NotificationContractor contractor = new NotificationContractor(context);
         Intent notificationIntent = new Intent(context, HubActivity.class);
         PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationContract contract = contractor.create(NotificationContractor.INSTALL_ERROR_NOTIFICATION_CHANNEL, true);
         contract.setTitle(context.getString(R.string.installing_error_update_notification_title));
