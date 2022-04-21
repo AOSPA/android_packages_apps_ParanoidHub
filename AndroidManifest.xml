@@ -28,7 +28,8 @@
             android:excludeFromRecents="true"
             android:label="@string/app_name"
             android:theme="@style/HubTheme.NoActionBar"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+			android:exported="true">
             <intent-filter android:priority="1">
                 <action android:name="android.settings.SYSTEM_UPDATE_SETTINGS" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -46,7 +47,8 @@
             android:name=".HubPreferencesActivity"
             android:label="@string/app_preferences_name"
             android:theme="@android:style/Theme.DeviceDefault.Settings"
-            android:autoRemoveFromRecents="true">
+            android:autoRemoveFromRecents="true"
+			android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -61,7 +63,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receiver.UpdateCheckReceiver">
+        <receiver android:name=".receiver.UpdateCheckReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
