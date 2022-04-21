@@ -30,4 +30,12 @@ android_app {
     optimize: {
         proguard_flags_files: ["proguard.flags"],
     },
+	
+	required: ["privapp_whitelist_co.aospa.hub.xml"],
+}
+
+prebuilt_etc {
+    name: "privapp_whitelist_co.aospa.hub.xml",
+    src: "privapp_whitelist_co.aospa.hub.xml",
+    sub_dir: "permissions",
 }
