@@ -28,8 +28,6 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
 
-import androidx.documentfile.provider.DocumentFile;
-
 import co.aospa.hub.HubController;
 import co.aospa.hub.R;
 import co.aospa.hub.misc.Constants;
@@ -189,10 +187,6 @@ public class LocalUpdateController {
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
             } else if (isDownloadsDocument(uri)) { // DownloadsProvider
-                DocumentFile fileD = DocumentFile.fromSingleUri(context, uri);
-                Log.d(TAG, "" + fileD.getName());
-                Log.d(TAG, "" + fileD.getType());
-
                 final String id = DocumentsContract.getDocumentId(uri);
                 if (id != null && id.startsWith("raw:")) {
                     return id.substring(4);
