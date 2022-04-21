@@ -1,0 +1,32 @@
+android_app {
+    name: "ParanoidHub",
+
+    defaults: [
+        "SettingsLibDefaults",
+    ],
+
+    srcs: [
+        "src/**/*.java",
+        "src/**/*.kt",
+    ],
+
+    static_libs: [
+        "com.google.android.material_material",
+        "androidx.core_core",
+        "androidx.core_core-ktx",
+        "androidx.appcompat_appcompat",
+        "androidx.cardview_cardview",
+        "androidx-constraintlayout_constraintlayout",
+        "androidx.preference_preference",
+        "androidx.recyclerview_recyclerview",
+    ],
+
+    resource_dirs: ["res"],
+
+    platform_apis: true,
+    privileged: true,
+    certificate: "platform",
+    optimize: {
+        proguard_flags_files: ["proguard.flags"],
+    },
+}
