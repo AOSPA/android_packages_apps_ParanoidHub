@@ -15,7 +15,7 @@
  */
 package co.aospa.hub;
 
-import static co.aospa.hub.model.Version.TYPE_DEV;
+import static co.aospa.hub.model.Version.TYPE_RELEASE;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -170,7 +170,7 @@ public class HubController {
                 Update update = mDownloads.get(downloadId).mUpdate;
                 update.setStatus(UpdateStatus.DOWNLOADED, mContext);
                 removeDownloadClient(mDownloads.get(downloadId));
-                if (!Version.isBuild(TYPE_DEV)) verifyUpdateAsync(update, downloadId, false);
+                if (Version.isBuild(TYPE_RELEASE)) verifyUpdateAsync(update, downloadId, false);
                 notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
                 tryReleaseWakelock();
             }
@@ -337,7 +337,7 @@ public class HubController {
             Log.d(TAG, "Adding update entry: " + info.getDownloadId());
             mDownloads.put(info.getDownloadId(), new DownloadEntry(update));
             if (isLocalUpdate) {
-                if (!Version.isBuild(TYPE_DEV)) {
+                if (Version.isBuild(TYPE_RELEASE)) {
                     verifyUpdateAsync(update, info.getDownloadId(), true);
                 } else {
                     Log.d(TAG, "Setting update status for local update");
@@ -417,9 +417,9 @@ public class HubController {
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
             return false;
         }
-        if (file.exists() && update.getFileSize() > 0 && file.length() >= update.getFileSize() && !Version.isBuild(TYPE_DEV)) {
+        if (file.exists() && update.getFileSize() > 0 && file.length() >= update.getFileSize() && Version.isBuild(TYPE_RELEASE)) {
             Log.d(TAG, "File already downloaded, starting verification");
-            if (!Version.isBuild(TYPE_DEV)) verifyUpdateAsync(update, downloadId, false);
+            if (Version.isBuild(TYPE_RELEASE)) verifyUpdateAsync(update, downloadId, false);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
         } else {
             DownloadClient downloadClient;
@@ -469,7 +469,7 @@ public class HubController {
     public void startInstall(String downloadId) {
         Update update = getActualUpdate(downloadId);
         if (update.getPersistentStatus() != UpdateStatus.Persistent.VERIFIED 
-                    && !Version.isBuild(TYPE_DEV)) {
+                    && Version.isBuild(TYPE_RELEASE)) {
             throw new IllegalArgumentException(update.getDownloadId() + " is not verified");
         }
         try {
