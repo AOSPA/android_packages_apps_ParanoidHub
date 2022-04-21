@@ -54,7 +54,7 @@ public class NotificationContract {
 
         Intent hub = new Intent(context, HubActivity.class);
         PendingIntent intent = PendingIntent.getActivity(context, 0, hub,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         mBuilder.setContentIntent(intent);
     }
 
