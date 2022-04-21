@@ -103,7 +103,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
         boolean isBetaUpdate = version.isBetaUpdate();
         Intent notificationIntent = new Intent(context, HubActivity.class);
         PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         String buildInfo = String.format(isBetaUpdate ?
                 context.getResources().getString(R.string.update_found_notification_text_beta) :
                 context.getResources().getString(R.string.update_found_notification_text),
