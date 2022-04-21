@@ -522,7 +522,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             mVersionHeader.setTypeface(mVersionHeader.getTypeface(), Typeface.NORMAL);
             mVersionHeader.setText(String.format(
                     getResources().getString(R.string.no_updates_text), 
-                    Version.getCurrentFlavor(), Version.getCurrentVersion(), 
+                    Version.getMajor(), Version.getMinor(), 
                     StringGenerator.getTimeLocalized(this, lastChecked)));
         }
     }
@@ -578,7 +578,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 int resId;
                 titleRes = R.string.install_update_dialog_title;
                 String updateInfo = getResources().getString(R.string.install_update_dialog_message_info,
-                        Version.getCurrentFlavor(), update.getVersion());
+                        Version.getMajor(), update.getVersion());
                 try {
                     if (Utils.isABUpdate(update.getFile())) {
                         resId = R.string.install_update_dialog_message_ab;
