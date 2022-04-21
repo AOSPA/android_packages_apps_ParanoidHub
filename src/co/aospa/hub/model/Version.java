@@ -89,26 +89,26 @@ public class Version {
     }
 
     public boolean isNewUpdate() {
-        return Float.valueOf(mVersion) > Float.valueOf(getCurrentVersion()) 
+        return Float.valueOf(mVersion) > Float.valueOf(getMinor()) 
                 && mTimestamp > getCurrentTimestamp();
     }
 
     public boolean isIncremental() {
-        return Float.valueOf(mVersion) == Float.valueOf(getCurrentVersion())
+        return Float.valueOf(mVersion) == Float.valueOf(getMinor())
                 && mTimestamp > getCurrentTimestamp();
     }
 
     public boolean isDowngrade() {
         return mAllowDowngrading && 
-                Float.valueOf(mVersion) < Float.valueOf(getCurrentVersion());
+                Float.valueOf(mVersion) < Float.valueOf(getMinor());
     }
 
-    public static String getCurrentFlavor() {
-        return SystemProperties.get(Constants.PROP_VERSION_FLAVOR);
+    public static String getMajor() {
+        return SystemProperties.get(Constants.PROP_VERSION_MAJOR);
     }
 
-    public static String getCurrentVersion() {
-        return SystemProperties.get(Constants.PROP_VERSION_CODE);
+    public static String getMinor() {
+        return SystemProperties.get(Constants.PROP_VERSION_MINOR);
     }
 
     public static long getCurrentTimestamp() {
