@@ -107,7 +107,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
         String buildInfo = String.format(isBetaUpdate ?
                 context.getResources().getString(R.string.update_found_notification_text_beta) :
                 context.getResources().getString(R.string.update_found_notification_text),
-                Version.getCurrentFlavor(), update.getVersion());
+                Version.getMajor(), update.getVersion());
         NotificationContractor contractor = new NotificationContractor(context);
         NotificationContract contract = contractor.create(NotificationContractor.NEW_UPDATES_NOTIFICATION_CHANNEL, true);
         contract.setTitle(context.getResources().getString(R.string.update_found_notification_title));
