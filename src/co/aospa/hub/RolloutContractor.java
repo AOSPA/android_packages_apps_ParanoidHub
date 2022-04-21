@@ -15,7 +15,7 @@
  */
 package co.aospa.hub;
 
-import static co.aospa.hub.model.Version.TYPE_DEV;
+import static co.aospa.hub.model.Version.TYPE_ALPHA;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -230,13 +230,13 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
 
     public boolean isReady() {
         if (Constants.IS_STAGED_ROLLOUT_ENABLED) {
-            if (Version.isBuild(TYPE_DEV)) {
+            if (Version.isBuild(TYPE_ALPHA)) {
                 boolean isDeviceWhitelisted = isDeviceWhitelisted();
                 if (isDeviceWhitelisted) {
                     Log.d(TAG, "Dev device is whitelisted and is ready for rollout");
                     return true;
                 }
-                Log.d(TAG, "Staged rollouts disabled on debug builds");
+                Log.d(TAG, "Staged rollouts disabled on alpha builds");
                 return false;
             }
             return mPrefs.getBoolean(Constants.IS_ROLLOUT_READY, false);
