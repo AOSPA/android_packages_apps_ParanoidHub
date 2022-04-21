@@ -32,7 +32,6 @@ public class Version {
 
     public static final String TYPE_ALPHA = "ALPHA";
     public static final String TYPE_BETA = "BETA";
-    public static final String TYPE_DEV = "DEV";
     public static final String TYPE_RELEASE = "RELEASE";
 
     private Context mContext;
@@ -112,9 +111,10 @@ public class Version {
     }
 
     public static long getCurrentTimestamp() {
+		final boolean isReleaseBuild = !isBuild(TYPE_ALPHA) && !isBuild(TYPE_BETA);
         String version = SystemProperties.get(Constants.PROP_VERSION);
         String[] split = version.split("-");
-        String date = split[3];
+        String date = isReleaseBuild ? split[3] : split[4];
         return Long.valueOf(date);
     }
 

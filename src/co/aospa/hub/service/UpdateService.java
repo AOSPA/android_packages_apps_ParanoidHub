@@ -148,7 +148,7 @@ public class UpdateService extends Service implements StatusListener {
         } else if (ACTION_INSTALL_UPDATE.equals(intent.getAction())) {
             String downloadId = intent.getStringExtra(EXTRA_DOWNLOAD_ID);
             UpdateInfo update = mController.getUpdate(downloadId);
-            if (!Version.isBuild(TYPE_DEV) && update.getPersistentStatus() != UpdateStatus.Persistent.VERIFIED) {
+            if (Version.isBuild(TYPE_RELEASE) && update.getPersistentStatus() != UpdateStatus.Persistent.VERIFIED) {
                 throw new IllegalArgumentException(update.getDownloadId() + " is not verified");
             }
             try {

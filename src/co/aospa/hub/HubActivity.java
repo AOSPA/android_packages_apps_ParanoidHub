@@ -352,7 +352,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case DOWNLOADING:
                 mHeaderStatus.setText(getResources().getString(R.string.downloading_title));
-                mHeaderStatusStep.setText(Version.isBuild(TYPE_DEV) ? 
+                mHeaderStatusStep.setText(!Version.isBuild(TYPE_RELEASE) ? 
                         getResources().getString(R.string.updating_step_downloading_title) :
                         getResources().getString(R.string.updating_step_downloading_verify_title));
                 mButton.setText(R.string.button_pause_update);
@@ -367,7 +367,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case PAUSED:
                 mHeaderStatus.setText(getResources().getString(R.string.downloading_paused_title));
-                mHeaderStatusStep.setText(Version.isBuild(TYPE_DEV) ? 
+                mHeaderStatusStep.setText(!Version.isBuild(TYPE_RELEASE) ? 
                         getResources().getString(R.string.updating_step_downloading_paused_title) :
                         getResources().getString(R.string.updating_step_downloading_paused_verify_title));
                 mButton.setText(R.string.button_resume_update);
@@ -435,7 +435,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             case INSTALLING:
                 if (update != null) {
                     mHeaderStatus.setText(getResources().getString(R.string.installing_title));
-                    mHeaderStatusStep.setText(Version.isBuild(TYPE_DEV) ? 
+                    mHeaderStatusStep.setText(!Version.isBuild(TYPE_RELEASE) ? 
                             getResources().getString(update.getFinalizing() ? 
                             R.string.updating_step_installing_finalizing_title : 
                             R.string.updating_step_installing_title) : 
@@ -451,7 +451,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case INSTALLATION_SUSPENDED:
                 mHeaderStatus.setText(getResources().getString(R.string.installing_title));
-                mHeaderStatusStep.setText(Version.isBuild(TYPE_DEV) ? 
+                mHeaderStatusStep.setText(!Version.isBuild(TYPE_RELEASE) ? 
                         getResources().getString(R.string.updating_step_installing_paused_title) :
                         getResources().getString(R.string.updating_step_installing_paused_verify_title));
                 mButton.setText(R.string.button_resume_update);
