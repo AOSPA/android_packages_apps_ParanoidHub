@@ -1,6 +1,10 @@
 android_app {
     name: "ParanoidHub",
 
+    defaults: [
+        "SettingsLibDefaults",
+    ],
+
     srcs: [
         "src/**/*.java",
         "src/**/*.kt",
