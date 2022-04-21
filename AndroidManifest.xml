@@ -32,7 +32,6 @@
         <activity
             android:name=".HubActivity"
             android:label="@string/hub_display_name"
-            android:theme="@style/Theme.Hub.NoActionBar"
             android:excludeFromRecents="true"
             android:exported="true"
             android:launchMode="singleTop">
