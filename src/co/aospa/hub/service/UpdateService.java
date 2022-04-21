@@ -36,7 +36,6 @@ import static co.aospa.hub.model.UpdateStatus.INSTALLATION_SUSPENDED;
 
 import static co.aospa.hub.model.Version.TYPE_RELEASE;
 
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
