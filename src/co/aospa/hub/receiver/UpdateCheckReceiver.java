@@ -123,7 +123,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
     private static PendingIntent getRepeatingUpdatesCheckIntent(Context context) {
         Intent intent = new Intent(context, UpdateCheckReceiver.class);
         intent.setAction(DAILY_CHECK_ACTION);
-        return PendingIntent.getBroadcast(context, 0, intent, 0);
+        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
     }
 
     public static void updateRepeatingUpdatesCheck(Context context) {
@@ -151,7 +151,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
     private static PendingIntent getUpdatesCheckIntent(Context context) {
         Intent intent = new Intent(context, UpdateCheckReceiver.class);
         intent.setAction(ONESHOT_CHECK_ACTION);
-        return PendingIntent.getBroadcast(context, 0, intent, 0);
+        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
     }
 
     public static void scheduleUpdatesCheck(Context context, boolean isSnoozed) {
