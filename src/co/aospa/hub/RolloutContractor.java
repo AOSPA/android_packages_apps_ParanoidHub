@@ -28,7 +28,6 @@ import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
-import co.aospa.hub.R;
 import co.aospa.hub.download.ClientConnector;
 import co.aospa.hub.download.DownloadClient;
 import co.aospa.hub.misc.Constants;
@@ -48,7 +47,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
