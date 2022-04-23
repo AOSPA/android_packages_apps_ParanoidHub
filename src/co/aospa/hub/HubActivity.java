@@ -41,6 +41,7 @@ import static co.aospa.hub.model.UpdateStatus.PREPARING;
 import static co.aospa.hub.model.Version.TYPE_RELEASE;
 
 import android.animation.LayoutTransition;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -141,7 +142,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.hub_activity);
 
         mVersionHeader = (TextView) findViewById(R.id.system_update_version_header);
-        mHeaderStatus = (TextView) findViewById(R.id.header_system_update_status);
+        mHeaderStatus = (TextView) findViewById(R.id.system_update_desc);
         mProgressBar = (ProgressBar) findViewById(R.id.system_update_progress);
         mUpdateDescription = (TextView) findViewById(R.id.system_update_desc);
         mUpdateSize = (TextView) findViewById(R.id.system_update_size);
@@ -228,6 +229,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         });
     }
 
+    @SuppressLint("StringFormatMatches")
     private void updateStatusAndInfo(Update update, int checkForUpdates) {
         boolean isChecking = (checkForUpdates == CHECK_LOCAL || checkForUpdates == CHECK_NORMAL);
         if (update != null && (update.getStatus() != UNAVAILABLE || isChecking)) {
@@ -760,7 +762,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         int percent = Math.round(100.f * intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 100) /
                 intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100));
         int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
-        int required = (plugged & BatteryManager.BATTERY_PLUGGED_ANY) != 0 ?
+        int required = plugged != 0 ?
                 getResources().getInteger(R.integer.battery_ok_percentage_charging) :
                 getResources().getInteger(R.integer.battery_ok_percentage_discharging);
         return percent >= required;

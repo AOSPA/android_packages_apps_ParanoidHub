@@ -35,7 +35,6 @@ import androidx.preference.PreferenceGroup.PreferencePositionCallback;
 import androidx.preference.PreferenceScreen;
 import androidx.recyclerview.widget.RecyclerView;
 
-import co.aospa.hub.R;
 import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.PreferenceHighlighter;
 import co.aospa.hub.misc.Utils;
