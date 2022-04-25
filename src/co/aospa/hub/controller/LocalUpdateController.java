@@ -16,9 +16,7 @@
 package co.aospa.hub.controller;
 
 import android.content.Context;
-import android.annotation.NonNull;
 import android.content.ContentUris;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
@@ -28,9 +26,9 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import co.aospa.hub.HubController;
-import co.aospa.hub.R;
-import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.FileUtils;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Update;
@@ -133,7 +131,6 @@ public class LocalUpdateController {
                     }
 
                     if (progress == 100) {
-                        Utils.setPermissions(updateFile, android.os.FileUtils.S_IRWXU | android.os.FileUtils.S_IRGRP | android.os.FileUtils.S_IROTH, -1, -1);
                         Log.d(TAG, "Copying local update completed");
                         mController.getActualUpdate(update.getDownloadId())
                                 .setStatus(UpdateStatus.DOWNLOADED, mContext);
