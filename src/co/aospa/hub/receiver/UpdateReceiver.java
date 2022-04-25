@@ -21,19 +21,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.PowerManager;
-import android.os.SystemProperties;
 
 import androidx.preference.PreferenceManager;
 
 import co.aospa.hub.R;
 import co.aospa.hub.HubActivity;
 import co.aospa.hub.misc.Constants;
-import co.aospa.hub.misc.StringGenerator;
 import co.aospa.hub.model.Version;
 import co.aospa.hub.notification.NotificationContract;
 import co.aospa.hub.notification.NotificationContractor;
-
-import java.text.DateFormat;
 
 public class UpdateReceiver extends BroadcastReceiver {
 

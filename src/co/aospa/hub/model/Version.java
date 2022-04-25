@@ -34,11 +34,9 @@ public class Version {
     public static final String TYPE_BETA = "Beta";
     public static final String TYPE_RELEASE = "Release";
 
-    private Context mContext;
     private String mName;
     private String mVersion;
     public long mTimestamp;
-    private int mPersistentStatus;
 
     private boolean mAllowBetaUpdates;
     private boolean mAllowDowngrading;
@@ -47,7 +45,6 @@ public class Version {
     }
 
     public Version(Context context, Update update) {
-        mContext = context;
         SharedPreferences prefs = context.getSharedPreferences(Utils.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
         mAllowBetaUpdates = prefs.getBoolean(Constants.PREF_ALLOW_BETA_UPDATES, false);
         mAllowDowngrading = prefs.getBoolean(Constants.PREF_ALLOW_DOWNGRADING, 
@@ -55,7 +52,6 @@ public class Version {
         mName = update.getName();
         mVersion = update.getVersion();
         mTimestamp = update.getTimestamp();
-        mPersistentStatus = update.getPersistentStatus();
     }
 
     public boolean isUpdateAvailable() {
@@ -82,24 +78,24 @@ public class Version {
             return true;
         }
         Log.d(TAG, mName + " Verson:" + mVersion 
-                + "Build:" + Long.toString(mTimestamp) 
+                + "Build:" + mTimestamp
                 + " is older than current Paranoid Android version");
         return false;
     }
 
     public boolean isNewUpdate() {
-        return Float.valueOf(mVersion) > Float.valueOf(getMinor()) 
+        return Float.parseFloat(mVersion) > Float.parseFloat(getMinor())
                 && mTimestamp > getCurrentTimestamp();
     }
 
     public boolean isIncremental() {
-        return Float.valueOf(mVersion) == Float.valueOf(getMinor())
+        return Float.valueOf(mVersion).equals(Float.valueOf(getMinor()))
                 && mTimestamp > getCurrentTimestamp();
     }
 
     public boolean isDowngrade() {
         return mAllowDowngrading && 
-                Float.valueOf(mVersion) < Float.valueOf(getMinor());
+                Float.parseFloat(mVersion) < Float.parseFloat(getMinor());
     }
 
     public static String getMajor() {
@@ -111,7 +107,7 @@ public class Version {
     }
 
     public static long getCurrentTimestamp() {
-        String date = null;
+        String date;
         String version = SystemProperties.get(Constants.PROP_VERSION);
         String[] split = version.split("-");
         if (isBuild(TYPE_RELEASE)) {
@@ -119,7 +115,7 @@ public class Version {
         } else {
             date = split[4];
         }
-        return Long.valueOf(date);
+        return Long.parseLong(date);
     }
 
     public static String getBuildType() {
@@ -136,7 +132,7 @@ public class Version {
     }
 
     public boolean isBetaUpdate() {
-        String updateType = null;
+        String updateType;
         String[] split = mName.split("-");
         try {
             updateType = split[5];
@@ -144,6 +140,6 @@ public class Version {
             return false;
         }
         String beta = TYPE_BETA.toLowerCase();
-        return updateType != null && beta.equals(updateType);
+        return beta.equals(updateType);
     }
 }

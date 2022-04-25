@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
-import android.os.SystemProperties;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -39,7 +38,6 @@ import co.aospa.hub.model.UpdatePresenter;
 import co.aospa.hub.model.Version;
 import co.aospa.hub.notification.NotificationContract;
 import co.aospa.hub.notification.NotificationContractor;
-import co.aospa.hub.service.UpdateService;
 
 import org.json.JSONException;
 
@@ -56,9 +54,6 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
     private static final String ONESHOT_CHECK_ACTION = "oneshot_check_action";
     private static final String SNOOZE_DOWNLOAD_ACTION = "snooze_download_action";
 
-    private static final String NEW_UPDATES_NOTIFICATION_CHANNEL =
-            "new_updates_notification_channel";
-
     private Context mContext;
     private ClientConnector mConnector;
     private RolloutContractor mRolloutContractor;
@@ -67,7 +62,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
     public void onReceive(final Context context, Intent intent) {
         mContext = context;
         if (mConnector == null) {
-            mConnector = new ClientConnector(context);
+            mConnector = new ClientConnector();
             mConnector.addClientStatusListener(this);
         }
         mRolloutContractor = new RolloutContractor(context);

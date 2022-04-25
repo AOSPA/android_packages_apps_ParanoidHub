@@ -16,9 +16,7 @@
 package co.aospa.hub.controller;
 
 import android.content.Context;
-import android.annotation.NonNull;
 import android.content.ContentUris;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
@@ -28,9 +26,9 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import co.aospa.hub.HubController;
-import co.aospa.hub.R;
-import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.FileUtils;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Update;
@@ -42,6 +40,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class LocalUpdateController {
 
@@ -79,8 +78,7 @@ public class LocalUpdateController {
     }
 
     public UpdateInfo setUpdate(File updateFile) {
-        UpdateInfo update = buildUpdate(updateFile);
-        return update;
+        return buildUpdate(updateFile);
     }
 
     private String getVersion(String fileName) {
@@ -101,13 +99,15 @@ public class LocalUpdateController {
 
     public File getLocalFile(File path) {
         try {
-            for (File f : path.listFiles()) {
+            for (File f : Objects.requireNonNull(path.listFiles())) {
                 if (f.getName().startsWith("pa-") 
                         && f.getName().endsWith(".zip")) {
                     return f;
                 }
             }
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -119,7 +119,7 @@ public class LocalUpdateController {
         Runnable copyUpdateRunnable = new Runnable() {
             private long mLastUpdate = -1;
 
-            FileUtils.ProgressCallBack mProgressCallBack = new FileUtils.ProgressCallBack() {
+            final FileUtils.ProgressCallBack mProgressCallBack = new FileUtils.ProgressCallBack() {
                 @Override
                 public void update(int progress) {
                     long now = SystemClock.elapsedRealtime();
@@ -133,7 +133,6 @@ public class LocalUpdateController {
                     }
 
                     if (progress == 100) {
-                        Utils.setPermissions(updateFile, android.os.FileUtils.S_IRWXU | android.os.FileUtils.S_IRGRP | android.os.FileUtils.S_IROTH, -1, -1);
                         Log.d(TAG, "Copying local update completed");
                         mController.getActualUpdate(update.getDownloadId())
                                 .setStatus(UpdateStatus.DOWNLOADED, mContext);
@@ -173,10 +172,6 @@ public class LocalUpdateController {
         sPreparingUpdate = update.getDownloadId();
     }
 
-    public static synchronized boolean isPreparing() {
-        return sPreparingUpdate != null;
-    }
-
     public static String getRealPath(Context context, Uri uri) {
         if (DocumentsContract.isDocumentUri(context, uri)) {
             if (isExternalStorageDocument(uri)) {
@@ -198,13 +193,15 @@ public class LocalUpdateController {
                 };
 
                 for (String contentUriPrefix : contentUriPrefixesToTry) {
-                    Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.valueOf(id));
+                    assert id != null;
+                    Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.parseLong(id));
                     try {
                         String path = getDataColumn(context, contentUri, null, null);
                         if (path != null) {
                             return path;
                         }
                     } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
 
@@ -297,7 +294,7 @@ public class LocalUpdateController {
         String mimeType = context.getContentResolver().getType(uri);
         String filename = null;
 
-        if (mimeType == null && context != null) {
+        if (mimeType == null) {
             String path = getRealPath(context, uri);
             if (path == null) {
                 filename = getName(uri.toString());

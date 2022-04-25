@@ -24,7 +24,6 @@ public final class Constants {
 
     // Update Configuration
     public static final String UPDATE_STATUS = "hub_update_status";
-    public static final String IS_UPDATE_DOWNLOADING = "hub_is_update_downloading";
 
     // AB Update Configuration
     public static final String IS_INSTALLING_AB = "is_installing_ab";
