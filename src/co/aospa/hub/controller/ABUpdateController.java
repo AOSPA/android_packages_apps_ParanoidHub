@@ -19,7 +19,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.UpdateEngine;
 import android.os.UpdateEngineCallback;
-import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.preference.PreferenceManager;
@@ -51,7 +50,7 @@ public class ABUpdateController extends UpdateEngineCallback {
     private final Context mContext;
     private String mDownloadId;
 
-    private UpdateEngine mUpdateEngine;
+    private final UpdateEngine mUpdateEngine;
     private boolean mBound;
 
     private boolean mFinalizing;
@@ -71,10 +70,10 @@ public class ABUpdateController extends UpdateEngineCallback {
         return sInstance;
     }
 
-    public boolean install(String downloadId) {
+    public void install(String downloadId) {
         if (isInstalling(mContext)) {
             Log.e(TAG, "Already installing an update");
-            return false;
+            return;
         }
 
         mDownloadId = downloadId;
@@ -85,7 +84,7 @@ public class ABUpdateController extends UpdateEngineCallback {
             mController.getActualUpdate(downloadId)
                     .setStatus(UpdateStatus.INSTALLATION_FAILED, mContext);
             mController.notifyUpdateStatusChanged(mController.getActualUpdate(downloadId), HubController.STATE_STATUS_CHANGED);
-            return false;
+            return;
         }
 
         long offset;
@@ -110,7 +109,7 @@ public class ABUpdateController extends UpdateEngineCallback {
             mController.getActualUpdate(mDownloadId)
                     .setStatus(UpdateStatus.INSTALLATION_FAILED, mContext);
             mController.notifyUpdateStatusChanged(mController.getActualUpdate(mDownloadId), HubController.STATE_STATUS_CHANGED);
-            return false;
+            return;
         }
 
         if (!mBound) {
@@ -120,7 +119,7 @@ public class ABUpdateController extends UpdateEngineCallback {
                 mController.getActualUpdate(downloadId)
                         .setStatus(UpdateStatus.INSTALLATION_FAILED, mContext);
                 mController.notifyUpdateStatusChanged(mController.getActualUpdate(mDownloadId), HubController.STATE_STATUS_CHANGED);
-                return false;
+                return;
             }
         }
 
@@ -138,18 +137,17 @@ public class ABUpdateController extends UpdateEngineCallback {
         setDownloadId(mDownloadId, false);
         setInstalling(true);
 
-        return true;
     }
 
-    public boolean suspend() {
+    public void suspend() {
         if (!isInstalling(mContext)) {
             Log.e(TAG, "cancel: Not installing any update");
-            return false;
+            return;
         }
 
         if (!mBound) {
             Log.e(TAG, "Not connected to update engine");
-            return false;
+            return;
         }
 
         mUpdateEngine.suspend();
@@ -158,18 +156,17 @@ public class ABUpdateController extends UpdateEngineCallback {
         mController.notifyUpdateStatusChanged(mController.getActualUpdate(mDownloadId), HubController.STATE_STATUS_CHANGED);
         setSuspended(true);
 
-        return true;
     }
 
-    public boolean resume() {
+    public void resume() {
         if (!isInstallSuspended(mContext)) {
             Log.e(TAG, "cancel: No update is suspended");
-            return false;
+            return;
         }
 
         if (!mBound) {
             Log.e(TAG, "Not connected to update engine");
-            return false;
+            return;
         }
 
         mUpdateEngine.resume();
@@ -182,7 +179,6 @@ public class ABUpdateController extends UpdateEngineCallback {
 
         setSuspended(false);
 
-        return true;
     }
 
     public boolean cancel() {
@@ -206,14 +202,14 @@ public class ABUpdateController extends UpdateEngineCallback {
         return true;
     }
 
-    public boolean reconnect() {
+    public void reconnect() {
         if (!isInstalling(mContext)) {
             Log.e(TAG, "reconnect: Not installing any update");
-            return false;
+            return;
         }
 
         if (mBound) {
-            return true;
+            return;
         }
 
         mDownloadId = getDownloadId();
@@ -222,10 +218,8 @@ public class ABUpdateController extends UpdateEngineCallback {
         mBound = mUpdateEngine.bind(this);
         if (!mBound) {
             Log.e(TAG, "Could not bind");
-            return false;
         }
 
-        return true;
     }
 
     private void setInstalling(boolean installing) {
@@ -252,10 +246,6 @@ public class ABUpdateController extends UpdateEngineCallback {
             return;
         }
         prefs.edit().putString(Constants.DOWNLOAD_ID_AB, id).apply();
-    }
-
-    public void setPerformanceMode(boolean enable) {
-        mUpdateEngine.setPerformanceMode(enable);
     }
 
     private String getDownloadId() {

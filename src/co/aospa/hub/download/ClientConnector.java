@@ -15,7 +15,6 @@
  */
 package co.aospa.hub.download;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.io.File;
@@ -27,9 +26,8 @@ public class ClientConnector implements DownloadClient.DownloadCallback {
 
     private static final String TAG = "ClientConnector";
 
-    private List<ConnectorListener> mListeners = new ArrayList<>();
+    private final List<ConnectorListener> mListeners = new ArrayList<>();
 
-    private Context mContext;
     private DownloadClient mClient;
     private File mJson;
 
@@ -39,8 +37,7 @@ public class ClientConnector implements DownloadClient.DownloadCallback {
         void onClientStatusSuccess(File oldJson, File newJson);
     }
 
-    public ClientConnector(Context context) {
-        mContext = context;
+    public ClientConnector() {
     }
 
     public void insert(File oldJson, File newJson, String url) {
@@ -55,7 +52,6 @@ public class ClientConnector implements DownloadClient.DownloadCallback {
                     .build();
         } catch (IOException exception) {
             Log.d(TAG, "Could not build download client");
-            return;
         }
     }
 
@@ -65,10 +61,6 @@ public class ClientConnector implements DownloadClient.DownloadCallback {
 
     public void addClientStatusListener(ConnectorListener listener) {
         mListeners.add(listener);
-    }
-
-    public void removeClientStatusListener(ConnectorListener listener) {
-        mListeners.remove(listener);
     }
 
     private void notifyClientStatusFailure(boolean cancelled) {

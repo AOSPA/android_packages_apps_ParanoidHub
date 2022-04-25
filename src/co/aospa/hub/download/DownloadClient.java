@@ -37,7 +37,7 @@ public interface DownloadClient {
     interface Headers {
         String get(String name);
 
-        Map<String, List<String>> getAll();
+        Map<String, List<String>>  getAll();
     }
 
     /**

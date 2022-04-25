@@ -34,9 +34,9 @@ public class FileUtils {
     }
 
     private static class CallbackByteChannel implements ReadableByteChannel {
-        private ProgressCallBack mCallback;
-        private long mSize;
-        private ReadableByteChannel mReadableByteChannel;
+        private final ProgressCallBack mCallback;
+        private final long mSize;
+        private final ReadableByteChannel mReadableByteChannel;
         private long mSizeRead;
         private int mProgress;
 
@@ -92,7 +92,4 @@ public class FileUtils {
         }
     }
 
-    public static void copyFile(File sourceFile, File destFile) throws IOException {
-        copyFile(sourceFile, destFile, null);
-    }
 }

@@ -31,9 +31,9 @@ public class NotificationContractor {
 
     public static final int ID = 10;
 
-    private Context mContext;
+    private final Context mContext;
     private NotificationContract mContract;
-    private NotificationManager mNotificationManager;
+    private final NotificationManager mNotificationManager;
 
     public NotificationContractor(Context context) {
         mContext = context;
