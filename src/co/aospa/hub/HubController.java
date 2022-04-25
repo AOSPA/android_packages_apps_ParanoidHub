@@ -19,13 +19,10 @@ import static co.aospa.hub.model.Version.TYPE_RELEASE;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.os.SystemProperties;
 import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -101,7 +98,7 @@ public class HubController {
         mUiThread = new Handler(context.getMainLooper());
         mDownloadRoot = Utils.getDownloadPath(context);
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Updater");
+        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "hub:wakelock");
         mWakeLock.setReferenceCounted(false);
         mContext = context.getApplicationContext();
         mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -375,7 +372,7 @@ public class HubController {
             return false;
         }
         Update update = mDownloads.get(downloadId).mUpdate;
-        File destination = Utils.copyUpdateToDir(mDownloadRoot, update.getName());
+        File destination = new File(mDownloadRoot, update.getName());
         /*if (destination.exists()) {
             destination = Utils.appendSequentialNumber(destination);
             Log.d(TAG, "Changing name with " + destination.getName());

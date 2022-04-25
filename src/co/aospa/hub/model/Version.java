@@ -88,7 +88,7 @@ public class Version {
     }
 
     public boolean isNewUpdate() {
-        return Float.valueOf(mVersion) > Float.valueOf(getMinor()) 
+        return Float.parseFloat(mVersion) > Float.parseFloat(getMinor())
                 && mTimestamp > getCurrentTimestamp();
     }
 
@@ -99,7 +99,7 @@ public class Version {
 
     public boolean isDowngrade() {
         return mAllowDowngrading && 
-                Float.valueOf(mVersion) < Float.valueOf(getMinor());
+                Float.parseFloat(mVersion) < Float.parseFloat(getMinor());
     }
 
     public static String getMajor() {
@@ -119,7 +119,7 @@ public class Version {
         } else {
             date = split[4];
         }
-        return Long.valueOf(date);
+        return Long.parseLong(date);
     }
 
     public static String getBuildType() {
