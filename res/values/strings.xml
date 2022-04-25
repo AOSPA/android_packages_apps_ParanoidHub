@@ -15,7 +15,8 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">Paranoid Android Updates</string>
+    <string name="hub_name">Paranoid Android Updates</string>
+    <string name="hub_display_name">System update</string>
     <string name="app_preferences_name">Update preferences</string>
     <string name="os_name">Paranoid Android</string>
     <string name="join_two_unrelated_items"><xliff:g id="first_item">%1$s</xliff:g>, <xliff:g id="second_item">%2$s</xliff:g></string>

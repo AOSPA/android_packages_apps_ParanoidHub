@@ -48,7 +48,7 @@ public class NotificationContract {
         manager.createNotificationChannel(notificationChannel);
 
         mBuilder = new NotificationCompat.Builder(context, channel);
-        mBuilder.mActions.clear();
+        mBuilder.clearActions();
         mBuilder.setColor(context.getResources().getColor(R.color.theme_accent));
         mBuilder.setShowWhen(false);
 
