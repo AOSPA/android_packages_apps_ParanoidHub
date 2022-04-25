@@ -17,7 +17,6 @@ package co.aospa.hub;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemProperties;
@@ -26,17 +25,14 @@ import android.view.View;
 
 import androidx.preference.PreferenceManager;
 
-import co.aospa.hub.R;
 import co.aospa.hub.controller.LocalUpdateController;
 import co.aospa.hub.download.ClientConnector;
 import co.aospa.hub.download.DownloadClient;
 import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Configuration;
-import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateInfo;
 import co.aospa.hub.model.UpdatePresenter;
-import co.aospa.hub.model.UpdateStatus;
 import co.aospa.hub.receiver.UpdateCheckReceiver;
 
 import java.io.File;
@@ -51,19 +47,18 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     public static final String DEVICE_FILE = "updates/" + SystemProperties.get(Constants.PROP_DEVICE);
     private static final String OTA_CONFIGURATION_FILE = "ota_configuration";
 
-    private Context mContext;
+    private final Context mContext;
     private ClientConnector mConnector;
     private final Handler mMainThread = new Handler(Looper.getMainLooper());
     private final Handler mThread = new Handler();
-    private HubActivity mHub;
-    private HubController mController;
-    private RolloutContractor mRolloutContractor;
+    private final HubActivity mHub;
+    private final HubController mController;
+    private final RolloutContractor mRolloutContractor;
 
     private Configuration mConfig;
 
-    private boolean mEnabled;
+    private final boolean mEnabled;
     private boolean mIsConfigMatchMaking = false;
-    private boolean mIsUpdateAvailable = false;
     private boolean mUserInitiated;
 
     public HubUpdateManager(Context context, HubController controller, HubActivity activity) {
@@ -77,9 +72,9 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     }
 
     public void warmUpMatchMaker(boolean userInitiated) {
-        if (mEnabled && !mController.hasActiveDownloads()) {
+        if (mEnabled && mController.hasActiveDownloads()) {
             if (mConnector == null) {
-                mConnector = new ClientConnector(mContext);
+                mConnector = new ClientConnector();
                 mConnector.addClientStatusListener(this);
             }
             if (userInitiated != mUserInitiated) {
@@ -98,7 +93,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     public void warmUpConfigMatchMaker() {
         if (mEnabled) {
             if (mConnector == null) {
-                mConnector = new ClientConnector(mContext);
+                mConnector = new ClientConnector();
                 mConnector.addClientStatusListener(this);
             }
             File oldJson = Utils.getCachedConfiguration(mContext);
@@ -113,15 +108,6 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         }
     }
 
-    public void setMatchMaker(boolean enabled) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        prefs.edit().putBoolean(Constants.IS_MATCHMAKER_ENABLED, enabled).apply();
-        boolean matchMakerEnabled = prefs.getBoolean(Constants.IS_MATCHMAKER_ENABLED, true);
-        if (matchMakerEnabled != mEnabled) {
-            mEnabled = matchMakerEnabled;
-        }
-    }
-
     public void beginMatchMaker() {
         if (mEnabled && mUserInitiated) {
             if (mHub != null) {
@@ -130,9 +116,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
                     mHub.getProgressBar().setIndeterminate(true);
                 });
             }
-            mThread.postDelayed(() -> {
-                mConnector.start();
-            }, 5000);
+            mThread.postDelayed(() -> mConnector.start(), 5000);
         } else {
             mConnector.start();
         }
@@ -145,9 +129,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
                 mHub.getProgressBar().setIndeterminate(true);
             });
         }
-        mThread.postDelayed(() -> {
-            syncLocalUpdate();
-        }, 5000);
+        mThread.postDelayed(this::syncLocalUpdate, 5000);
     }
 
     private void requestUpdate(File oldJson, File newJson) {
@@ -163,13 +145,13 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
                     UpdateCheckReceiver.cancelUpdatesCheck(mContext);
                     newJson.renameTo(oldJson);
                 } catch (IOException | JSONException e) {
+                    e.printStackTrace();
                 }
             } else {
                 if (mConfig != null) {
                     Log.d(TAG, "Can't check for new updates, ota enabled from sever? " + mConfig.isOtaEnabledFromServer());
                 }
-                Update nullUpdate = null;
-                mController.notifyUpdateStatusChanged(nullUpdate, HubController.STATE_STATUS_CHANGED);
+                mController.notifyUpdateStatusChanged(null, HubController.STATE_STATUS_CHANGED);
             }
         }
     }
@@ -179,18 +161,14 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
             Log.d(TAG, "Syncing requested update");
             UpdateInfo update = UpdatePresenter.matchMakeJson(mContext, json);
             if (update != null) {
-                mIsUpdateAvailable = mController.isUpdateAvailable(update, mRolloutContractor.isReady(), false);
-                if (mIsUpdateAvailable) {};
+                boolean mIsUpdateAvailable = mController.isUpdateAvailable(update, mRolloutContractor.isReady(), false);
                 if (mUserInitiated && !mIsUpdateAvailable) {
                     if (mHub != null) {
-                        mMainThread.post(() -> {
-                            mHub.reportMessage(R.string.no_updates_found_snack);
-                        });
+                        mMainThread.post(() -> mHub.reportMessage(R.string.no_updates_found_snack));
                     }
                 }
             } else {
-                Update nullUpdate = null;
-                mController.notifyUpdateStatusChanged(nullUpdate, HubController.STATE_STATUS_CHANGED);
+                mController.notifyUpdateStatusChanged(null, HubController.STATE_STATUS_CHANGED);
             }
         }
     }
@@ -203,30 +181,26 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         File update = controller.getLocalFile(path);
         boolean isValidUpdate = update != null;
         if (isValidUpdate) {
-            boolean updateAvailable = false;
+            boolean updateAvailable;
             UpdateInfo localUpdate = controller.setUpdate(update);
             Log.d(TAG, "Checking if " + localUpdate.getName() + " is available for local upgrade");
             updateAvailable = mController.isUpdateAvailable(localUpdate, true, true);
-            if (updateAvailable) {};
             if (!updateAvailable) {
                 if (mHub != null) {
-                    mMainThread.post(() -> {
-                        mHub.reportMessage(R.string.no_updates_found_snack);
-                    });
+                    mMainThread.post(() -> mHub.reportMessage(R.string.no_updates_found_snack));
                 }
             } else {
                 Log.d(TAG, "Local update: " + localUpdate.getName() + " is available");
             }
         } else {
             Log.d(TAG, "No valid local update found");
-            Update nullUpdate = null;
-            mController.notifyUpdateStatusChanged(nullUpdate, HubController.STATE_STATUS_CHANGED);
+            mController.notifyUpdateStatusChanged(null, HubController.STATE_STATUS_CHANGED);
         }
     }
 
     private void fetchCachedOrNewUpdates() {
         mRolloutContractor.setConfiguration(mConfig);
-        if (mEnabled && !mController.hasActiveDownloads()) {
+        if (mEnabled && mController.hasActiveDownloads()) {
             if (mConfig != null && mConfig.isOtaEnabledFromServer()) {
                 File cachedUpdate = Utils.getCachedUpdateList(mContext);
                 if (cachedUpdate.exists()) {
@@ -244,8 +218,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
                 if (mConfig != null) {
                     Log.d(TAG, "Can't fetch cached updates, ota enabled from sever? " + mConfig.isOtaEnabledFromServer());
                 }
-                Update nullUpdate = null;
-                mController.notifyUpdateStatusChanged(nullUpdate, HubController.STATE_STATUS_CHANGED);
+                mController.notifyUpdateStatusChanged(null, HubController.STATE_STATUS_CHANGED);
             }
         } else {
             Log.d(TAG, "Can't fetch cached updates because match maker is disabled");
@@ -259,8 +232,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     @Override
     public void onClientStatusFailure(boolean cancelled) {
         Log.d(TAG, "Could not download updates");
-        Update nullUpdate = null;
-        mController.notifyUpdateStatusChanged(nullUpdate, HubController.STATE_STATUS_CHANGED);
+        mController.notifyUpdateStatusChanged(null, HubController.STATE_STATUS_CHANGED);
         if (mHub != null) {
             mMainThread.post(() -> {
                 if (!cancelled) {
@@ -280,7 +252,9 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         if (mIsConfigMatchMaking) {
             try {
                 mConfig = UpdatePresenter.matchMakeConfiguration(oldJson, newJson);
-            } catch (IOException | JSONException e) {}
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
             mIsConfigMatchMaking = false;
             Log.d(TAG, "Ota configuration Updated!");
             fetchCachedOrNewUpdates();

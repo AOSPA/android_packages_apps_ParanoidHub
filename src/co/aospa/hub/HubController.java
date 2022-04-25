@@ -19,16 +19,12 @@ import static co.aospa.hub.model.Version.TYPE_RELEASE;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.os.SystemProperties;
 import android.util.Log;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
 import co.aospa.hub.controller.ABUpdateController;
@@ -49,6 +45,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class HubController {
@@ -66,27 +63,21 @@ public class HubController {
     private static final int MAX_REPORT_INTERVAL_MS = 1000;
 
     private final Context mContext;
-    private Handler mUiThread;
-    private Handler mBgThread = new Handler();
-    private final LocalBroadcastManager mBroadcastManager;
+    private final Handler mUiThread;
+    private final Handler mBgThread = new Handler();
 
     private final PowerManager.WakeLock mWakeLock;
 
     private final File mDownloadRoot;
 
-    private boolean mIsUpdatesOnline;
     private int mActiveDownloads = 0;
-    private List<StatusListener> mListeners = new ArrayList<>();
-    private Map<String, DownloadEntry> mDownloads = new HashMap<>();
-    private Set<String> mVerifyingUpdates = new HashSet<>();
-    private SharedPreferences mPrefs;
+    private final List<StatusListener> mListeners = new ArrayList<>();
+    private final Map<String, DownloadEntry> mDownloads = new HashMap<>();
+    private final Set<String> mVerifyingUpdates = new HashSet<>();
+    private final SharedPreferences mPrefs;
 
     public interface StatusListener {
         void onUpdateStatusChanged(Update update, int state);
-    }
-
-    public static synchronized HubController getInstance() {
-        return sController;
     }
 
     public static synchronized HubController getInstance(Context context) {
@@ -97,11 +88,10 @@ public class HubController {
     }
 
     private HubController(Context context) {
-        mBroadcastManager = LocalBroadcastManager.getInstance(context);
         mUiThread = new Handler(context.getMainLooper());
         mDownloadRoot = Utils.getDownloadPath(context);
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Updater");
+        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "hub:wakelock");
         mWakeLock.setReferenceCounted(false);
         mContext = context.getApplicationContext();
         mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -109,7 +99,7 @@ public class HubController {
         Utils.cleanupDownloadsDir(context);
     }
 
-    private class DownloadEntry {
+    private static class DownloadEntry {
         final Update mUpdate;
         DownloadClient mDownloadClient;
         private DownloadEntry(Update update) {
@@ -118,18 +108,15 @@ public class HubController {
     }
 
     public void notifyUpdateStatusChanged(Update update, int state) {
-        mUiThread.post(new Runnable() {
-            @Override
-            public void run() {
-                for (StatusListener listener : mListeners) {
-                        listener.onUpdateStatusChanged(update, state);
-                    }
+        mUiThread.post(() -> {
+            for (StatusListener listener : mListeners) {
+                    listener.onUpdateStatusChanged(update, state);
                 }
             });
     }
 
     private void tryReleaseWakelock() {
-        if (!hasActiveDownloads()) {
+        if (hasActiveDownloads()) {
             mWakeLock.release();
         }
     }
@@ -147,7 +134,7 @@ public class HubController {
 
             @Override
             public void onResponse(int statusCode, String url, DownloadClient.Headers headers) {
-                final Update update = mDownloads.get(downloadId).mUpdate;
+                final Update update = Objects.requireNonNull(mDownloads.get(downloadId)).mUpdate;
                 String contentLength = headers.get("Content-Length");
                 if (contentLength != null) {
                     try {
@@ -167,9 +154,9 @@ public class HubController {
             @Override
             public void onSuccess(File destination) {
                 Log.d(TAG, "Download complete");
-                Update update = mDownloads.get(downloadId).mUpdate;
+                Update update = Objects.requireNonNull(mDownloads.get(downloadId)).mUpdate;
                 update.setStatus(UpdateStatus.DOWNLOADED, mContext);
-                removeDownloadClient(mDownloads.get(downloadId));
+                removeDownloadClient(Objects.requireNonNull(mDownloads.get(downloadId)));
                 if (Version.isBuild(TYPE_RELEASE)) verifyUpdateAsync(update, downloadId, false);
                 notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
                 tryReleaseWakelock();
@@ -177,13 +164,13 @@ public class HubController {
 
             @Override
             public void onFailure(boolean cancelled) {
-                Update update = mDownloads.get(downloadId).mUpdate;
+                Update update = Objects.requireNonNull(mDownloads.get(downloadId)).mUpdate;
                 if (cancelled) {
                     Log.d(TAG, "Download cancelled");
                     // Already notified
                 } else {
                     Log.e(TAG, "Download failed");
-                    removeDownloadClient(mDownloads.get(downloadId));
+                    removeDownloadClient(Objects.requireNonNull(mDownloads.get(downloadId)));
                     update.setStatus(UpdateStatus.DOWNLOAD_FAILED, mContext);
                     notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
                 }
@@ -200,7 +187,7 @@ public class HubController {
             @Override
             public void update(long bytesRead, long contentLength, long speed, long eta,
                     boolean done) {
-                Update update = mDownloads.get(downloadId).mUpdate;
+                Update update = Objects.requireNonNull(mDownloads.get(downloadId)).mUpdate;
                 if (contentLength <= 0) {
                     if (update.getFileSize() <= 0) {
                         return;
@@ -280,10 +267,6 @@ public class HubController {
         return true;
     }
 
-    public boolean isUpdatesOnline() {
-        return mIsUpdatesOnline;
-    }
-
     public boolean isUpdateAvailable(UpdateInfo info, boolean isReadyForRollout, boolean isLocalUpdate) {
         Update update = new Update(info);
         boolean needsReboot = mPrefs.getBoolean(Constants.NEEDS_REBOOT_AFTER_UPDATE, false);
@@ -356,26 +339,25 @@ public class HubController {
         return false;
     }
 
-    public boolean startLocalUpdate(String downloadId) {
+    public void startLocalUpdate(String downloadId) {
         Log.d(TAG, "Starting local update for " + downloadId);
         if (!mDownloads.containsKey(downloadId)) {
             Log.d(TAG, "Local update not registered");
-            return false;
+            return;
         }
 
         UpdateInfo update = getUpdate(downloadId);
         LocalUpdateController controller = LocalUpdateController.getInstance(mContext, this);
         controller.copyUpdateToDir(update);
-        return true;
     }
 
-    public boolean startDownload(String downloadId) {
+    public void startDownload(String downloadId) {
         Log.d(TAG, "Starting " + downloadId);
         if (!mDownloads.containsKey(downloadId) || isDownloading(downloadId)) {
-            return false;
+            return;
         }
-        Update update = mDownloads.get(downloadId).mUpdate;
-        File destination = Utils.copyUpdateToDir(mDownloadRoot, update.getName());
+        Update update = Objects.requireNonNull(mDownloads.get(downloadId)).mUpdate;
+        File destination = new File(mDownloadRoot, update.getName());
         /*if (destination.exists()) {
             destination = Utils.appendSequentialNumber(destination);
             Log.d(TAG, "Changing name with " + destination.getName());
@@ -394,28 +376,27 @@ public class HubController {
             Log.e(TAG, "Could not build download client");
             update.setStatus(UpdateStatus.DOWNLOAD_FAILED, mContext);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
-            return false;
+            return;
         }
-        addDownloadClient(mDownloads.get(downloadId), downloadClient);
+        addDownloadClient(Objects.requireNonNull(mDownloads.get(downloadId)), downloadClient);
         update.setStatus(UpdateStatus.STARTING, mContext);
         notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
         downloadClient.start();
-        mWakeLock.acquire();
-        return true;
+        mWakeLock.acquire(10*60*1000L /*10 minutes*/);
     }
 
-    public boolean resumeDownload(String downloadId) {
+    public void resumeDownload(String downloadId) {
         Log.d(TAG, "Resuming " + downloadId);
         if (!mDownloads.containsKey(downloadId) || isDownloading(downloadId)) {
-            return false;
+            return;
         }
-        Update update = mDownloads.get(downloadId).mUpdate;
+        Update update = Objects.requireNonNull(mDownloads.get(downloadId)).mUpdate;
         File file = update.getFile();
         if (file == null || !file.exists()) {
             Log.e(TAG, "The destination file of " + downloadId + " doesn't exist, can't resume");
             update.setStatus(UpdateStatus.PAUSED_ERROR, mContext);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
-            return false;
+            return;
         }
         if (file.exists() && update.getFileSize() > 0 && file.length() >= update.getFileSize() && Version.isBuild(TYPE_RELEASE)) {
             Log.d(TAG, "File already downloaded, starting verification");
@@ -435,56 +416,34 @@ public class HubController {
                 Log.e(TAG, "Could not build download client");
                 update.setStatus(UpdateStatus.PAUSED_ERROR, mContext);
                 notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
-                return false;
+                return;
             }
-            addDownloadClient(mDownloads.get(downloadId), downloadClient);
+            addDownloadClient(Objects.requireNonNull(mDownloads.get(downloadId)), downloadClient);
             update.setStatus(UpdateStatus.STARTING, mContext);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
             downloadClient.resume();
-            mWakeLock.acquire();
+            mWakeLock.acquire(10*60*1000L /*10 minutes*/);
         }
-        return true;
     }
 
-    public boolean pauseDownload(String downloadId) {
+    public void pauseDownload(String downloadId) {
         if (!isDownloading(downloadId)) {
             Log.d(TAG, "Couldn't pausing, nothing downloading");
-            return false;
+            return;
         }
         DownloadEntry entry = mDownloads.get(downloadId);
-		if (entry.mDownloadClient == null) {
+        assert entry != null;
+        if (entry.mDownloadClient == null) {
             Log.d(TAG, "Download id is unavailable");
-			return false;
+			return;
 		}
         Log.d(TAG, "Pausing " + downloadId);
         entry.mDownloadClient.cancel();
-        removeDownloadClient(mDownloads.get(downloadId));
+        removeDownloadClient(Objects.requireNonNull(mDownloads.get(downloadId)));
         entry.mUpdate.setStatus(UpdateStatus.PAUSED, mContext);
         entry.mUpdate.setEta(0);
         entry.mUpdate.setSpeed(0);
         notifyUpdateStatusChanged(entry.mUpdate, STATE_STATUS_CHANGED);
-        return true;
-    }
-
-    public void startInstall(String downloadId) {
-        Update update = getActualUpdate(downloadId);
-        if (update.getPersistentStatus() != UpdateStatus.Persistent.VERIFIED 
-                    && Version.isBuild(TYPE_RELEASE)) {
-            throw new IllegalArgumentException(update.getDownloadId() + " is not verified");
-        }
-        try {
-            if (Utils.isABUpdate(update.getFile())) {
-                ABUpdateController abController = ABUpdateController.getInstance(mContext, this);
-                abController.install(downloadId);
-            } else {
-                UpdateController updateController = UpdateController.getInstance(mContext, this);
-                updateController.install(downloadId);
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "Could not install update", e);
-            getActualUpdate(downloadId).setStatus(UpdateStatus.INSTALLATION_FAILED, mContext);
-            notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
-        }
     }
 
     private void deleteUpdateAsync(final Update update) {
@@ -496,12 +455,12 @@ public class HubController {
         }).start();
     }
 
-    public boolean deleteUpdate(String downloadId) {
+    public void deleteUpdate(String downloadId) {
         Log.d(TAG, "Cancelling " + downloadId);
         if (!mDownloads.containsKey(downloadId) || isDownloading(downloadId)) {
-            return false;
+            return;
         }
-        Update update = mDownloads.get(downloadId).mUpdate;
+        Update update = Objects.requireNonNull(mDownloads.get(downloadId)).mUpdate;
         update.setStatus(UpdateStatus.DELETED, mContext);
         update.setProgress(0);
         update.setPersistentStatus(UpdateStatus.Persistent.UNKNOWN);
@@ -515,11 +474,6 @@ public class HubController {
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
         }
 
-        return true;
-    }
-
-    public Set<String> getIds() {
-        return mDownloads.keySet();
     }
 
     public List<UpdateInfo> getUpdates() {
@@ -543,8 +497,7 @@ public class HubController {
     }
 
     public int getUpdateStatus() {
-        int status = mPrefs.getInt(Constants.UPDATE_STATUS, -1);
-        return status;
+        return mPrefs.getInt(Constants.UPDATE_STATUS, -1);
     }
 
     public void setDownloadEntry(Update update) {
@@ -555,19 +508,11 @@ public class HubController {
 
     public boolean isDownloading(String downloadId) {
         return mDownloads.containsKey(downloadId) &&
-                mDownloads.get(downloadId).mDownloadClient != null;
+                Objects.requireNonNull(mDownloads.get(downloadId)).mDownloadClient != null;
     }
 
     public boolean hasActiveDownloads() {
-        return mActiveDownloads > 0;
-    }
-
-    public boolean isVerifyingUpdate() {
-        return mVerifyingUpdates.size() > 0;
-    }
-
-    public boolean isVerifyingUpdate(String downloadId) {
-        return mVerifyingUpdates.contains(downloadId);
+        return mActiveDownloads <= 0;
     }
 
     public boolean isInstalling(Context context, boolean abUpdate) {
@@ -595,13 +540,6 @@ public class HubController {
         }
         entry.mDownloadClient = null;
         mActiveDownloads--;
-    }
-
-    public void setPerformanceMode(boolean enable) {
-        if (!Utils.isABDevice()) {
-            return;
-        }
-        ABUpdateController.getInstance(mContext, this).setPerformanceMode(enable);
     }
 
     public void resetHub() {

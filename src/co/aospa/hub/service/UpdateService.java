@@ -15,43 +15,27 @@
  */
 package co.aospa.hub.service;
 
-import static co.aospa.hub.model.UpdateStatus.UNKNOWN;
-import static co.aospa.hub.model.UpdateStatus.UNAVAILABLE;
-import static co.aospa.hub.model.UpdateStatus.CHECKING;
-import static co.aospa.hub.model.UpdateStatus.AVAILABLE;
-import static co.aospa.hub.model.UpdateStatus.STARTING;
-import static co.aospa.hub.model.UpdateStatus.DOWNLOADING;
 import static co.aospa.hub.model.UpdateStatus.DOWNLOADED;
-import static co.aospa.hub.model.UpdateStatus.PAUSED;
-import static co.aospa.hub.model.UpdateStatus.PAUSED_ERROR;
 import static co.aospa.hub.model.UpdateStatus.DELETED;
-import static co.aospa.hub.model.UpdateStatus.VERIFYING;
 import static co.aospa.hub.model.UpdateStatus.VERIFIED;
 import static co.aospa.hub.model.UpdateStatus.VERIFICATION_FAILED;
-import static co.aospa.hub.model.UpdateStatus.INSTALLING;
 import static co.aospa.hub.model.UpdateStatus.INSTALLED;
 import static co.aospa.hub.model.UpdateStatus.INSTALLATION_FAILED;
-import static co.aospa.hub.model.UpdateStatus.INSTALLATION_CANCELLED;
-import static co.aospa.hub.model.UpdateStatus.INSTALLATION_SUSPENDED;
 
 import static co.aospa.hub.model.Version.TYPE_RELEASE;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.text.format.Formatter;
 import android.util.Log;
 
 import co.aospa.hub.R;
-import co.aospa.hub.HubActivity;
 import co.aospa.hub.HubController;
 import co.aospa.hub.HubController.StatusListener;
 import co.aospa.hub.controller.ABUpdateController;
 import co.aospa.hub.controller.UpdateController;
-import co.aospa.hub.misc.StringGenerator;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateInfo;
@@ -60,12 +44,8 @@ import co.aospa.hub.model.UpdateStatus;
 import co.aospa.hub.model.Version;
 import co.aospa.hub.notification.NotificationContract;
 import co.aospa.hub.notification.NotificationContractor;
-import co.aospa.hub.receiver.UpdateReceiver;
-import co.aospa.hub.receiver.UpdateCheckReceiver;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.NumberFormat;
 
 public class UpdateService extends Service implements StatusListener {
 
@@ -200,7 +180,7 @@ public class UpdateService extends Service implements StatusListener {
     }
 
     private void tryStopSelf() {
-        if (!mHasClients && !mController.hasActiveDownloads() &&
+        if (!mHasClients && mController.hasActiveDownloads() &&
                 !mController.isInstalling(this, false) && !mController.isInstalling(this, true)) {
             Log.d(TAG, "Service no longer needed, stopping");
             stopSelf();

@@ -15,7 +15,6 @@
  */
 package co.aospa.hub.misc;
 
-import android.app.AlarmManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -26,7 +25,6 @@ import android.content.res.TypedArray;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
-import android.os.FileUtils;
 import android.os.SystemProperties;
 import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
@@ -37,18 +35,12 @@ import androidx.annotation.ColorInt;
 
 import co.aospa.hub.R;
 import co.aospa.hub.model.Update;
-import co.aospa.hub.model.UpdateBaseInfo;
-import co.aospa.hub.model.UpdateInfo;
-import co.aospa.hub.model.UpdateStatus;
 import co.aospa.hub.model.Version;
 import co.aospa.hub.service.UpdateService;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -76,7 +68,7 @@ public class Utils {
                 throw new RuntimeException("Could not create directory");
             }
         }
-        Log.e(TAG, "Got storage export path: " + dir.toString());
+        Log.e(TAG, "Got storage export path: " + dir);
         return dir;
     }
 
@@ -93,7 +85,7 @@ public class Utils {
         boolean allowDowngrading = PreferenceManager.getDefaultSharedPreferences(context)
                 .getBoolean(Constants.PREF_ALLOW_DOWNGRADING, allowDowngradingDefault);
         Version version = new Version(context, update);
-        return (version.isDowngrade() || version.mTimestamp > version.getCurrentTimestamp());
+        return (version.isDowngrade() || version.mTimestamp > Version.getCurrentTimestamp());
     }
 
     public static String getServerURL(Context context) {
@@ -160,39 +152,6 @@ public class Utils {
         }
         for (File file : uncryptFiles) {
             file.delete();
-        }
-    }
-
-    private static File createNewFileWithPermissions(File destination, String name) throws IOException {
-        File update = File.createTempFile(name, ".zip", destination);
-        FileUtils.setPermissions(
-                /* path= */ update,
-                /* mode= */ FileUtils.S_IRWXU | FileUtils.S_IRGRP | FileUtils.S_IROTH,
-                /* uid= */ -1, /* gid= */ -1);
-        return update;
-    }
-
-    public static int setPermissions(String path, int mode, int uid, int gid) {
-        return FileUtils.setPermissions(
-                /* path= */ path,
-                /* mode= */ mode,
-                /* uid= */ uid, /* gid= */ gid);
-    }
-
-    public static int setPermissions(File update, int mode, int uid, int gid) {
-        return FileUtils.setPermissions(
-                /* path= */ update,
-                /* mode= */ mode,
-                /* uid= */ uid, /* gid= */ gid);
-    }
-
-    public static File copyUpdateToDir(File destination, String name) {
-        try {
-            File update = createNewFileWithPermissions(destination, name);
-            return update;
-        } catch (IOException e) {
-            Log.w(TAG, "Failed to copy update file to OTA directory", e);
-            return null;
         }
     }
 

@@ -28,7 +28,6 @@ import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
-import co.aospa.hub.R;
 import co.aospa.hub.download.ClientConnector;
 import co.aospa.hub.download.DownloadClient;
 import co.aospa.hub.misc.Constants;
@@ -42,13 +41,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.Object;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -80,12 +77,11 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     private static final String[] DEVICE_E = { "80", "81", "82", "83", "84", "85", "86", "87", "88", 
             "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99" };
 
-    private Context mContext;
+    private final Context mContext;
     private ClientConnector mConnector;
     private Configuration mConfig;
-    private static final Object mLock = new Object();
-    private TelephonyManager mTelephonyManager;
-    private SharedPreferences mPrefs;
+    private final TelephonyManager mTelephonyManager;
+    private final SharedPreferences mPrefs;
 
     private String mImei;
 
@@ -93,7 +89,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
         mContext = context;
         mTelephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (mConnector == null) {
-            mConnector = new ClientConnector(context);
+            mConnector = new ClientConnector();
             mConnector.addClientStatusListener(this);
         }
         mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -166,21 +162,21 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
 
     public void matchMakeWhitelist(File oldWhitelist, File newWhitelist)
             throws IOException, JSONException {
-        String json = "";
+        StringBuilder json = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(newWhitelist))) {
             for (String line; (line = br.readLine()) != null;) {
-                json += line;
+                json.append(line);
             }
         }
-        JSONObject obj = new JSONObject(json);
+        JSONObject obj = new JSONObject(json.toString());
         JSONObject whitelist = obj.getJSONObject("whitelisted_devices");
-        Iterator keys = whitelist.keys();
-        List<String> list = new ArrayList<String>();
+        Iterator<String> keys = whitelist.keys();
+        List<String> list = new ArrayList<>();
         while(keys.hasNext()) {
-            String key = (String) keys.next();
+            String key = keys.next();
             list.add(key);
         }
-        mWhitelist = list.toArray(new String[list.size()]);
+        mWhitelist = list.toArray(new String[0]);
         Log.d(TAG, "Whitelisted devices: " + Arrays.toString(mWhitelist));
         newWhitelist.renameTo(oldWhitelist);
     }
@@ -203,7 +199,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
         if (mImei == null) {
             return false;
         }
-        boolean match = Stream.of(mWhitelist).anyMatch(mImei::equals);
+        boolean match = Arrays.asList(mWhitelist).contains(mImei);
         Log.d(TAG, "Device is apart of whitelisted rollout: " + match);
         if (match) setScheduled(false);
         if (match) setReady(true);

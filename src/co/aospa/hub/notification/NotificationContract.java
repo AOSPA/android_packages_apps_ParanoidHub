@@ -33,11 +33,8 @@ public class NotificationContract {
 
     public static final String TAG = "NotificationContract";
 
-    private Context mContext;
-    private NotificationCompat.Builder mBuilder;
-
-    public NotificationContract() {
-    }
+    private final Context mContext;
+    private final NotificationCompat.Builder mBuilder;
 
     public NotificationContract(Context context, NotificationManager manager, String channel, boolean highImportance) {
         mContext = context;
@@ -48,7 +45,7 @@ public class NotificationContract {
         manager.createNotificationChannel(notificationChannel);
 
         mBuilder = new NotificationCompat.Builder(context, channel);
-        mBuilder.mActions.clear();
+        mBuilder.clearActions();
         mBuilder.setColor(context.getResources().getColor(R.color.theme_accent));
         mBuilder.setShowWhen(false);
 
@@ -92,11 +89,6 @@ public class NotificationContract {
         mBuilder.setAutoCancel(isDimissible);
     }
 
-    public void setAction(int icon, CharSequence title, PendingIntent intent) {
-        NotificationCompat.Action action = new NotificationCompat.Action(icon, title, intent);
-        mBuilder.addAction(action);
-    }
-
     public void setIntent(PendingIntent intent) {
         mBuilder.setContentIntent(intent);
     }
@@ -111,14 +103,19 @@ public class NotificationContract {
 
     private String getChannel(String channel) {
         String currentChannel = "";
-        if (channel.equals(NotificationContractor.INSTALL_ERROR_NOTIFICATION_CHANNEL)) {
-            currentChannel = mContext.getResources().getString(R.string.channel_update_failed_title);
-        } else if (channel.equals(NotificationContractor.ONGOING_NOTIFICATION_CHANNEL)) {
-            currentChannel = mContext.getResources().getString(R.string.channel_ongoing_title);
-        } else if (channel.equals(NotificationContractor.PROGRESS_NOTIFICATION_CHANNEL)) {
-            currentChannel = mContext.getResources().getString(R.string.channel_progress_title);
-        } else if (channel.equals(NotificationContractor.NEW_UPDATES_NOTIFICATION_CHANNEL)) {
-            currentChannel = mContext.getResources().getString(R.string.channel_new_updates_title);
+        switch (channel) {
+            case NotificationContractor.INSTALL_ERROR_NOTIFICATION_CHANNEL:
+                currentChannel = mContext.getResources().getString(R.string.channel_update_failed_title);
+                break;
+            case NotificationContractor.ONGOING_NOTIFICATION_CHANNEL:
+                currentChannel = mContext.getResources().getString(R.string.channel_ongoing_title);
+                break;
+            case NotificationContractor.PROGRESS_NOTIFICATION_CHANNEL:
+                currentChannel = mContext.getResources().getString(R.string.channel_progress_title);
+                break;
+            case NotificationContractor.NEW_UPDATES_NOTIFICATION_CHANNEL:
+                currentChannel = mContext.getResources().getString(R.string.channel_new_updates_title);
+                break;
         }
         return currentChannel;
     }
