@@ -41,6 +41,7 @@ import static co.aospa.hub.model.UpdateStatus.PREPARING;
 import static co.aospa.hub.model.Version.TYPE_RELEASE;
 
 import android.animation.LayoutTransition;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -124,7 +125,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     private Handler mHandler = new Handler();
 
     private Button mButton;
-    private ImageView mSecondaryButton;
     private ImageView mInfoIcon;
     private ProgressBar mProgressBar;
     private TextView mVersionHeader;
@@ -141,7 +141,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.hub_activity);
 
         mVersionHeader = (TextView) findViewById(R.id.system_update_version_header);
-        mHeaderStatus = (TextView) findViewById(R.id.header_system_update_status);
+        mHeaderStatus = (TextView) findViewById(R.id.system_update_desc);
         mProgressBar = (ProgressBar) findViewById(R.id.system_update_progress);
         mUpdateDescription = (TextView) findViewById(R.id.system_update_desc);
         mUpdateSize = (TextView) findViewById(R.id.system_update_size);
@@ -153,16 +153,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
 
         mButton = (Button) findViewById(R.id.system_update_primary_button);
         mButton.setOnClickListener(this);
-
-        mSecondaryButton = (ImageView) findViewById(R.id.system_update_secondary_button);
-        mSecondaryButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent preferences = new Intent(HubActivity.this, HubPreferencesActivity.class);
-                        startActivity(preferences);
-                    }
-                });
 
         ((ViewGroup) findViewById(R.id.system_update_header)).getLayoutTransition()
                 .enableTransitionType(LayoutTransition.CHANGING);
@@ -228,6 +218,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         });
     }
 
+    @SuppressLint("StringFormatMatches")
     private void updateStatusAndInfo(Update update, int checkForUpdates) {
         boolean isChecking = (checkForUpdates == CHECK_LOCAL || checkForUpdates == CHECK_NORMAL);
         if (update != null && (update.getStatus() != UNAVAILABLE || isChecking)) {
@@ -271,7 +262,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         mInfoIcon.setVisibility(View.VISIBLE);
         mInfoDescription.setVisibility(View.VISIBLE);
         mInfoDescription.setText(getResources().getString(R.string.error_update_refreshing_hub_desc));
-        mSecondaryButton.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
         mProgressBar.setIndeterminate(true);
         mHandler.postDelayed(new Runnable() {
@@ -286,14 +276,12 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     private void updateMessages(Update update, int checkForUpdates) {
         mButton.setVisibility(View.GONE);
         mVersionHeader.setVisibility(View.GONE);
-        mSecondaryButton.setVisibility(View.VISIBLE);
         mHeaderStatusStep.setVisibility(View.GONE);
         HubController controller = mUpdateService.getController();
         if (checkForUpdates == CHECK_LOCAL) {
             mHeaderStatus.setText(getResources().getString(R.string.update_checking_local_title));
             mVersionHeader.setVisibility(View.GONE);
             mUpdateSize.setVisibility(View.GONE);
-            mSecondaryButton.setVisibility(View.GONE);
             updateStatusAndInfo(update, checkForUpdates);
             updateProgress(update, checkForUpdates);
             updateSystemStatus(update, checkForUpdates, false);
@@ -302,7 +290,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             mHeaderStatus.setText(getResources().getString(R.string.update_checking_title));
             mVersionHeader.setVisibility(View.GONE);
             mUpdateSize.setVisibility(View.GONE);
-            mSecondaryButton.setVisibility(View.GONE);
             updateStatusAndInfo(update, checkForUpdates);
             updateProgress(update, checkForUpdates);
             updateSystemStatus(update, checkForUpdates, false);
@@ -428,7 +415,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 if (update != null) {
                     mHeaderStatus.setText(getResources().getString(R.string.preparing_title));
                     mButton.setVisibility(View.GONE);
-                    mSecondaryButton.setVisibility(View.GONE);
                     mProgressBar.setIndeterminate(false);
                 }
                 break;
@@ -445,7 +431,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                     mButton.setText(R.string.button_pause_update);
                     mButton.setVisibility(View.VISIBLE);
                     mInfoDescription.setText(getResources().getString(R.string.installing_warning_and_desc_ab));
-                    mSecondaryButton.setVisibility(View.GONE);
                     mProgressBar.setIndeterminate(false);
                 }
                 break;
@@ -760,7 +745,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         int percent = Math.round(100.f * intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 100) /
                 intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100));
         int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
-        int required = (plugged & BatteryManager.BATTERY_PLUGGED_ANY) != 0 ?
+        int required = plugged != 0 ?
                 getResources().getInteger(R.integer.battery_ok_percentage_charging) :
                 getResources().getInteger(R.integer.battery_ok_percentage_discharging);
         return percent >= required;
