@@ -179,6 +179,10 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     public void onUpdateStatusChanged(Update update, int state) {
         mDownloadId = update != null ? update.getDownloadId() : "0";
         runOnUiThread(() -> {
+            if (state == HubController.STATE_STATUS_CHECK_FAILED){
+                updateMessagesForFailedCheck();
+                return;
+            }
             if (state == HubController.STATE_DOWNLOAD_PROGRESS 
                     || state == HubController.STATE_INSTALL_PROGRESS) {
                 if (mRefreshUi) {
@@ -424,6 +428,14 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         updateStatusAndInfo(update, checkForUpdates);
         updateProgress(update, checkForUpdates);
         updateSystemStatus(update, checkForUpdates, false);
+    }
+
+    public void updateMessagesForFailedCheck() {
+        mHeaderStatus.setText(getResources().getString(R.string.error_update_check_failed));
+        mButton.setText(R.string.button_check_for_update);
+        mButton.setVisibility(View.VISIBLE);
+        updateSystemStatus(null, CHECK_NONE, true);
+        reportMessage(R.string.error_update_check_failed_snack);
     }
 
     private MaterialAlertDialogBuilder checkForUpdates() {

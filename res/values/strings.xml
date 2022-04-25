@@ -74,6 +74,7 @@
     <!-- Checking for update -->
     <string name="update_checking_title">Checking for update...</string>
     <string name="update_checking_local_title">Checking for local update...</string>
+    <string name="update_checking_no_network_snack">Updates are temporarily unavailable. Try again later.</string>
 
     <!-- Update available -->
     <string name="update_found_title">System update available</string>
@@ -182,7 +183,8 @@
     <string name="error_update_refreshing_hub">Resetting...</string>
     <string name="error_update_refreshing_hub_header_status">Update data is corrupted</string>
     <string name="error_update_refreshing_hub_desc">Paranoid Android Updates ran into a problem, all configurations and data will be reset.</string>
-    <string name="error_update_check_failed_snack">Failed to check for updates. Please check your internet connection and try again later.</string>
+    <string name="error_update_check_failed">Can\'t check for update</string>
+    <string name="error_update_check_failed_snack">Updates are temporarily unavailable. Try again later.</string>
     <string name="error_download_failed_snack">The download failed. Please check your internet connection and try again later.</string>
     <string name="error_verification_failed_snack">The update verification failed.</string>
     <string name="error_update_not_installable_snack">This update can\'t be installed on top of the current build.</string>
