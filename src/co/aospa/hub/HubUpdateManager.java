@@ -116,6 +116,9 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
                     mHub.getProgressBar().setIndeterminate(true);
                 });
             }
+            if (!Utils.isNetworkAvailable(mContext)){
+                mThread.postDelayed(this::cancelUpdate, 2000);
+            }
             mThread.postDelayed(() -> mConnector.start(), 5000);
         } else {
             mConnector.start();
@@ -170,6 +173,17 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
             } else {
                 mController.notifyUpdateStatusChanged(null, HubController.STATE_STATUS_CHANGED);
             }
+        }
+    }
+
+    private void cancelUpdate() {
+        Log.d(TAG, "Could not download updates because there is no network available");
+        mController.notifyUpdateStatusChanged(null, HubController.STATE_STATUS_CHECK_FAILED);
+        if (mHub != null) {
+            mMainThread.post(() -> {
+                mHub.getProgressBar().setVisibility(View.GONE);
+                mHub.getProgressBar().setIndeterminate(false);
+            });
         }
     }
 

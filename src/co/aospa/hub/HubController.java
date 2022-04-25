@@ -56,6 +56,7 @@ public class HubController {
     public static final int STATE_DOWNLOAD_PROGRESS = 1;
     public static final int STATE_INSTALL_PROGRESS = 2;
     public static final int STATE_UPDATE_DELETE = 3;
+    public static final int STATE_STATUS_CHECK_FAILED = 4;
     public static final String EXTRA_DOWNLOAD_ID = "extra_download_id";
 
     private static HubController sController;
