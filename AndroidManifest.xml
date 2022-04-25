@@ -19,15 +19,16 @@
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/hub_name"
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
-        android:theme="@style/HubTheme">
+        android:theme="@style/Theme.Hub">
 
         <activity
             android:name=".HubActivity"
             android:excludeFromRecents="true"
-            android:label="@string/app_name"
+            android:label="@string/hub_display_name"
+            android:theme="@style/Theme.Hub.NoActionBar"
             android:launchMode="singleTop"
 			android:exported="true">
             <intent-filter android:priority="1">

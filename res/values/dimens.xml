@@ -14,4 +14,12 @@
     <dimen name="donut_view_percent_sign_size">20sp</dimen>
     <dimen name="donut_view_percent_text_size">45sp</dimen>
     <dimen name="donut_view_shrunken_label_text_size">10sp</dimen>
+
+    <!-- Wdiget Button (M3 port) -->
+    <dimen name="m3_btn_max_width">320dp</dimen>
+    <dimen name="m3_btn_text_btn_padding_left">12dp</dimen>
+    <dimen name="m3_btn_text_btn_padding_right">12dp</dimen>
+    <dimen name="m3_btn_padding_top">6dp</dimen>
+    <dimen name="m3_btn_padding_bottom">6dp</dimen>
+    <dimen name="m3_btn_inset">4dp</dimen>
 </resources>

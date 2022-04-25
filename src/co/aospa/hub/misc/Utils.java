@@ -163,39 +163,6 @@ public class Utils {
         }
     }
 
-    private static File createNewFileWithPermissions(File destination, String name) throws IOException {
-        File update = File.createTempFile(name, ".zip", destination);
-        FileUtils.setPermissions(
-                /* path= */ update,
-                /* mode= */ FileUtils.S_IRWXU | FileUtils.S_IRGRP | FileUtils.S_IROTH,
-                /* uid= */ -1, /* gid= */ -1);
-        return update;
-    }
-
-    public static int setPermissions(String path, int mode, int uid, int gid) {
-        return FileUtils.setPermissions(
-                /* path= */ path,
-                /* mode= */ mode,
-                /* uid= */ uid, /* gid= */ gid);
-    }
-
-    public static int setPermissions(File update, int mode, int uid, int gid) {
-        return FileUtils.setPermissions(
-                /* path= */ update,
-                /* mode= */ mode,
-                /* uid= */ uid, /* gid= */ gid);
-    }
-
-    public static File copyUpdateToDir(File destination, String name) {
-        try {
-            File update = createNewFileWithPermissions(destination, name);
-            return update;
-        } catch (IOException e) {
-            Log.w(TAG, "Failed to copy update file to OTA directory", e);
-            return null;
-        }
-    }
-
     /**
      * Cleanup the download directory, which is assumed to be a privileged location
      * the user can't access and that might have stale files. This can happen if
