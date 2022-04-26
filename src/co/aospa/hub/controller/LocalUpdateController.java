@@ -88,7 +88,7 @@ public class LocalUpdateController {
 
     private Long getTimestamp(String fileName) {
         String[] timestamp = fileName.split("-");
-        String[] exactTimestamp = timestamp[4].split("\\.");
+        String[] exactTimestamp = timestamp[5].split("\\.");
         return Long.parseLong(exactTimestamp[0]);
     }
 
@@ -100,7 +100,7 @@ public class LocalUpdateController {
     public File getLocalFile(File path) {
         try {
             for (File f : Objects.requireNonNull(path.listFiles())) {
-                if (f.getName().startsWith("pa-") 
+                if (f.getName().startsWith("aospa-")
                         && f.getName().endsWith(".zip")) {
                     return f;
                 }
