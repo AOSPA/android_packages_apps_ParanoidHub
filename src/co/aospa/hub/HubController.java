@@ -340,7 +340,7 @@ public class HubController {
         return false;
     }
 
-    public void startLocalUpdate(String downloadId) {
+    public void startLocalUpdate(LocalUpdateController controller, String downloadId) {
         Log.d(TAG, "Starting local update for " + downloadId);
         if (!mDownloads.containsKey(downloadId)) {
             Log.d(TAG, "Local update not registered");
@@ -348,7 +348,6 @@ public class HubController {
         }
 
         UpdateInfo update = getUpdate(downloadId);
-        LocalUpdateController controller = LocalUpdateController.getInstance(mContext, this);
         controller.copyUpdateToDir(update);
     }
 
