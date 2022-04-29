@@ -25,7 +25,7 @@
 
     <!-- Directory where the update files will be downloaded and stored.
          WARNING: The application can and will delete any unknown file. -->
-    <string name="download_path" translatable="false">/hub_updates</string>
+    <string name="download_path" translatable="false">/system_updates</string>
 
     <!-- Directory where the downloads will be exported to.
          The path is relative to the root of the external storage.-->
@@ -79,6 +79,7 @@
     <!-- Update available -->
     <string name="update_found_title">System update available</string>
     <string name="update_found_title_local">Local update available</string>
+    <string name="update_found_title_local_import">Importing local update...</string>
     <string name="update_found_subtitle">%1$s %2$s</string>
     <string name="update_found_changelog"><![CDATA[%1$s]]></string>
     <string name="update_found_changelog_default">A new version of Paranoid Android is ready to install. No changes for this update were found.</string>

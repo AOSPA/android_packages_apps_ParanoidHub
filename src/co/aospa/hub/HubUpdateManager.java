@@ -31,6 +31,7 @@ import co.aospa.hub.download.DownloadClient;
 import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Configuration;
+import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateInfo;
 import co.aospa.hub.model.UpdatePresenter;
 import co.aospa.hub.receiver.UpdateCheckReceiver;
@@ -53,6 +54,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     private final Handler mThread = new Handler();
     private final HubActivity mHub;
     private final HubController mController;
+    private final LocalUpdateController mLocalUpdateController;
     private final RolloutContractor mRolloutContractor;
 
     private Configuration mConfig;
@@ -65,6 +67,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         mContext = context;
         mController = controller;
         mHub = activity;
+        mLocalUpdateController = new LocalUpdateController(activity, context, controller);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         mEnabled = prefs.getBoolean(Constants.IS_MATCHMAKER_ENABLED, true);
         mRolloutContractor = new RolloutContractor(context);
@@ -126,13 +129,12 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     }
 
     public void beginLocalMatchMaker() {
-        if (mHub != null) {
-            mMainThread.post(() -> {
-                mHub.getProgressBar().setVisibility(View.VISIBLE);
-                mHub.getProgressBar().setIndeterminate(true);
-            });
-        }
-        mThread.postDelayed(this::syncLocalUpdate, 5000);
+        Log.d(TAG, "Starting local update picker");
+        mLocalUpdateController.initUpdatePicker();
+    }
+
+    public void initLocalUpdate(String downloadId) {
+        mController.startLocalUpdate(mLocalUpdateController, downloadId);
     }
 
     private void requestUpdate(File oldJson, File newJson) {
@@ -162,7 +164,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     private void syncUpdate(File json) throws IOException, JSONException {
         if (mEnabled) {
             Log.d(TAG, "Syncing requested update");
-            UpdateInfo update = UpdatePresenter.matchMakeJson(mContext, json);
+            Update update = UpdatePresenter.matchMakeJson(mContext, json);
             if (update != null) {
                 boolean mIsUpdateAvailable = mController.isUpdateAvailable(update, mRolloutContractor.isReady(), false);
                 if (mUserInitiated && !mIsUpdateAvailable) {
@@ -184,31 +186,6 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
                 mHub.getProgressBar().setVisibility(View.GONE);
                 mHub.getProgressBar().setIndeterminate(false);
             });
-        }
-    }
-
-    public void syncLocalUpdate() {
-        Log.d(TAG, "Syncing requested local update");
-        LocalUpdateController controller = 
-                new LocalUpdateController(mContext, mController);
-        File path = Utils.getExportPath(mContext);
-        File update = controller.getLocalFile(path);
-        boolean isValidUpdate = update != null;
-        if (isValidUpdate) {
-            boolean updateAvailable;
-            UpdateInfo localUpdate = controller.setUpdate(update);
-            Log.d(TAG, "Checking if " + localUpdate.getName() + " is available for local upgrade");
-            updateAvailable = mController.isUpdateAvailable(localUpdate, true, true);
-            if (!updateAvailable) {
-                if (mHub != null) {
-                    mMainThread.post(() -> mHub.reportMessage(R.string.no_updates_found_snack));
-                }
-            } else {
-                Log.d(TAG, "Local update: " + localUpdate.getName() + " is available");
-            }
-        } else {
-            Log.d(TAG, "No valid local update found");
-            mController.notifyUpdateStatusChanged(null, HubController.STATE_STATUS_CHANGED);
         }
     }
 
@@ -241,6 +218,10 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
 
     public Configuration getConfiguration() {
         return mConfig;
+    }
+
+    public LocalUpdateController getLocalUpdateController() {
+        return mLocalUpdateController;
     }
 
     @Override

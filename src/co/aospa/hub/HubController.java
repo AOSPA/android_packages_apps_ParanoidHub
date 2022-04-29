@@ -273,24 +273,29 @@ public class HubController {
         boolean needsReboot = mPrefs.getBoolean(Constants.NEEDS_REBOOT_AFTER_UPDATE, false);
         int status = mPrefs.getInt(Constants.UPDATE_STATUS, -1);
         if (needsReboot) {
+            Log.d(TAG, "isUpdateAvailable: Update Status: Installed");
             update.setStatus(UpdateStatus.INSTALLED, mContext);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
             return false;
         }
 
         if (status == UpdateStatus.INSTALLED) {
+            Log.d(TAG, "isUpdateAvailable: Update Status: Installed");
             update.setStatus(UpdateStatus.INSTALLED, mContext);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
             return false;
         } else if (status == UpdateStatus.INSTALLING) {
+            Log.d(TAG, "isUpdateAvailable: Update Status: Installing");
             update.setStatus(UpdateStatus.INSTALLING, mContext);
             notifyUpdateStatusChanged(update, STATE_INSTALL_PROGRESS);
             return false;
         } else if (status == UpdateStatus.DOWNLOADING) {
+            Log.d(TAG, "isUpdateAvailable: Update Status: Downloading");
             update.setStatus(UpdateStatus.DOWNLOADING, mContext);
             notifyUpdateStatusChanged(update, STATE_DOWNLOAD_PROGRESS);
             return false;
         } else if (status == UpdateStatus.DOWNLOADED) {
+            Log.d(TAG, "isUpdateAvailable: Update Status: Downloaded");
             update.setStatus(UpdateStatus.DOWNLOADED, mContext);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
             return false;
@@ -307,22 +312,22 @@ public class HubController {
         if (!fixUpdateStatus(update) && !update.getAvailableOnline()) {
             update.setPersistentStatus(UpdateStatus.Persistent.UNKNOWN);
             deleteUpdateAsync(update);
-            Log.d(TAG, info.getDownloadId() + " had an invalid status and is not online");
+            Log.d(TAG, update.getDownloadId() + " had an invalid status and is not online");
             return false;
         }
 
-        if (!mDownloads.containsKey(info.getDownloadId())) {
+        if (!mDownloads.containsKey(update.getDownloadId())) {
             if (!isReadyForRollout) {
-                Log.d(TAG, "Update " + info.getDownloadId() + " is available but not ready for rollout on this device");
+                Log.d(TAG, "Update " + update.getDownloadId() + " is available but not ready for rollout on this device");
                 update.setStatus(UpdateStatus.UNAVAILABLE, mContext);
                 notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
                 return false;
             }
-            Log.d(TAG, "Adding update entry: " + info.getDownloadId());
-            mDownloads.put(info.getDownloadId(), new DownloadEntry(update));
+            Log.d(TAG, "Adding update entry: " + update.getDownloadId());
+            mDownloads.put(update.getDownloadId(), new DownloadEntry(update));
             if (isLocalUpdate) {
                 if (Version.isBuild(TYPE_RELEASE)) {
-                    verifyUpdateAsync(update, info.getDownloadId(), true);
+                    verifyUpdateAsync(update, update.getDownloadId(), true);
                 } else {
                     Log.d(TAG, "Setting update status for local update");
                     update.setStatus(UpdateStatus.LOCAL_UPDATE, mContext);
@@ -340,7 +345,7 @@ public class HubController {
         return false;
     }
 
-    public void startLocalUpdate(String downloadId) {
+    public void startLocalUpdate(LocalUpdateController controller, String downloadId) {
         Log.d(TAG, "Starting local update for " + downloadId);
         if (!mDownloads.containsKey(downloadId)) {
             Log.d(TAG, "Local update not registered");
@@ -348,7 +353,6 @@ public class HubController {
         }
 
         UpdateInfo update = getUpdate(downloadId);
-        LocalUpdateController controller = LocalUpdateController.getInstance(mContext, this);
         controller.copyUpdateToDir(update);
     }
 

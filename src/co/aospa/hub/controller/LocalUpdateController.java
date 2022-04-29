@@ -15,11 +15,16 @@
  */
 package co.aospa.hub.controller;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.ContentUris;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -28,6 +33,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import co.aospa.hub.HubActivity;
 import co.aospa.hub.HubController;
 import co.aospa.hub.misc.FileUtils;
 import co.aospa.hub.misc.Utils;
@@ -37,78 +43,233 @@ import co.aospa.hub.model.UpdateStatus;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Objects;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class LocalUpdateController {
 
     private static final String TAG = "LocalUpdateController";
 
-    private static LocalUpdateController sInstance = null;
-    private static String sPreparingUpdate = null;
+    private static final int REQUEST_PICK = 9061;
+    private static final String FILE_NAME = "localUpdate.zip";
+    private static final String MIME_ZIP = "application/zip";
+    private static final String METADATA_PATH = "META-INF/com/android/metadata";
+    private static final String METADATA_TIMESTAMP_KEY = "post-timestamp=";
 
+    public static final int NONE = 0;
+    public static final int STARTED = 1;
+    public static final int COMPLETED = 2;
+
+    private static LocalUpdateController sInstance = null;
+
+    private final HubActivity mActivity;
     private final HubController mController;
     private final Context mContext;
     private Thread mPrepareUpdateThread;
+    private final Handler mUiThread;
+    private final List<ImportListener> mListeners = new ArrayList<>();
 
-    public LocalUpdateController(Context context, HubController controller) {
-        mController = controller;
-        mContext = context.getApplicationContext();
+    public interface ImportListener {
+        void onImportStatusChanged(UpdateInfo info, int state);
     }
 
-    public static synchronized LocalUpdateController getInstance(Context context,
+    public LocalUpdateController(HubActivity activity, Context context, HubController controller) {
+        mActivity = activity;
+        mController = controller;
+        mContext = context.getApplicationContext();
+        mUiThread = new Handler(context.getMainLooper());
+    }
+
+    public static synchronized LocalUpdateController getInstance(HubActivity activity, Context context,
             HubController controller) {
         if (sInstance == null) {
-            sInstance = new LocalUpdateController(context, controller);
+            sInstance = new LocalUpdateController(activity, context, controller);
         }
         return sInstance;
     }
 
     public UpdateInfo buildUpdate(File updateFile) {
+        final long timeStamp = getTimeStamp(updateFile);
         Update update = new Update();
         update.setFile(updateFile);
         update.setName(updateFile.getName());
         update.setFileSize(updateFile.length());
-        update.setTimestamp(getTimestamp(updateFile.getName()));
-        update.setDownloadId(getDummyId(updateFile.getName()));
+        update.setTimestamp(timeStamp);
+        update.setDownloadId(getDummyId(updateFile));
         update.setVersion(getVersion(updateFile.getName()));
         return update;
     }
 
-    public UpdateInfo setUpdate(File updateFile) {
-        return buildUpdate(updateFile);
+    public void initUpdatePicker() {
+        final Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT)
+                .addCategory(Intent.CATEGORY_OPENABLE)
+                .setType(MIME_ZIP);
+        mActivity.startActivityForResult(intent, REQUEST_PICK);
+    }
+
+    public boolean onResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK || requestCode != REQUEST_PICK) {
+            return false;
+        }
+        return onPicked(data.getData());
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private boolean onPicked(Uri uri) {
+        Log.d(TAG, "onPicked");
+        mActivity.runOnUiThread(() -> notifyImportListener(null, STARTED));
+        mPrepareUpdateThread = new Thread(() -> {
+            File importedFile = null;
+            try {
+                boolean updateAvailable;
+                importedFile = importFile(uri);
+                final UpdateInfo update = buildUpdate(importedFile);
+                updateAvailable = mController.isUpdateAvailable(update, true, true);
+                if (updateAvailable) {}
+                Log.d(TAG, updateAvailable ? "Local update: " + update.getName() + " is available" : "Local update is not available");
+                mActivity.runOnUiThread(() -> notifyImportListener(update, COMPLETED));
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to import update package", e);
+                // Do not store invalid update
+                if (importedFile != null) {
+                    importedFile.delete();
+                }
+                mActivity.runOnUiThread(() -> notifyImportListener(null, NONE));
+            }
+        });
+        mPrepareUpdateThread.start();
+        return true;
+    }
+
+    @SuppressLint("SetWorldReadable")
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private File importFile(Uri uri) throws IOException {
+        final ParcelFileDescriptor parcelDescriptor = mActivity.getContentResolver()
+                .openFileDescriptor(uri, "r");
+        if (parcelDescriptor == null) {
+            throw new IOException("Failed to obtain fileDescriptor");
+        }
+
+        final String fileName = getFileName(mContext, uri);
+        Log.d(TAG, "importFile: " + fileName);
+        final FileInputStream iStream = new FileInputStream(parcelDescriptor
+                .getFileDescriptor());
+        final File downloadDir = Utils.getDownloadPath(mActivity);
+        final File outFile = new File(downloadDir, fileName);
+        if (outFile.exists()) {
+            outFile.delete();
+        }
+        final FileOutputStream oStream = new FileOutputStream(outFile);
+
+        int read;
+        final byte[] buffer = new byte[4096];
+        while ((read = iStream.read(buffer)) > 0) {
+            oStream.write(buffer, 0, read);
+        }
+        oStream.flush();
+        oStream.close();
+        iStream.close();
+
+        outFile.setReadable(true, false);
+
+        return outFile;
+    }
+
+    public void notifyImportListener(UpdateInfo info, int state) {
+        Log.d(TAG, "Notifying import listeners: " + state);
+        mUiThread.post(() -> {
+            for (ImportListener listener : mListeners) {
+                listener.onImportStatusChanged(info, state);
+            }
+        });
+    }
+
+    public void addImportListener(ImportListener listener) {
+        mListeners.add(listener);
+    }
+
+    public void removeImportListener(ImportListener listener) {
+        mListeners.remove(listener);
     }
 
     private String getVersion(String fileName) {
         String[] version = fileName.split("-");
-        return version[2];
+        return version[3];
     }
 
-    private Long getTimestamp(String fileName) {
-        String[] timestamp = fileName.split("-");
-        String[] exactTimestamp = timestamp[5].split("\\.");
-        return Long.parseLong(exactTimestamp[0]);
-    }
-
-    private String getDummyId(String fileName) {
-        long id = getTimestamp(fileName) * 2;
+    private String getDummyId(File file) {
+        long id = getTimeStamp(file) * 2;
         return Long.toString(id);
     }
 
-    public File getLocalFile(File path) {
+    private long getTimeStamp(File file) {
         try {
-            for (File f : Objects.requireNonNull(path.listFiles())) {
-                if (f.getName().startsWith("aospa-")
-                        && f.getName().endsWith(".zip")) {
-                    return f;
+            final String metadataContent = readZippedFile(file, METADATA_PATH);
+            final String[] lines = metadataContent.split("\n");
+            for (String line : lines) {
+                if (!line.startsWith(METADATA_TIMESTAMP_KEY)) {
+                    continue;
                 }
+
+                final String timeStampStr = line.replace(METADATA_TIMESTAMP_KEY, "");
+                return Long.parseLong(timeStampStr);
             }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to read date from local update zip package", e);
+        } catch (NumberFormatException e) {
+            Log.e(TAG, "Failed to parse timestamp number from zip metadata file", e);
         }
-        return null;
+
+        Log.e(TAG, "Couldn't find timestamp in zip file, falling back to $now");
+        return System.currentTimeMillis();
+    }
+
+    private String readZippedFile(File file, String path) throws IOException {
+        final StringBuilder sb = new StringBuilder();
+        InputStream iStream = null;
+
+        try {
+            final ZipFile zip = new ZipFile(file);
+            final Enumeration<? extends ZipEntry> iterator = zip.entries();
+            while (iterator.hasMoreElements()) {
+                final ZipEntry entry = iterator.nextElement();
+                if (!METADATA_PATH.equals(entry.getName())) {
+                    continue;
+                }
+
+                iStream = zip.getInputStream(entry);
+                break;
+            }
+
+            if (iStream == null) {
+                throw new FileNotFoundException("Couldn't find " + path + " in " + file.getName());
+            }
+
+            final byte[] buffer = new byte[1024];
+            int read;
+            while ((read = iStream.read(buffer)) > 0) {
+                sb.append(new String(buffer, 0, read, StandardCharsets.UTF_8));
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to read file from zip package", e);
+            throw e;
+        } finally {
+            if (iStream != null) {
+                iStream.close();
+            }
+        }
+
+        return sb.toString();
     }
 
     public synchronized void copyUpdateToDir(UpdateInfo update) {
@@ -161,7 +322,6 @@ public class LocalUpdateController {
                 } finally {
                     synchronized (LocalUpdateController.this) {
                         mPrepareUpdateThread = null;
-                        sPreparingUpdate = null;
                     }
                 }
             }
@@ -169,7 +329,6 @@ public class LocalUpdateController {
 
         mPrepareUpdateThread = new Thread(copyUpdateRunnable);
         mPrepareUpdateThread.start();
-        sPreparingUpdate = update.getDownloadId();
     }
 
     public static String getRealPath(Context context, Uri uri) {

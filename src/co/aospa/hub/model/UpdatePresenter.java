@@ -43,7 +43,7 @@ public class UpdatePresenter {
 
     // This should really return an UpdateBaseInfo object, but currently this only
     // used to initialize UpdateInfo objects
-    private static UpdateInfo buildUpdate(Context context, JSONObject object) throws JSONException {
+    private static Update buildUpdate(Context context, JSONObject object) throws JSONException {
         Update update = new Update(context);
         update.setName(object.getString("name"));
         update.setVersion(object.getString("version"));
@@ -63,9 +63,9 @@ public class UpdatePresenter {
         return config;
     }
 
-    public static UpdateInfo matchMakeJson(Context context, File file)
+    public static Update matchMakeJson(Context context, File file)
             throws IOException, JSONException {
-        UpdateInfo update = null;
+        Update update = null;
         String json = "";
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             for (String line; (line = br.readLine()) != null;) {

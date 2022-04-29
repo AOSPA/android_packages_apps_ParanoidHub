@@ -62,12 +62,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import co.aospa.hub.HubController.StatusListener;
+import co.aospa.hub.controller.LocalUpdateController;
+import co.aospa.hub.controller.LocalUpdateController.ImportListener;
 import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.StringGenerator;
 import co.aospa.hub.misc.Utils;
@@ -81,7 +84,7 @@ import co.aospa.hub.service.UpdateService;
 import java.io.IOException;
 import java.util.Objects;
 
-public class HubActivity extends AppCompatActivity implements View.OnClickListener, StatusListener {
+public class HubActivity extends AppCompatActivity implements View.OnClickListener, ImportListener, StatusListener {
 
     private static final String TAG = "HubActivity";
 
@@ -152,7 +155,25 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             controller.removeUpdateStatusListener(HubActivity.this);
             unbindService(mConnection);
         }
+
+        if (mManager != null) {
+            LocalUpdateController localUpdateController = mManager.getLocalUpdateController();
+            localUpdateController.removeImportListener(HubActivity.this);
+        }
         super.onStop();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        LocalUpdateController localUpdateController;
+        if (mManager != null) {
+            localUpdateController = mManager.getLocalUpdateController();
+            if (localUpdateController != null && !localUpdateController.onResult(requestCode, resultCode, data)) {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private final ServiceConnection mConnection = new ServiceConnection() {
@@ -165,6 +186,8 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             HubController controller = mUpdateService.getController();
             controller.addUpdateStatusListener(HubActivity.this);
             mManager = new HubUpdateManager(getApplicationContext(), controller, HubActivity.this);
+            LocalUpdateController localUpdateController = mManager.getLocalUpdateController();
+            localUpdateController.addImportListener(HubActivity.this);
             mManager.warmUpConfigMatchMaker();
         }
 
@@ -194,6 +217,23 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             }
             updateProgressForState(update, state);
         });
+    }
+
+    @Override
+    public void onImportStatusChanged(UpdateInfo info, int state) {
+        Update update = new Update(info);
+        if (state == LocalUpdateController.COMPLETED) {
+            runOnUiThread(() -> {
+                mProgressBar.setVisibility(View.GONE);
+                mProgressBar.setIndeterminate(false);
+            });
+        } else if (state == LocalUpdateController.STARTED) {
+            runOnUiThread(() -> {
+                mHeaderStatus.setText(R.string.update_found_title_local_import);
+                mProgressBar.setVisibility(View.VISIBLE);
+                mProgressBar.setIndeterminate(true);
+            });
+        }
     }
 
     @SuppressLint("StringFormatMatches")
@@ -620,7 +660,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 if (isBatteryLevelOk()) {
                     enforceBatteryReq().show();
                 } else {
-                    controller.startLocalUpdate(update.getDownloadId());
+                    mManager.initLocalUpdate(update.getDownloadId());
                 }
                 break;
             case AVAILABLE:
@@ -642,7 +682,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 controller.startDownload(update.getDownloadId());
                 break;
             case LOCAL_UPDATE_FAILED:
-                controller.startLocalUpdate(update.getDownloadId());
+                mManager.initLocalUpdate(update.getDownloadId());
                 break;
             case PAUSED:
                 UpdateInfo pausedUpdateInfo = controller.getUpdate(update.getDownloadId());
