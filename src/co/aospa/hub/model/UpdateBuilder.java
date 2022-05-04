@@ -34,23 +34,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 /**
- * This class handles all updates fetched from the servers/local json
+ * This class handles all updates fetched from the server/local json
  **/
-public class UpdatePresenter {
+public class UpdateBuilder {
 
-    private static final String TAG = "UpdatePresenter";
+    private static final String TAG = "UpdateBuilder";
     private static Update mUpdate = null;
 
-    // This should really return an UpdateBaseInfo object, but currently this only
+    // This should really return an UpdateBaseInfo object, but currently this is only
     // used to initialize UpdateInfo objects
     private static UpdateInfo buildUpdate(Context context, JSONObject object) throws JSONException {
         Update update = new Update(context);
-        update.setName(object.getString("name"));
+        update.setName(object.getString("filename"));
         update.setVersion(object.getString("version"));
-        update.setTimestamp(object.getLong("build"));
+        update.setVersionNumber(object.getString("number"));
+        update.setBuildType(object.getString("romtype"));
+        update.setTimestamp(object.getLong("datetime"));
         update.setFileSize(object.getLong("size"));
         update.setDownloadUrl(object.getString("url"));
-        update.setDownloadId(object.getString("md5"));
+        update.setDownloadId(object.getString("id"));
         return update;
     }
 
@@ -58,9 +60,17 @@ public class UpdatePresenter {
         Configuration config = new Configuration();
         config.setOtaEnabled(object.getString("enabled"));
         config.setOtaWhitelistOnly(object.getString("whitelist_only"));
-        config.setChangelog(object.getString("info"));
-        config.setBetaChangelog(object.getString("info_beta"));
         return config;
+    }
+
+    private static Changelog buildChangelog(JSONObject object) throws JSONException {
+        Changelog changelog = new Changelog();
+        changelog.setVersion(object.getString("version"));
+        changelog.setVersionNumber(object.getString("number"));
+        changelog.setBuildType(object.getString("romtype"));
+        changelog.setId(object.getString("id"));
+        changelog.setChangelog(object.getString("info"));
+        return changelog;
     }
 
     public static UpdateInfo matchMakeJson(Context context, File file)
@@ -115,6 +125,31 @@ public class UpdatePresenter {
         }
         newConfig.renameTo(oldConfig);
         return config;
+    }
+
+    public static Changelog buildChangelog(File oldChangelog, File newChangelog)
+            throws IOException, JSONException {
+        Changelog changelog = null;
+        String json = "";
+        try (BufferedReader br = new BufferedReader(new FileReader(newChangelog))) {
+            for (String line; (line = br.readLine()) != null;) {
+                json += line;
+            }
+        }
+        JSONObject obj = new JSONObject(json);
+        JSONArray changes = obj.getJSONArray("changelog");
+        for (int i = 0; i < changes.length(); i++) {
+            if (changes.isNull(i)) {
+                continue;
+            }
+            try {
+                changelog = buildChangelog(changes.getJSONObject(i));
+            } catch (JSONException e) {
+                Log.d(TAG, "Could not parse changelog object, index=" + i, e);
+            }
+        }
+        newChangelog.renameTo(oldChangelog);
+        return changelog;
     }
 
     /**

@@ -22,6 +22,8 @@ public class UpdateBase implements UpdateBaseInfo {
     private String mDownloadId;
     private long mTimestamp;
     private String mVersion;
+    private String mVersionNumber;
+    private String mBuildType;
     private long mFileSize;
 
     public UpdateBase() {
@@ -33,6 +35,8 @@ public class UpdateBase implements UpdateBaseInfo {
         mDownloadId = update.getDownloadId();
         mTimestamp = update.getTimestamp();
         mVersion = update.getVersion();
+        mVersionNumber = update.getVersionNumber();
+        mBuildType = update.getBuildType();
         mFileSize = update.getFileSize();
     }
 
@@ -70,6 +74,24 @@ public class UpdateBase implements UpdateBaseInfo {
 
     public void setVersion(String version) {
         mVersion = version;
+    }
+
+    @Override
+    public String getVersionNumber() {
+        return mVersionNumber;
+    }
+
+    public void setVersionNumber(String versionNumber) {
+        mVersionNumber = versionNumber;
+    }
+
+    @Override
+    public String getBuildType() {
+        return mBuildType;
+    }
+
+    public void setBuildType(String buildType) {
+        mBuildType = buildType;
     }
 
     @Override

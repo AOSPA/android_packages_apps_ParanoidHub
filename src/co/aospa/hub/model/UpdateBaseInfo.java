@@ -24,6 +24,10 @@ public interface UpdateBaseInfo {
 
     String getVersion();
 
+    String getVersionNumber();
+
+    String getBuildType();
+
     String getDownloadUrl();
 
     long getFileSize();
