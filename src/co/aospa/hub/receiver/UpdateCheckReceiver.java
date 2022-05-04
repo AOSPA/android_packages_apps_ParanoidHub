@@ -34,7 +34,7 @@ import co.aospa.hub.download.DownloadClient;
 import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Update;
-import co.aospa.hub.model.UpdatePresenter;
+import co.aospa.hub.model.UpdateBuilder;
 import co.aospa.hub.model.Version;
 import co.aospa.hub.notification.NotificationContract;
 import co.aospa.hub.notification.NotificationContractor;
@@ -102,7 +102,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
         String buildInfo = String.format(isBetaUpdate ?
                 context.getResources().getString(R.string.update_found_notification_text_beta) :
                 context.getResources().getString(R.string.update_found_notification_text),
-                Version.getMajor(), update.getVersion());
+                update.getVersion(), update.getVersionNumber());
         NotificationContractor contractor = new NotificationContractor(context);
         NotificationContract contract = contractor.create(NotificationContractor.NEW_UPDATES_NOTIFICATION_CHANNEL, true);
         contract.setTitle(context.getResources().getString(R.string.update_found_notification_title));
@@ -196,8 +196,8 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
     public void onClientStatusSuccess(File oldFile, File newFile) {
         try {
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-            if (oldFile.exists() && UpdatePresenter.isNewUpdate(mContext, oldFile, newFile, mRolloutContractor.isReady())) {
-                Update update = UpdatePresenter.getUpdate();
+            if (oldFile.exists() && UpdateBuilder.isNewUpdate(mContext, oldFile, newFile, mRolloutContractor.isReady())) {
+                Update update = UpdateBuilder.getUpdate();
                 showNotification(mContext, update);
                 updateRepeatingUpdatesCheck(mContext);
             }

@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 
+import co.aospa.hub.HubUpdateManager;
 import co.aospa.hub.R;
 import co.aospa.hub.model.Update;
 import co.aospa.hub.model.Version;
@@ -76,14 +77,12 @@ public class Utils {
         return new File(context.getCacheDir(), "updates.json");
     }
 
-    public static File getCachedConfiguration(Context context) {
-        return new File(context.getCacheDir(), "configuration.json");
+    public static File getCachedRequiredFiles(Context context, int type) {
+        boolean isOtaConfiguration = type == HubUpdateManager.FILE_OTA_CONFIGURATION;
+        return new File(context.getCacheDir(), isOtaConfiguration ? "ota_configuration.json" : "changelog.json");
     }
 
     public static boolean canInstall(Context context, Update update) {
-        boolean allowDowngradingDefault = context.getResources().getBoolean(R.bool.config_allowDowngradingDefault);
-        boolean allowDowngrading = PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(Constants.PREF_ALLOW_DOWNGRADING, allowDowngradingDefault);
         Version version = new Version(context, update);
         return (version.isDowngrade() || version.mTimestamp > Version.getCurrentTimestamp());
     }
