@@ -81,9 +81,6 @@ public class Utils {
     }
 
     public static boolean canInstall(Context context, Update update) {
-        boolean allowDowngradingDefault = context.getResources().getBoolean(R.bool.config_allowDowngradingDefault);
-        boolean allowDowngrading = PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(Constants.PREF_ALLOW_DOWNGRADING, allowDowngradingDefault);
         Version version = new Version(context, update);
         return (version.isDowngrade() || version.mTimestamp > Version.getCurrentTimestamp());
     }

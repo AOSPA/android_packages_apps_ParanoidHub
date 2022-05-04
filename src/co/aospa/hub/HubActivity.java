@@ -523,7 +523,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 int resId;
                 titleRes = R.string.install_update_dialog_title;
                 String updateInfo = getResources().getString(R.string.install_update_dialog_message_info,
-                        Version.getMajor(), update.getVersion());
+                        update.getVersion(), update.getVersionNumber());
                 try {
                     if (Utils.isABUpdate(update.getFile())) {
                         resId = R.string.install_update_dialog_message_ab;

@@ -32,7 +32,7 @@ import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Configuration;
 import co.aospa.hub.model.UpdateInfo;
-import co.aospa.hub.model.UpdatePresenter;
+import co.aospa.hub.model.UpdateBuilder;
 import co.aospa.hub.receiver.UpdateCheckReceiver;
 
 import java.io.File;
@@ -141,7 +141,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
                 Log.d(TAG, "Requesting update..");
                 try {
                     syncUpdate(newJson);
-                    if (oldJson.exists() && UpdatePresenter.isNewUpdate(mContext, oldJson, newJson, mRolloutContractor.isReady())) {
+                    if (oldJson.exists() && UpdateBuilder.isNewUpdate(mContext, oldJson, newJson, mRolloutContractor.isReady())) {
                         UpdateCheckReceiver.updateRepeatingUpdatesCheck(mContext);
                     }
                     // In case we set a one-shot check because of a previous failure
@@ -162,7 +162,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     private void syncUpdate(File json) throws IOException, JSONException {
         if (mEnabled) {
             Log.d(TAG, "Syncing requested update");
-            UpdateInfo update = UpdatePresenter.matchMakeJson(mContext, json);
+            UpdateInfo update = UpdateBuilder.matchMakeJson(mContext, json);
             if (update != null) {
                 boolean mIsUpdateAvailable = mController.isUpdateAvailable(update, mRolloutContractor.isReady(), false);
                 if (mUserInitiated && !mIsUpdateAvailable) {
@@ -265,7 +265,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     public void onClientStatusSuccess(File oldJson, File newJson) {
         if (mIsConfigMatchMaking) {
             try {
-                mConfig = UpdatePresenter.matchMakeConfiguration(oldJson, newJson);
+                mConfig = UpdateBuilder.matchMakeConfiguration(oldJson, newJson);
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }

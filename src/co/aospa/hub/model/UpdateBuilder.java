@@ -34,23 +34,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 /**
- * This class handles all updates fetched from the servers/local json
+ * This class handles all updates fetched from the server/local json
  **/
-public class UpdatePresenter {
+public class UpdateBuilder {
 
-    private static final String TAG = "UpdatePresenter";
+    private static final String TAG = "UpdateBuilder";
     private static Update mUpdate = null;
 
-    // This should really return an UpdateBaseInfo object, but currently this only
+    // This should really return an UpdateBaseInfo object, but currently this is only
     // used to initialize UpdateInfo objects
     private static UpdateInfo buildUpdate(Context context, JSONObject object) throws JSONException {
         Update update = new Update(context);
-        update.setName(object.getString("name"));
+        update.setName(object.getString("filename"));
         update.setVersion(object.getString("version"));
-        update.setTimestamp(object.getLong("build"));
+        update.setVersionNumber(object.getString("number"));
+        update.setBuildType(object.getString("romtype"));
+        update.setTimestamp(object.getLong("datetime"));
         update.setFileSize(object.getLong("size"));
         update.setDownloadUrl(object.getString("url"));
-        update.setDownloadId(object.getString("md5"));
+        update.setDownloadId(object.getString("id"));
         return update;
     }
 
