@@ -20,6 +20,7 @@ import static co.aospa.hub.model.Version.TYPE_RELEASE;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -32,6 +33,7 @@ import co.aospa.hub.controller.LocalUpdateController;
 import co.aospa.hub.controller.UpdateController;
 import co.aospa.hub.download.DownloadClient;
 import co.aospa.hub.misc.Constants;
+import co.aospa.hub.misc.HubDbHelper;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateInfo;
@@ -66,6 +68,7 @@ public class HubController {
     private final Context mContext;
     private final Handler mUiThread;
     private final Handler mBgThread = new Handler();
+    private final HubDbHelper mHubDbHelper;
 
     private final PowerManager.WakeLock mWakeLock;
 
@@ -95,9 +98,15 @@ public class HubController {
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "hub:wakelock");
         mWakeLock.setReferenceCounted(false);
         mContext = context.getApplicationContext();
+        mHubDbHelper = new HubDbHelper(context);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         Utils.cleanupDownloadsDir(context);
+
+        for (Update update : mHubDbHelper.getUpdates()) {
+            boolean isReadyForRollout = mPrefs.getBoolean(Constants.IS_ROLLOUT_READY, false);
+            isUpdateAvailable(update, isReadyForRollout, false);
+        }
     }
 
     private static class DownloadEntry {
@@ -149,6 +158,8 @@ public class HubController {
                 }
                 update.setStatus(UpdateStatus.DOWNLOADING, mContext);
                 update.setPersistentStatus(UpdateStatus.Persistent.INCOMPLETE);
+                new Thread(() -> mHubDbHelper.addUpdateWithOnConflict(update,
+                        SQLiteDatabase.CONFLICT_REPLACE)).start();
                 notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
             }
 
@@ -222,9 +233,11 @@ public class HubController {
             if (file.exists() && verifyPackage(file)) {
                 file.setReadable(true, false);
                 update.setPersistentStatus(UpdateStatus.Persistent.VERIFIED);
+                mHubDbHelper.changeUpdateStatus(update);
                 update.setStatus(isLocalUpdate ? UpdateStatus.LOCAL_UPDATE : UpdateStatus.VERIFIED, mContext);
             } else {
                 update.setPersistentStatus(UpdateStatus.Persistent.UNKNOWN);
+                mHubDbHelper.removeUpdate(downloadId);
                 update.setProgress(0);
                 update.setStatus(isLocalUpdate ? UpdateStatus.LOCAL_UPDATE_FAILED : UpdateStatus.VERIFICATION_FAILED, mContext);
             }
@@ -334,6 +347,14 @@ public class HubController {
             update.setAvailableOnline(true);
             notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
             return true;
+        } else {
+            Log.d(TAG, "Download (" + info.getDownloadId() + ") already added");
+            DownloadEntry entry = mDownloads.get(info.getDownloadId());
+            if (entry != null) {
+                Update existingUpdate = entry.mUpdate;
+                existingUpdate.setAvailableOnline(existingUpdate.getAvailableOnline());
+                existingUpdate.setDownloadUrl(info.getDownloadUrl());
+            }
         }
         update.setStatus(status, mContext);
         notifyUpdateStatusChanged(update, STATE_STATUS_CHANGED);
@@ -453,6 +474,7 @@ public class HubController {
             if (file.exists() && !file.delete()) {
                 Log.e(TAG, "Could not delete " + file.getAbsolutePath());
             }
+            mHubDbHelper.removeUpdate(update.getDownloadId());
         }).start();
     }
 

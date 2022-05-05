@@ -30,20 +30,24 @@ public class ClientConnector implements DownloadClient.DownloadCallback {
 
     private DownloadClient mClient;
     private File mJson;
+    private int mFileType;
+    private boolean mOneShot;
 
     public interface ConnectorListener {
         void onClientStatusFailure(boolean cancelled);
         void onClientStatusResponse(int statusCode, String url, DownloadClient.Headers headers);
-        void onClientStatusSuccess(File oldJson, File newJson);
+        void onClientStatusSuccess(File oldJson, File newJson, int fileType, boolean oneShot);
     }
 
     public ClientConnector() {
     }
 
-    public void insert(File oldJson, File newJson, String url) {
+    public void insert(File oldJson, File newJson, String url, int type, boolean oneShot) {
         Log.d(TAG, "Old update table: " + oldJson.getName() + "New update table: " + newJson.getName());
         mJson = oldJson;
         mClient = null;
+        mFileType = type;
+        mOneShot = oneShot;
         try {
             mClient = new DownloadClient.Builder()
                     .setUrl(url)
@@ -76,9 +80,9 @@ public class ClientConnector implements DownloadClient.DownloadCallback {
         }
     }
 
-    private void notifyClientStatusSuccess(File oldJson, File newJson) {
+    private void notifyClientStatusSuccess(File oldJson, File newJson, int fileType, boolean oneShot) {
         for (ConnectorListener listener : mListeners) {
-            listener.onClientStatusSuccess(oldJson, newJson);
+            listener.onClientStatusSuccess(oldJson, newJson, fileType, oneShot);
         }
     }
 
@@ -96,7 +100,7 @@ public class ClientConnector implements DownloadClient.DownloadCallback {
 
     @Override
     public void onSuccess(File destination) {
-        notifyClientStatusSuccess(mJson, destination);
+        notifyClientStatusSuccess(mJson, destination, mFileType, mOneShot);
     }
     
 }

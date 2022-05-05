@@ -36,6 +36,8 @@ public class Version {
 
     private String mName;
     private String mVersion;
+    private String mVersionNumber;
+    private String mBuildType;
     public long mTimestamp;
 
     private boolean mAllowBetaUpdates;
@@ -51,21 +53,14 @@ public class Version {
                 context.getResources().getBoolean(R.bool.config_allowDowngradingDefault));
         mName = update.getName();
         mVersion = update.getVersion();
+        mVersionNumber = update.getVersionNumber();
+        mBuildType = update.getBuildType();
         mTimestamp = update.getTimestamp();
     }
 
     public boolean isUpdateAvailable() {
         if (isDowngrade()) {
             Log.d(TAG, mName + " is available for downgrade");
-            return true;
-        }
-
-        if (isIncremental()) {
-            if (isBetaUpdate() && !mAllowBetaUpdates) {
-                Log.d(TAG, mName + " is a beta but the user is not opted in");
-                return false;
-            }
-            Log.d(TAG, mName + " is available for incremental or hotfix");
             return true;
         }
 
@@ -77,25 +72,24 @@ public class Version {
             Log.d(TAG, mName + " is available for update");
             return true;
         }
-        Log.d(TAG, mName + " Verson:" + mVersion 
-                + "Build:" + mTimestamp
+        Log.d(TAG, mName + " Version: " + mVersion + " " + mVersionNumber
+                + " Build: " + mTimestamp
                 + " is older than current Paranoid Android version");
         return false;
     }
 
     public boolean isNewUpdate() {
-        return Float.parseFloat(mVersion) > Float.parseFloat(getMinor())
-                && mTimestamp > getCurrentTimestamp();
-    }
-
-    public boolean isIncremental() {
-        return Float.valueOf(mVersion).equals(Float.valueOf(getMinor()))
-                && mTimestamp > getCurrentTimestamp();
+        if (Float.parseFloat(mVersionNumber) > Float.parseFloat(getMinor())) {
+            return true;
+        }
+        // If the version numbers are the same, but the timestamps are different, trigger an update anyway
+        return Float.parseFloat(mVersionNumber) == (Float.parseFloat(getMinor())) && mTimestamp > getCurrentTimestamp();
     }
 
     public boolean isDowngrade() {
         return mAllowDowngrading && 
-                Float.parseFloat(mVersion) < Float.parseFloat(getMinor());
+                Float.parseFloat(mVersionNumber) < Float.parseFloat(getMinor())
+                && mTimestamp < getCurrentTimestamp();
     }
 
     public static String getMajor() {
@@ -132,14 +126,6 @@ public class Version {
     }
 
     public boolean isBetaUpdate() {
-        String updateType;
-        String[] split = mName.split("-");
-        try {
-            updateType = split[5];
-        } catch(ArrayIndexOutOfBoundsException e) {
-            return false;
-        }
-        String beta = TYPE_BETA.toLowerCase();
-        return beta.equals(updateType);
+        return mBuildType.equals(TYPE_BETA);
     }
 }
