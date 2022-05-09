@@ -33,14 +33,18 @@ import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 
+import co.aospa.hub.HubUpdateManager;
 import co.aospa.hub.R;
 import co.aospa.hub.model.Update;
+import co.aospa.hub.model.UpdateInfo;
 import co.aospa.hub.model.Version;
 import co.aospa.hub.service.UpdateService;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -73,17 +77,15 @@ public class Utils {
     }
 
     public static File getCachedUpdateList(Context context) {
-        return new File(context.getCacheDir(), "updates.json");
+        return new File(context.getCacheDir(), HubUpdateManager.DEVICE_FILE);
     }
 
-    public static File getCachedConfiguration(Context context) {
-        return new File(context.getCacheDir(), "configuration.json");
+    public static File getCachedRequiredFiles(Context context, int type) {
+        boolean isOtaConfiguration = type == HubUpdateManager.FILE_OTA_CONFIGURATION;
+        return new File(context.getCacheDir(), isOtaConfiguration ? "ota_configuration" : "changelog");
     }
 
     public static boolean canInstall(Context context, Update update) {
-        boolean allowDowngradingDefault = context.getResources().getBoolean(R.bool.config_allowDowngradingDefault);
-        boolean allowDowngrading = PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(Constants.PREF_ALLOW_DOWNGRADING, allowDowngradingDefault);
         Version version = new Version(context, update);
         return (version.isDowngrade() || version.mTimestamp > Version.getCurrentTimestamp());
     }
@@ -199,8 +201,18 @@ public class Utils {
             return;
         }
 
+        // Ideally the database is empty when we get here
+        HubDbHelper dbHelper = new HubDbHelper(context);
+        List<String> knownPaths = new ArrayList<>();
+        for (UpdateInfo update : dbHelper.getUpdates()) {
+            knownPaths.add(update.getFile().getAbsolutePath());
+        }
         for (File file : files) {
-            file.delete();
+            if (!knownPaths.contains(file.getAbsolutePath())) {
+                Log.d(TAG, "Deleting " + file.getAbsolutePath());
+                //noinspection ResultOfMethodCallIgnored
+                file.delete();
+            }
         }
 
         preferences.edit().putBoolean(DOWNLOADS_CLEANUP_DONE, true).apply();
