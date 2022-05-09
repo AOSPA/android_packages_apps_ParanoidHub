@@ -104,7 +104,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
         newWhitelist.renameTo(oldWhitelist);
         String url = Utils.getServerURL(mContext) + WHITELIST_FILE;
         Log.d(TAG, "Updating whitelisted devices for rollout from " + url);
-        mConnector.insert(oldWhitelist, newWhitelist, url);
+        mConnector.insert(oldWhitelist, newWhitelist, url, HubUpdateManager.FILE_WHITELIST, false);
         mConnector.start();
     }
 
@@ -225,16 +225,11 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     public boolean isReady() {
+        if (Version.isBuild(TYPE_ALPHA)) {
+            Log.d(TAG, "Staged rollouts are disabled on alpha builds, marking as ready");
+            return true;
+        }
         if (Constants.IS_STAGED_ROLLOUT_ENABLED) {
-            if (Version.isBuild(TYPE_ALPHA)) {
-                boolean isDeviceWhitelisted = isDeviceWhitelisted();
-                if (isDeviceWhitelisted) {
-                    Log.d(TAG, "Dev device is whitelisted and is ready for rollout");
-                    return true;
-                }
-                Log.d(TAG, "Staged rollouts disabled on alpha builds");
-                return false;
-            }
             return mPrefs.getBoolean(Constants.IS_ROLLOUT_READY, false);
         }
         Log.d(TAG, "Staged rollouts are disabled, marking updates as always ready");
@@ -250,7 +245,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     public void onClientStatusResponse(int statusCode, String url, DownloadClient.Headers headers) {}
 
     @Override
-    public void onClientStatusSuccess(File oldWhitelist, File newWhitelist) {
+    public void onClientStatusSuccess(File oldWhitelist, File newWhitelist, int fileType, boolean oneShot) {
         try {
             matchMakeWhitelist(oldWhitelist, newWhitelist);
         } catch (IOException | JSONException e) {
