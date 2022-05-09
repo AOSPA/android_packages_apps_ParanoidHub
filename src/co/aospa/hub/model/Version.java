@@ -35,7 +35,9 @@ public class Version {
     public static final String TYPE_RELEASE = "Release";
 
     private String mName;
-    private String mVersion;
+    private String mVersionMajor;
+    private String mVersionMinor;
+    private String mVariant;
     public long mTimestamp;
 
     private boolean mAllowBetaUpdates;
@@ -50,22 +52,14 @@ public class Version {
         mAllowDowngrading = prefs.getBoolean(Constants.PREF_ALLOW_DOWNGRADING, 
                 context.getResources().getBoolean(R.bool.config_allowDowngradingDefault));
         mName = update.getName();
-        mVersion = update.getVersion();
-        mTimestamp = update.getTimestamp();
+        mVersionMajor = update.getVersionMajor();
+        mVersionMinor = update.getVersionMinor();
+        mBuildVariant = update.getBuildVariant();
     }
 
     public boolean isUpdateAvailable() {
         if (isDowngrade()) {
             Log.d(TAG, mName + " is available for downgrade");
-            return true;
-        }
-
-        if (isIncremental()) {
-            if (isBetaUpdate() && !mAllowBetaUpdates) {
-                Log.d(TAG, mName + " is a beta but the user is not opted in");
-                return false;
-            }
-            Log.d(TAG, mName + " is available for incremental or hotfix");
             return true;
         }
 
@@ -77,25 +71,19 @@ public class Version {
             Log.d(TAG, mName + " is available for update");
             return true;
         }
-        Log.d(TAG, mName + " Verson:" + mVersion 
-                + "Build:" + mTimestamp
+        Log.d(TAG, mName + " Version: " + mVersionMajor + " " + mVersionMinor
+                + " Build: " + mTimestamp
                 + " is older than current Paranoid Android version");
         return false;
     }
 
     public boolean isNewUpdate() {
-        return Float.parseFloat(mVersion) > Float.parseFloat(getMinor())
-                && mTimestamp > getCurrentTimestamp();
-    }
-
-    public boolean isIncremental() {
-        return Float.valueOf(mVersion).equals(Float.valueOf(getMinor()))
-                && mTimestamp > getCurrentTimestamp();
+        return Float.parseFloat(mVersionMinor) > Float.parseFloat(getMinor());
     }
 
     public boolean isDowngrade() {
         return mAllowDowngrading && 
-                Float.parseFloat(mVersion) < Float.parseFloat(getMinor());
+                Float.parseFloat(mVersionMinor) < Float.parseFloat(getMinor());
     }
 
     public static String getMajor() {
@@ -106,40 +94,20 @@ public class Version {
         return SystemProperties.get(Constants.PROP_VERSION_MINOR);
     }
 
-    public static long getCurrentTimestamp() {
-        String date;
-        String version = SystemProperties.get(Constants.PROP_VERSION);
-        String[] split = version.split("-");
-        if (isBuild(TYPE_RELEASE)) {
-            date = split[3];
-        } else {
-            date = split[4];
-        }
-        return Long.parseLong(date);
+    public static String getBuildVariant() {
+        return SystemProperties.get(Constants.PROP_BUILD_VARIANT);
     }
 
-    public static String getBuildType() {
-        return SystemProperties.get(Constants.PROP_BUILD_TYPE);
-    }
-
-    public static boolean isBuild(String type) {
-        String buildType = getBuildType();
-        if ((type).equals(buildType)) {
-            Log.d(TAG, "Current build type is: " + type);
+    public static boolean isBuild(String variant) {
+        String buildVariant = getBuildVariant();
+        if ((variant).equals(buildVariant)) {
+            Log.d(TAG, "Current build type is: " + variant);
             return true;
         }
         return false;
     }
 
     public boolean isBetaUpdate() {
-        String updateType;
-        String[] split = mName.split("-");
-        try {
-            updateType = split[5];
-        } catch(ArrayIndexOutOfBoundsException e) {
-            return false;
-        }
-        String beta = TYPE_BETA.toLowerCase();
-        return beta.equals(updateType);
+        return mBuildVariant.equals(TYPE_BETA);
     }
 }

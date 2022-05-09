@@ -15,6 +15,13 @@
  */
 package co.aospa.hub.model;
 
+import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
+
+import co.aospa.hub.HubActivity;
+import co.aospa.hub.misc.Constants;
+
 public class Configuration {
 
     private boolean mEnabled;
@@ -39,27 +46,11 @@ public class Configuration {
         }
     }
 
-    public void setChangelog(String changelog) {
-        mChangelog = changelog;
-    }
-
-    public void setBetaChangelog(String betaChangelog) {
-        mBetaChangelog = betaChangelog;
-    }
-
     public boolean isOtaEnabledFromServer() {
         return mEnabled;
     }
 
     public boolean isOtaWhitelistOnly() {
         return mWhitelistOnly;
-    }
-
-    public String getChangelog() {
-        return mChangelog;
-    }
-
-    public String getBetaChangelog() {
-        return mBetaChangelog;
     }
 }
