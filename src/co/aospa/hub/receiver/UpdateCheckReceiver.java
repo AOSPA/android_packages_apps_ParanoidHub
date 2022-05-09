@@ -34,7 +34,7 @@ import co.aospa.hub.download.DownloadClient;
 import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Update;
-import co.aospa.hub.model.UpdatePresenter;
+import co.aospa.hub.model.UpdateBuilder;
 import co.aospa.hub.model.Version;
 import co.aospa.hub.notification.NotificationContract;
 import co.aospa.hub.notification.NotificationContractor;
@@ -102,7 +102,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
         String buildInfo = String.format(isBetaUpdate ?
                 context.getResources().getString(R.string.update_found_notification_text_beta) :
                 context.getResources().getString(R.string.update_found_notification_text),
-                Version.getMajor(), update.getVersion());
+                update.getVersionMajor(), update.getVersionMinor());
         NotificationContractor contractor = new NotificationContractor(context);
         NotificationContract contract = contractor.create(NotificationContractor.NEW_UPDATES_NOTIFICATION_CHANNEL, true);
         contract.setTitle(context.getResources().getString(R.string.update_found_notification_title));
@@ -177,9 +177,9 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
     private void updateDeviceConfiguration() {
         File oldJson = Utils.getCachedUpdateList(mContext);
         File newJson = new File(oldJson.getAbsolutePath() + UUID.randomUUID());
-        String url = Utils.getServerURL(mContext) + HubUpdateManager.DEVICE_FILE;
+        String url = Utils.getServerURL(mContext) + HubUpdateManager.DEVICE_FOLDER + HubUpdateManager.DEVICE_FILE;
         Log.d(TAG, "Updating ota information from " + url);
-        mConnector.insert(oldJson, newJson, url);
+        mConnector.insert(oldJson, newJson, url, HubUpdateManager.FILE_DEVICE, false);
         mConnector.start();
     }
 
@@ -193,11 +193,11 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
     public void onClientStatusResponse(int statusCode, String url, DownloadClient.Headers headers) {}
 
     @Override
-    public void onClientStatusSuccess(File oldFile, File newFile) {
+    public void onClientStatusSuccess(File oldFile, File newFile, int fileType, boolean oneShot) {
         try {
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-            if (oldFile.exists() && UpdatePresenter.isNewUpdate(mContext, oldFile, newFile, mRolloutContractor.isReady())) {
-                Update update = UpdatePresenter.getUpdate();
+            if (oldFile.exists() && UpdateBuilder.isNewUpdate(mContext, oldFile, newFile, mRolloutContractor.isReady())) {
+                Update update = UpdateBuilder.getUpdate();
                 showNotification(mContext, update);
                 updateRepeatingUpdatesCheck(mContext);
             }

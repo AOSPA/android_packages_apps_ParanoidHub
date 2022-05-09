@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="48dp"
         android:animateLayoutChanges="true"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/system_update_primary_button">
@@ -81,21 +81,25 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/system_update_info_icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="14dp"
-            android:src="@drawable/ic_info_outline_grey600_24dp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/system_update_info_desc"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="12dp"
-            android:visibility="gone" />
+            android:layout_marginTop="12dp">
+
+            <ImageView
+                android:id="@+id/system_update_info_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_info_outline_grey600_24dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/system_update_info_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:visibility="gone" />
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -122,7 +126,7 @@
     <ScrollView
         android:id="@+id/system_update_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="296dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="36dp"
@@ -132,7 +136,8 @@
             android:id="@+id/system_update_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible" />
+            android:textSize="16sp"
+            android:visibility="gone" />
     </ScrollView>
 
     <com.google.android.material.button.MaterialButton
