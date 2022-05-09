@@ -22,7 +22,11 @@ public interface UpdateBaseInfo {
 
     long getTimestamp();
 
-    String getVersion();
+    String getVersionMajor();
+
+    String getVersionMinor();
+
+    String getBuildVariant();
 
     String getDownloadUrl();
 

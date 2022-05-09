@@ -71,6 +71,7 @@ import co.aospa.hub.HubController.StatusListener;
 import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.StringGenerator;
 import co.aospa.hub.misc.Utils;
+import co.aospa.hub.model.Changelog;
 import co.aospa.hub.model.Configuration;
 import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateInfo;
@@ -165,7 +166,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             HubController controller = mUpdateService.getController();
             controller.addUpdateStatusListener(HubActivity.this);
             mManager = new HubUpdateManager(getApplicationContext(), controller, HubActivity.this);
-            mManager.warmUpConfigMatchMaker();
+            mManager.updateConfigFromServer();
         }
 
         @Override
@@ -212,16 +213,24 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                         Formatter.formatShortFileSize(this, update.getFileSize())));
 
                 mUpdateDescription.setMovementMethod(LinkMovementMethod.getInstance());
-                Configuration config = mManager.getConfiguration();
-                String changelog = null;
-                if (config != null) {
-                    changelog = isBetaUpdate ? config.getBetaChangelog() : config.getChangelog();
+                Changelog changelog = mManager.getChangelog();
+                String clVersionMajor = null;
+                String clVersionMinor = null;
+                String clBuildVariant = null;
+                String clLog = null;
+                if (changelog != null) {
+                    clVersionMajor = changelog.getVersionMajor();
+                    clVersionMinor = changelog.getVersionMinor();
+                    clBuildVariant = changelog.getBuildVariant();
+                    clLog = changelog.get();
                 }
 
-                if (changelog != null && !mIsLocalUpdate) {
+                if (clLog != null && !mIsLocalUpdate) {
                     String description = String.format(getResources().getString(
-                            R.string.update_found_changelog), changelog);
-                    mUpdateDescription.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
+                            R.string.update_found_changelog), clVersionMajor, clVersionMinor, clLog);
+                    String descriptionBeta = String.format(getResources().getString(
+                            R.string.update_found_changelog_beta), clVersionMajor, clVersionMinor, clBuildVariant, clLog);
+                    mUpdateDescription.setText(Html.fromHtml(isBetaUpdate ? descriptionBeta : description, Html.FROM_HTML_MODE_COMPACT));
                 } else {
                     String defaultRes = getResources().getString(R.string.update_found_changelog_default);
                     if (mIsLocalUpdate) {
@@ -271,10 +280,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             return;
         }
 
-        if (controller.getUpdateStatus() == AVAILABLE && update == null) {
-            beginHubReset();
-            return;
-        } else if (update == null) {
+        if (update == null) {
             mHeaderStatus.setText(getResources().getString(R.string.no_updates_title));
             mButton.setText(R.string.button_check_for_update);
             mButton.setVisibility(View.VISIBLE);
@@ -283,7 +289,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             return;
         }
 
-        int status = update.getStatus();
+        int status = controller.getUpdateStatus();
         Log.d(TAG, "Current update status: " + status);
         switch (status) {
             default:
@@ -523,7 +529,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 int resId;
                 titleRes = R.string.install_update_dialog_title;
                 String updateInfo = getResources().getString(R.string.install_update_dialog_message_info,
-                        Version.getMajor(), update.getVersion());
+                        update.getVersionMajor(), update.getVersionMinor());
                 try {
                     if (Utils.isABUpdate(update.getFile())) {
                         resId = R.string.install_update_dialog_message_ab;
@@ -572,7 +578,6 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             pref.edit().putLong(Constants.PREF_LAST_UPDATE_CHECK, millis).apply();
             updateMessages(null, CHECK_NORMAL);
             mManager.warmUpMatchMaker(true);
-            mManager.beginMatchMaker();
         }
     }
 
@@ -638,6 +643,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 controller.pauseDownload(update.getDownloadId());
                 break;
             case DOWNLOAD_FAILED:
+                mManager.warmUpMatchMaker(true);
             case VERIFICATION_FAILED:
                 controller.startDownload(update.getDownloadId());
                 break;
