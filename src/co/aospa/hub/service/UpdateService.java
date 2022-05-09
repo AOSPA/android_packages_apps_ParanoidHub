@@ -39,7 +39,7 @@ import co.aospa.hub.controller.UpdateController;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateInfo;
-import co.aospa.hub.model.UpdatePresenter;
+import co.aospa.hub.model.UpdateBuilder;
 import co.aospa.hub.model.UpdateStatus;
 import co.aospa.hub.model.Version;
 import co.aospa.hub.notification.NotificationContract;
@@ -112,7 +112,7 @@ public class UpdateService extends Service implements StatusListener {
         } else if (ACTION_START_DOWNLOAD.equals(intent.getAction())) {
             String downloadId = intent.getStringExtra(EXTRA_DOWNLOAD_ID);
             mNotificationContractor.retract(NotificationContractor.ID);
-            mController.setDownloadEntry(UpdatePresenter.getUpdate());
+            mController.setDownloadEntry(UpdateBuilder.getUpdate());
             mController.startDownload(downloadId);
         } else if (ACTION_DOWNLOAD_CONTROL.equals(intent.getAction())) {
             String downloadId = intent.getStringExtra(EXTRA_DOWNLOAD_ID);

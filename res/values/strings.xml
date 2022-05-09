@@ -80,7 +80,8 @@
     <string name="update_found_title">System update available</string>
     <string name="update_found_title_local">Local update available</string>
     <string name="update_found_subtitle">%1$s %2$s</string>
-    <string name="update_found_changelog"><![CDATA[%1$s]]></string>
+    <string name="update_found_changelog"><![CDATA[<b>Paranoid Android %1$s %2$s<b/> \n%3$s]]></string>
+    <string name="update_found_changelog_beta"><![CDATA[<b>Paranoid Android %1$s %2$s %3$s<b/> \n%4$s]]></string>
     <string name="update_found_changelog_default">A new version of Paranoid Android is ready to install. No changes for this update were found.</string>
     <string name="update_found_changelog_default_local">A new local update has been found, this version is %1$s (%2$s). By tapping continue, you agree to install this update.</string>
     <string name="update_found_size">Update size: %1$s</string>
