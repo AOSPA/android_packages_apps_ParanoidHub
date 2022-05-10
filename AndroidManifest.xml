@@ -45,6 +45,14 @@
         </activity>
 
         <activity
+            android:name=".activities.ChangelogActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/app_changelog_name"
+            android:theme="@style/Theme.Hub.NoActionBar"
+            android:launchMode="singleTop"
+            android:exported="true" />
+
+        <activity
             android:name=".HubPreferencesActivity"
             android:label="@string/app_preferences_name"
             android:theme="@android:style/Theme.DeviceDefault.Settings"

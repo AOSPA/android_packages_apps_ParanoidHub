@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.os.SystemProperties;
 import android.util.Log;
 import android.view.View;
