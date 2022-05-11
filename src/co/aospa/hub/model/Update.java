@@ -23,6 +23,7 @@ import androidx.preference.PreferenceManager;
 import co.aospa.hub.misc.Constants;
 
 import java.io.File;
+import java.io.Serializable;
 
 public class Update extends UpdateBase implements UpdateInfo {
 
