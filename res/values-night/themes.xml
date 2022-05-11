@@ -41,8 +41,12 @@
         <item name="shapeAppearanceOverlay">@style/Theme.Hub.Dialog.Rounded.Overlay</item>
     </style>
 
-    <style name="Theme.Hub.ImageView">
+    <style name="Theme.Hub.HeaderSystemUpdate">
         <item name="android:src">@drawable/header_system_update_dark</item>
+    </style>
+
+    <style name="Theme.Hub.HeaderChangelog">
+        <item name="android:src">@drawable/header_changelog</item>
     </style>
 
     <style name="Widget.Hub.Button" parent="Widget.MaterialComponents.Button.TextButton">

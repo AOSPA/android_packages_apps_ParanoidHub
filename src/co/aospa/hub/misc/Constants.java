@@ -64,5 +64,6 @@ public final class Constants {
     public static final String PROP_VERSION_MINOR = "ro.aospa.version.minor";
     public static final String PROP_DEVICE = "ro.aospa.device";
     public static final String PROP_BUILD_VARIANT = "ro.aospa.build.variant";
+    public static final String PROP_DEVICE_MODEL = "ro.product.system.model";
     public static final String UNCRYPT_FILE_EXT = ".uncrypt";
 }
