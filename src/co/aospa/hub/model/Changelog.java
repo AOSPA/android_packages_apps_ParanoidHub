@@ -15,13 +15,16 @@
  */
 package co.aospa.hub.model;
 
-public class Changelog {
+import java.io.Serializable;
+
+public class Changelog implements Serializable {
 
     private String mVersionMajor;
     private String mVersionMinor;
     private String mBuildVariant;
     private String mId;
     private String mChangelog;
+    private String mChangelogBrief;
 
     public Changelog() {
     }
@@ -36,7 +39,9 @@ public class Changelog {
 
     public void setChangelog(String changelog) {mChangelog = changelog;}
 
-    public String getVersionMajor() {return mVersionMajor;}
+    public void setChangelogBrief(String changelog) {mChangelogBrief = changelog;}
+
+    public String getVersion() {return mVersion;}
 
     public String getVersionMinor() {return mVersionMinor;}
 
@@ -45,5 +50,7 @@ public class Changelog {
     public String getId() {return mId;}
 
     public String get() {return mChangelog;}
+
+    public String getBrief() {return mChangelogBrief;}
 
 }

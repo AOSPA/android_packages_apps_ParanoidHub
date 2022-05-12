@@ -70,6 +70,7 @@ public class UpdateBuilder {
         changelog.setBuildVariant(object.getString("variant"));
         changelog.setId(object.getString("id"));
         changelog.setChangelog(object.getString("info"));
+        changelog.setChangelogBrief(object.getString("info_brief"));
         return changelog;
     }
 

@@ -20,23 +20,22 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/hub_name"
-        android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
+        android:supportsRtl="true"
         android:theme="@style/Theme.Hub">
 
-        <activity
+		<activity
             android:name=".HubActivity"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:label="@string/hub_display_name"
-            android:theme="@style/Theme.Hub.NoActionBar"
             android:launchMode="singleTop"
-			android:exported="true">
+            android:theme="@style/Theme.Hub.NoActionBar">
             <intent-filter android:priority="1">
                 <action android:name="android.settings.SYSTEM_UPDATE_SETTINGS" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.android.settings.SHORTCUT" />
@@ -46,29 +45,37 @@
 
         <activity
             android:name=".HubPreferencesActivity"
-            android:label="@string/app_preferences_name"
-            android:theme="@android:style/Theme.DeviceDefault.Settings"
             android:autoRemoveFromRecents="true"
-			android:exported="true">
+            android:exported="true"
+            android:label="@string/hub_display_name"
+            android:theme="@android:style/Theme.DeviceDefault.Settings">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="co.aospa.hub.ChangelogActivity"
+            android:autoRemoveFromRecents="true"
+            android:exported="true"
+            android:label="@string/hub_display_name"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Hub.NoActionBar">
+		</activity>
+
         <service android:name=".service.UpdateService" />
 
         <receiver android:name=".receiver.UpdateReceiver" android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
         <receiver android:name=".receiver.UpdateCheckReceiver" android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-    </application>
-
+	</application>
 </manifest>
