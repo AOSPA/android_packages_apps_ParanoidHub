@@ -20,6 +20,7 @@ android_app {
         "androidx.localbroadcastmanager_localbroadcastmanager",
         "androidx.preference_preference",
         "androidx.recyclerview_recyclerview",
+        "SystemUIAnimationLib",
     ],
 
     resource_dirs: ["res"],
