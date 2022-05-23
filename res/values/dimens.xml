@@ -14,4 +14,5 @@
     <dimen name="donut_view_percent_sign_size">20sp</dimen>
     <dimen name="donut_view_percent_text_size">45sp</dimen>
     <dimen name="donut_view_shrunken_label_text_size">10sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
