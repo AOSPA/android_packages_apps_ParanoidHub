@@ -101,14 +101,9 @@ public class Version {
     }
 
     public static long getCurrentTimestamp() {
-        String date;
         String version = SystemProperties.get(Constants.PROP_VERSION);
         String[] split = version.split("-");
-        if (isBuild(TYPE_RELEASE)) {
-            date = split[3];
-        } else {
-            date = split[4];
-        }
+        String date = split[4];
         return Long.parseLong(date);
     }
 

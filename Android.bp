@@ -1,14 +1,20 @@
 android_app {
     name: "ParanoidHub",
-
-    defaults: [
-        "SettingsLibDefaults",
-    ],
+	defaults: ["platform_app_defaults", "SettingsLibDefaults"],
+	platform_apis: true,
+    privileged: true,
+    certificate: "platform",
+    system_ext_specific: true,
+	required: ["privapp_whitelist_co.aospa.hub.xml"],
+    optimize: {
+        proguard_flags_files: ["proguard.flags"],
+    },
 
     srcs: [
         "src/**/*.java",
         "src/**/*.kt",
     ],
+	resource_dirs: ["res"],
 
     static_libs: [
         "com.google.android.material_material",
@@ -20,19 +26,8 @@ android_app {
         "androidx.localbroadcastmanager_localbroadcastmanager",
         "androidx.preference_preference",
         "androidx.recyclerview_recyclerview",
+        "SystemUIAnimationLib",
     ],
-
-    resource_dirs: ["res"],
-
-    platform_apis: true,
-    privileged: true,
-    certificate: "platform",
-    system_ext_specific: true,
-    optimize: {
-        proguard_flags_files: ["proguard.flags"],
-    },
-	
-	required: ["privapp_whitelist_co.aospa.hub.xml"],
 }
 
 prebuilt_etc {
