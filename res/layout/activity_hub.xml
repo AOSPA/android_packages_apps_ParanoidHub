@@ -24,7 +24,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="24dp"
-            style="@style/Theme.Hub.ImageView" />
+            style="@style/Theme.Hub.HeaderSystemUpdate" />
 
         <TextView
             android:id="@+id/header_system_update_status"
@@ -68,18 +68,28 @@
         android:id="@+id/system_update_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="48dp"
         android:animateLayoutChanges="true"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/system_update_primary_button">
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/system_update_scrollview"
+        tools:layout_editor_absoluteX="24dp">
 
         <TextView
             android:id="@+id/system_update_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/system_update_desc_detail_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/update_found_changelog_view_detail"
+            style="@style/Widget.Hub.Button.Small"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -112,21 +122,21 @@
         android:layout_marginEnd="24dp"
         android:animateLayoutChanges="true"
         android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/system_update_header">
 
         <TextView
             android:id="@+id/system_update_version_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:visibility="visible" />
+            android:textSize="16sp" />
 
     </LinearLayout>
 
     <ScrollView
         android:id="@+id/system_update_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="296dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="36dp"

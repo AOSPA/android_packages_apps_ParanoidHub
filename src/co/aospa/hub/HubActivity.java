@@ -38,6 +38,7 @@ import static co.aospa.hub.model.Version.TYPE_RELEASE;
 
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
+import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -51,6 +52,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.ServiceManager;
+import android.os.SystemProperties;
+import android.service.dreams.DreamService;
+import android.service.dreams.IDreamManager;
 import android.text.Html;
 import android.text.format.Formatter;
 import android.text.method.LinkMovementMethod;
@@ -65,6 +70,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
+import com.android.systemui.animation.DialogLaunchAnimator;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import co.aospa.hub.HubController.StatusListener;
@@ -72,12 +78,12 @@ import co.aospa.hub.misc.Constants;
 import co.aospa.hub.misc.StringGenerator;
 import co.aospa.hub.misc.Utils;
 import co.aospa.hub.model.Changelog;
-import co.aospa.hub.model.Configuration;
 import co.aospa.hub.model.Update;
 import co.aospa.hub.model.UpdateInfo;
 import co.aospa.hub.model.UpdateStatus;
 import co.aospa.hub.model.Version;
 import co.aospa.hub.service.UpdateService;
+import co.aospa.hub.views.ChangelogDialog;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -103,10 +109,12 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     private Button mButton;
     private ImageView mInfoIcon;
     private ProgressBar mProgressBar;
+    private View mVersionContainer;
     private TextView mVersionHeader;
     private TextView mHeaderStatus;
     private TextView mInfoDescription;
     private TextView mUpdateDescription;
+    private TextView mUpdateDescriptionButton;
     private TextView mUpdateSize;
     private TextView mHeaderStatusMessage;
     private TextView mHeaderStatusStep;
@@ -114,8 +122,10 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.hub_activity);
+        setTheme(R.style.Theme_Hub_NoActionBar);
+        setContentView(R.layout.activity_hub);
 
+        mVersionContainer = findViewById(R.id.version_header);
         mVersionHeader = findViewById(R.id.system_update_version_header);
         mHeaderStatus = findViewById(R.id.header_system_update_status);
         mProgressBar = findViewById(R.id.system_update_progress);
@@ -126,6 +136,9 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
 
         mInfoIcon = findViewById(R.id.system_update_info_icon);
         mInfoDescription = findViewById(R.id.system_update_info_desc);
+
+        mUpdateDescriptionButton = findViewById(R.id.system_update_desc_detail_button);
+        mUpdateDescriptionButton.setOnClickListener(this);
 
         mButton = findViewById(R.id.system_update_primary_button);
         mButton.setOnClickListener(this);
@@ -202,10 +215,9 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         boolean isChecking = (checkForUpdates == CHECK_LOCAL || checkForUpdates == CHECK_NORMAL);
         if (update != null && (update.getStatus() != UNAVAILABLE || isChecking)) {
             if (update.getStatus() != UNAVAILABLE || isChecking) {
-                Version version = new Version(getApplicationContext(), update);
-                boolean isBetaUpdate = version.isBetaUpdate();
-                mVersionHeader.setVisibility(View.GONE);
+                mVersionContainer.setVisibility(View.GONE);
                 mUpdateDescription.setVisibility(View.VISIBLE);
+                mUpdateDescriptionButton.setVisibility(View.VISIBLE);
                 mUpdateSize.setVisibility(View.VISIBLE);
 
                 mUpdateSize.setText(String.format(
@@ -214,25 +226,17 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
 
                 mUpdateDescription.setMovementMethod(LinkMovementMethod.getInstance());
                 Changelog changelog = mManager.getChangelog();
-                String clVersion = null;
-                String clVersionNumber = null;
-                String clBuildType = null;
                 String clLog = null;
                 if (changelog != null) {
-                    clVersion = changelog.getVersion();
-                    clVersionNumber = changelog.getVersionNumber();
-                    clBuildType = changelog.getBuildType();
-                    clLog = changelog.get();
+                    clLog = changelog.getBrief();
                 }
 
                 if (clLog != null && !mIsLocalUpdate) {
                     String description = String.format(getResources().getString(
-                            R.string.update_found_changelog), clVersion, clVersionNumber, clLog);
-                    String descriptionBeta = String.format(getResources().getString(
-                            R.string.update_found_changelog_beta), clVersion, clVersionNumber, clBuildType, clLog);
-                    mUpdateDescription.setText(Html.fromHtml(isBetaUpdate ? descriptionBeta : description, Html.FROM_HTML_MODE_COMPACT));
+                            R.string.update_found_changelog_brief), SystemProperties.get(Constants.PROP_DEVICE_MODEL), clLog);
+                    mUpdateDescription.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
                 } else {
-                    String defaultRes = getResources().getString(R.string.update_found_changelog_default);
+                    String defaultRes = getResources().getString(R.string.update_found_changelog_default_brief);
                     if (mIsLocalUpdate) {
                         defaultRes = String.format(getResources().getString(
                                 R.string.update_found_changelog_default_local), update.getVersion(), update.getTimestamp());
@@ -259,12 +263,12 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
 
     private void updateMessages(Update update, int checkForUpdates) {
         mButton.setVisibility(View.GONE);
-        mVersionHeader.setVisibility(View.GONE);
+        mVersionContainer.setVisibility(View.GONE);
         mHeaderStatusStep.setVisibility(View.GONE);
         HubController controller = mUpdateService.getController();
         if (checkForUpdates == CHECK_LOCAL) {
             mHeaderStatus.setText(getResources().getString(R.string.update_checking_local_title));
-            mVersionHeader.setVisibility(View.GONE);
+            mVersionContainer.setVisibility(View.GONE);
             mUpdateSize.setVisibility(View.GONE);
             updateStatusAndInfo(update, checkForUpdates);
             updateProgress(update, checkForUpdates);
@@ -272,7 +276,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             return;
         } else if (checkForUpdates == CHECK_NORMAL) {
             mHeaderStatus.setText(getResources().getString(R.string.update_checking_title));
-            mVersionHeader.setVisibility(View.GONE);
+            mVersionContainer.setVisibility(View.GONE);
             mUpdateSize.setVisibility(View.GONE);
             updateStatusAndInfo(update, checkForUpdates);
             updateProgress(update, checkForUpdates);
@@ -430,6 +434,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         mInfoIcon.setVisibility(infoAllowed ? View.VISIBLE : View.GONE);
         mInfoDescription.setVisibility(infoAllowed ? View.VISIBLE : View.GONE);
         mUpdateDescription.setVisibility(status != UNAVAILABLE ? View.VISIBLE : View.GONE);
+        mUpdateDescriptionButton.setVisibility(status != UNAVAILABLE ? View.VISIBLE : View.GONE);
         mHeaderStatusStep.setVisibility(stepsAllowed ? View.VISIBLE : View.GONE);
         updateStatusAndInfo(update, checkForUpdates);
         updateProgress(update, checkForUpdates);
@@ -465,13 +470,13 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
 
     public void updateSystemStatus(Update update, int checkForUpdates, boolean forceUnavailable) {
         if (checkForUpdates == CHECK_LOCAL || checkForUpdates == CHECK_NORMAL) {
-            mVersionHeader.setVisibility(View.GONE);
+            mVersionContainer.setVisibility(View.GONE);
             Log.d(TAG, "Not showing system status because we are checking for updates");
             return;
         }
         boolean updateUnavailable = update != null && update.getStatus() == UNAVAILABLE;
         if (updateUnavailable || forceUnavailable) {
-            mVersionHeader.setVisibility(View.VISIBLE);
+            mVersionContainer.setVisibility(View.VISIBLE);
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             long lastChecked = prefs.getLong(Constants.PREF_LAST_UPDATE_CHECK, -1) / 1000;
             mVersionHeader.setTypeface(mVersionHeader.getTypeface(), Typeface.NORMAL);
@@ -567,6 +572,13 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         return dialog;
     }
 
+    private void showDetailedChangelog(View view, Changelog changelog) {
+        ChangelogDialog dialog = new ChangelogDialog(HubActivity.this, changelog);
+        IDreamManager dreamService = IDreamManager.Stub.asInterface(ServiceManager.getService("dreams"));
+        DialogLaunchAnimator dialogLaunchAnimator = new DialogLaunchAnimator(dreamService);
+        dialogLaunchAnimator.showFromView(dialog, view, true);
+    }
+
     private void warmUpCheckForUpdates() {
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(Utils.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
         boolean allowLocalUpdates = prefs.getBoolean(Constants.PREF_ALLOW_LOCAL_UPDATES, false);
@@ -603,84 +615,90 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     public void onClick(View v) {
         HubController controller = mUpdateService.getController();
         Update update = controller.getActualUpdate(mDownloadId);
-        if (update == null) {
-            warmUpCheckForUpdates();
-            return;
-        }
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean needsReboot = prefs.getBoolean(Constants.NEEDS_REBOOT_AFTER_UPDATE, false);
-        if (needsReboot) {
-            prefs.edit().putBoolean(Constants.NEEDS_REBOOT_AFTER_UPDATE, false).apply();
-            rebootDevice(update);
-            return;
-        }
-
-        switch (update.getStatus()) {
-            default:
-            case UNAVAILABLE:
+        if (v == mButton) {
+            if (update == null) {
                 warmUpCheckForUpdates();
-                break;
-            case LOCAL_UPDATE:
-                if (isBatteryLevelOk()) {
-                    enforceBatteryReq().show();
-                } else {
-                    controller.startLocalUpdate(update.getDownloadId());
-                }
-                break;
-            case AVAILABLE:
-                if (Utils.isABDevice()) {
+                return;
+            }
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            boolean needsReboot = prefs.getBoolean(Constants.NEEDS_REBOOT_AFTER_UPDATE, false);
+            if (needsReboot) {
+                prefs.edit().putBoolean(Constants.NEEDS_REBOOT_AFTER_UPDATE, false).apply();
+                rebootDevice(update);
+                return;
+            }
+
+            switch (update.getStatus()) {
+                default:
+                case UNAVAILABLE:
+                    warmUpCheckForUpdates();
+                    break;
+                case LOCAL_UPDATE:
                     if (isBatteryLevelOk()) {
                         enforceBatteryReq().show();
                     } else {
+                        controller.startLocalUpdate(update.getDownloadId());
+                    }
+                    break;
+                case AVAILABLE:
+                    if (Utils.isABDevice()) {
+                        if (isBatteryLevelOk()) {
+                            enforceBatteryReq().show();
+                        } else {
+                            controller.startDownload(update.getDownloadId());
+                        }
+                    } else {
                         controller.startDownload(update.getDownloadId());
                     }
-                } else {
+                    break;
+                case DOWNLOADING:
+                    controller.pauseDownload(update.getDownloadId());
+                    break;
+                case DOWNLOAD_FAILED:
+                    mManager.warmUpMatchMaker(true);
+                case VERIFICATION_FAILED:
                     controller.startDownload(update.getDownloadId());
-                }
-                break;
-            case DOWNLOADING:
-                controller.pauseDownload(update.getDownloadId());
-                break;
-            case DOWNLOAD_FAILED:
-                mManager.warmUpMatchMaker(true);
-            case VERIFICATION_FAILED:
-                controller.startDownload(update.getDownloadId());
-                break;
-            case LOCAL_UPDATE_FAILED:
-                controller.startLocalUpdate(update.getDownloadId());
-                break;
-            case PAUSED:
-                UpdateInfo pausedUpdateInfo = controller.getUpdate(update.getDownloadId());
-                Update pausedUpdate = new Update(pausedUpdateInfo);
-                final boolean canResume = Utils.canInstall(getApplicationContext(), pausedUpdate) ||
-                        pausedUpdateInfo.getFile().length() == pausedUpdateInfo.getFileSize();
-                if (canResume) {
-                    controller.resumeDownload(update.getDownloadId());
-                } else {
-                    reportMessage(R.string.error_update_not_installable_snack);
-                }
-                break;
-            case INSTALLATION_CANCELLED:
-            case INSTALLATION_FAILED:
-                Utils.triggerUpdate(getApplicationContext(), update.getDownloadId());
-                break;
-            case DOWNLOADED:
-                final boolean canInstall = Utils.canInstall(getApplicationContext(), update);
-                if (canInstall) {
-                    Objects.requireNonNull(createDialog(1, update.getDownloadId())).show();
-                } else {
-                    reportMessage(R.string.error_update_not_installable_snack);
-                }
-                break;
-            case INSTALLING:
-                Objects.requireNonNull(createDialog(2, null)).show();
-                break;
-            case INSTALLED:
-                PowerManager pm =
-                        (PowerManager) HubActivity.this.getSystemService(Context.POWER_SERVICE);
-                pm.reboot(null);
-                break;
+                    break;
+                case LOCAL_UPDATE_FAILED:
+                    controller.startLocalUpdate(update.getDownloadId());
+                    break;
+                case PAUSED:
+                    UpdateInfo pausedUpdateInfo = controller.getUpdate(update.getDownloadId());
+                    Update pausedUpdate = new Update(pausedUpdateInfo);
+                    final boolean canResume = Utils.canInstall(getApplicationContext(), pausedUpdate) ||
+                            pausedUpdateInfo.getFile().length() == pausedUpdateInfo.getFileSize();
+                    if (canResume) {
+                        controller.resumeDownload(update.getDownloadId());
+                    } else {
+                        reportMessage(R.string.error_update_not_installable_snack);
+                    }
+                    break;
+                case INSTALLATION_CANCELLED:
+                case INSTALLATION_FAILED:
+                    Utils.triggerUpdate(getApplicationContext(), update.getDownloadId());
+                    break;
+                case DOWNLOADED:
+                    final boolean canInstall = Utils.canInstall(getApplicationContext(), update);
+                    if (canInstall) {
+                        Objects.requireNonNull(createDialog(1, update.getDownloadId())).show();
+                    } else {
+                        reportMessage(R.string.error_update_not_installable_snack);
+                    }
+                    break;
+                case INSTALLING:
+                    Objects.requireNonNull(createDialog(2, null)).show();
+                    break;
+                case INSTALLED:
+                    PowerManager pm =
+                            (PowerManager) HubActivity.this.getSystemService(Context.POWER_SERVICE);
+                    pm.reboot(null);
+                    break;
+            }
+        } else  if (v == mUpdateDescriptionButton) {
+            if (update != null) {
+                showDetailedChangelog(v, mManager.getChangelog());
+            }
         }
     }
 

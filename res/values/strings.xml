@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2017 The LineageOS Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +16,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="hub_name">Paranoid Android Updates</string>
     <string name="hub_display_name">System update</string>
-    <string name="app_preferences_name">Update preferences</string>
     <string name="os_name">Paranoid Android</string>
     <string name="join_two_unrelated_items"><xliff:g id="first_item">%1$s</xliff:g>, <xliff:g id="second_item">%2$s</xliff:g></string>
 
@@ -32,7 +30,7 @@
     <string name="export_path" translatable="false">/ParanoidHub</string>
 
     <!-- The server that hosts the update files -->
-    <string name="hub_server_url" translatable="false">"https://api.aospa.co/"</string>
+    <string name="hub_server_url" translatable="false">"https://raw.githubusercontent.com/Sirhc95/ota_test/master/"</string>
 
     <plurals name="eta_seconds">
         <item quantity="one">1 second left</item>
@@ -80,10 +78,16 @@
     <string name="update_found_title">System update available</string>
     <string name="update_found_title_local">Local update available</string>
     <string name="update_found_subtitle">%1$s %2$s</string>
-    <string name="update_found_changelog"><![CDATA[<b>Paranoid Android %1$s %2$s<b/> \n%3$s]]></string>
-    <string name="update_found_changelog_beta"><![CDATA[<b>Paranoid Android %1$s %2$s %3$s<b/> \n%4$s]]></string>
+    <string name="update_found_changelog_header"><![CDATA[%1$s %2$s %3$s]]></string>
+    <string name="update_found_changelog_header_beta"><![CDATA[%1$s %2$s %3$s %4$s]]></string>
+    <string name="update_found_changelog"><![CDATA[%1$s]]></string>
+    <string name="update_found_changelog_beta"><![CDATA[%1$s]]></string>
+    <string name="update_found_changelog_brief"><![CDATA[Improves the security and performance of your %1$s <br/><br/>%2$s]]></string>
     <string name="update_found_changelog_default">A new version of Paranoid Android is ready to install. No changes for this update were found.</string>
+    <string name="update_found_changelog_default_brief">A new version of Paranoid Android is ready to install. This update fixes critical bugs and improves the performance and stability of your device. \nAdditional charges may apply when updates are downloaded over cellular network or while roaming.</string>
     <string name="update_found_changelog_default_local">A new local update has been found, this version is %1$s (%2$s). By tapping continue, you agree to install this update.</string>
+    <string name="update_found_changelog_view_detail">View all changes</string>
+    <string name="update_found_changelog_view_detail_finish">Go back</string>
     <string name="update_found_size">Update size: %1$s</string>
     <string name="update_found_warning_and_desc">Downloading updates over a cellular network or while roaming may cause additional charges. \n\nThis update requires your device to restart</string>
     <string name="update_found_notification_title">System update available</string>
@@ -202,4 +206,6 @@
     <string name="local_update_summary">Prompt for updating from storage when checking for updates</string>
     <string name="allow_beta_updates_title">Opt-in to beta updates</string>
     <string name="allow_beta_updates_summary">Turning this on allows your device to receive updates for beta releases</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

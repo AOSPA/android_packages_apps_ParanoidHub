@@ -16,6 +16,7 @@
 package co.aospa.hub;
 
 import static co.aospa.hub.model.Version.TYPE_ALPHA;
+import static co.aospa.hub.model.Version.TYPE_UNOFFICIAL;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -225,8 +226,8 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
     }
 
     public boolean isReady() {
-        if (Version.isBuild(TYPE_ALPHA)) {
-            Log.d(TAG, "Staged rollouts are disabled on alpha builds, marking as ready");
+        if (Version.isBuild(TYPE_ALPHA) || Version.isBuild(TYPE_UNOFFICIAL)) {
+            Log.d(TAG, "Staged rollouts are disabled on non official and non beta builds, marking as ready");
             return true;
         }
         if (Constants.IS_STAGED_ROLLOUT_ENABLED) {
