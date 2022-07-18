@@ -70,6 +70,7 @@ public class UpdateBuilder {
         changelog.setBuildType(object.getString("romtype"));
         changelog.setId(object.getString("id"));
         changelog.setChangelog(object.getString("info"));
+        changelog.setChangelogBrief(object.getString("info_brief"));
         return changelog;
     }
 
