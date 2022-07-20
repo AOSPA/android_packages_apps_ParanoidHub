@@ -522,33 +522,25 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 HubActivity.this.startService(intent);
             };
         } else if (reason == 1) {
-            if (isBatteryLevelOk()) {
-                titleRes = R.string.install_low_battery_warning_title;
-                message = getResources().getString(R.string.install_low_battery_warning_text,
-                        getResources().getInteger(R.integer.battery_ok_percentage_discharging),
-                        getResources().getInteger(R.integer.battery_ok_percentage_charging));
-                listener = null;
-            } else {
-                HubController controller = mUpdateService.getController();
-                UpdateInfo update = controller.getUpdate(downloadId);
-                int resId;
-                titleRes = R.string.install_update_dialog_title;
-                String updateInfo = getResources().getString(R.string.install_update_dialog_message_info,
-                        update.getVersion(), update.getVersionNumber());
-                try {
-                    if (Utils.isABUpdate(update.getFile())) {
-                        resId = R.string.install_update_dialog_message_ab;
-                    } else {
-                        resId = R.string.install_update_dialog_message;
-                    }
-                } catch (IOException e) {
-                    Log.e(TAG, "Could not determine the type of the update");
-                    return null;
+            HubController controller = mUpdateService.getController();
+            UpdateInfo update = controller.getUpdate(downloadId);
+            int resId;
+            titleRes = R.string.install_update_dialog_title;
+            String updateInfo = getResources().getString(R.string.install_update_dialog_message_info,
+                    update.getVersion(), update.getVersionNumber());
+            try {
+                if (Utils.isABUpdate(update.getFile())) {
+                    resId = R.string.install_update_dialog_message_ab;
+                } else {
+                    resId = R.string.install_update_dialog_message;
                 }
-                message = getResources().getString(resId, updateInfo,
-                        getResources().getString(android.R.string.ok));
-                listener = (dialog, id) -> Utils.triggerUpdate(getApplicationContext(), downloadId);
+            } catch (IOException e) {
+                Log.e(TAG, "Could not determine the type of the update");
+                return null;
             }
+            message = getResources().getString(resId, updateInfo,
+                    getResources().getString(android.R.string.ok));
+            listener = (dialog, id) -> Utils.triggerUpdate(getApplicationContext(), downloadId);
         }
 
         MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this, R.style.Theme_Hub_Dialog);
@@ -564,8 +556,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     private MaterialAlertDialogBuilder enforceBatteryReq() {
         MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this, R.style.Theme_Hub_Dialog);
         String requirements = getResources().getString(R.string.install_low_battery_warning_text,
-                    getResources().getInteger(R.integer.battery_ok_percentage_discharging),
-                    getResources().getInteger(R.integer.battery_ok_percentage_charging));
+                    getResources().getInteger(R.integer.battery_ok_percentage));
         dialog.setTitle(getResources().getString(R.string.install_low_battery_warning_title));
         dialog.setMessage(requirements);
         dialog.setPositiveButton(android.R.string.ok, null);
@@ -635,7 +626,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                     warmUpCheckForUpdates();
                     break;
                 case LOCAL_UPDATE:
-                    if (isBatteryLevelOk()) {
+                    if (!isBatteryLevelOk()) {
                         enforceBatteryReq().show();
                     } else {
                         controller.startLocalUpdate(update.getDownloadId());
@@ -643,7 +634,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                     break;
                 case AVAILABLE:
                     if (Utils.isABDevice()) {
-                        if (isBatteryLevelOk()) {
+                        if (!isBatteryLevelOk()) {
                             enforceBatteryReq().show();
                         } else {
                             controller.startDownload(update.getDownloadId());
@@ -681,7 +672,11 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 case DOWNLOADED:
                     final boolean canInstall = Utils.canInstall(getApplicationContext(), update);
                     if (canInstall) {
-                        Objects.requireNonNull(createDialog(1, update.getDownloadId())).show();
+                        if (!isBatteryLevelOk()) {
+                            enforceBatteryReq().show();
+                        } else {
+                            Objects.requireNonNull(createDialog(1, update.getDownloadId())).show();
+                        }
                     } else {
                         reportMessage(R.string.error_update_not_installable_snack);
                     }
@@ -716,11 +711,8 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         }
         int percent = Math.round(100.f * intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 100) /
                 intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100));
-        int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
-        int required = plugged != 0 ?
-                getResources().getInteger(R.integer.battery_ok_percentage_charging) :
-                getResources().getInteger(R.integer.battery_ok_percentage_discharging);
-        return percent < required;
+        int required = getResources().getInteger(R.integer.battery_ok_percentage);
+        return percent >= required;
     }
 
     public ProgressBar getProgressBar() {

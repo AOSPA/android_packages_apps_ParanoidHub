@@ -128,7 +128,7 @@
     <string name="install_update_notification_title">Listo para actualizar</string>
     <string name="install_update_notification_text">Presione para terminar de aplicar la actualización.</string>
     <string name="install_low_battery_warning_title">No es posible actualizar ahora</string>
-    <string name="install_low_battery_warning_text">Su dispositivo tiene poca batería, necesita al menos <xliff:g id="percent_discharging">%1$d</xliff:g>%% de batería para continuar, <xliff:g id="percent_charging">%2$d</xliff:g>%% si se está cargando.</string>
+    <string name="install_low_battery_warning_text">Su dispositivo tiene poca batería, necesita al menos <xliff:g id="percent_discharging">%1$d</xliff:g>%% de batería para continuar.</string>
     <string name="install_update_dialog_title">Aplicar actualización</string>
     <string name="install_update_dialog_message">Estás a punto de actualizar a <xliff:g id="update_name">%1$s</xliff:g>.\n\nSi presiona <xliff:g id="ok">%2$s</xliff:g>, el dispositivo se reiniciará en modo de recuperación para instalar la actualización.\n\nNota: esta función requiere de un recovery compatible o las actualizaciones deberán instalarse manualmente.</string>
     <string name="install_update_dialog_message_ab">Estás a punto de actualizar a <xliff:g id="update_name">%1$s</xliff:g>.\n\nSi presiona <xliff:g id="ok">%2$s</xliff:g>, el dispositivo comenzará a instalar en segundo plano.\n\nUna vez completado, se le pedirá que reinicie.</string>
