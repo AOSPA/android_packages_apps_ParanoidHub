@@ -58,7 +58,7 @@ public class Update extends UpdateBase implements UpdateInfo {
         mSpeed = update.getSpeed();
         mInstallProgress = update.getInstallProgress();
         mAvailableOnline = update.getAvailableOnline();
-        mIsFinalizing = update.getFinalizing();
+        mIsFinalizing = update.isFinalizing();
     }
 
     @Override
@@ -140,7 +140,7 @@ public class Update extends UpdateBase implements UpdateInfo {
     }
 
     @Override
-    public boolean getFinalizing() {
+    public boolean isFinalizing() {
         return mIsFinalizing;
     }
 

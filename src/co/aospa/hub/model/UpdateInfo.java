@@ -36,5 +36,5 @@ public interface UpdateInfo extends UpdateBaseInfo {
 
     boolean getAvailableOnline();
 
-    boolean getFinalizing();
+    boolean isFinalizing();
 }
