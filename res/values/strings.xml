@@ -101,17 +101,13 @@
     <!-- Updating Steps -->
     <string name="updating_title">Updating your device...</string>
     <string name="updating_failed_title">Couldn\'t update</string>
-    <string name="updating_step_downloading_title">Step 1 of 2 - Downloading</string>
-    <string name="updating_step_downloading_paused_title">Step 1 of 2 - Download paused</string>
+    <string name="updating_step_downloading_title">Step 1 of 3 - Downloading</string>
+    <string name="updating_step_downloading_paused_title">Step 1 of 3 - Download paused</string>
     <string name="updating_step_downloading_verify_title">Step 1 of 3 - Downloading</string>
-    <string name="updating_step_downloading_paused_verify_title">Step 1 of 3 - Download paused</string>
-    <string name="updating_step_verifying_title">Step 2 of 3 - Verifying</string>
-    <string name="updating_step_installing_title">Step 2 of 2 - Installing</string>
-    <string name="updating_step_installing_paused_title">Step 2 of 2 - Installation paused</string>
-    <string name="updating_step_installing_finalizing_title">Step 2 of 2 - Finalizing</string>
-    <string name="updating_step_installing_verify_title">Step 3 of 3 - Installing</string>
-    <string name="updating_step_installing_paused_verify_title">Step 3 of 3 - Installation paused</string>
-    <string name="updating_step_installing_finalizing_verify_title">Step 3 of 3 - Finalizing</string>
+    <string name="updating_step_verifying_title">Step 1 of 3 - Verifying</string>
+    <string name="updating_step_installing_title">Step 2 of 3 - Installing</string>
+    <string name="updating_step_installing_paused_title">Step 2 of 3 - Installation paused</string>
+    <string name="updating_step_installing_finalizing_title">Step 3 of 3 - Finalizing</string>
     <string name="updating_step_installed_title">Restart to finish the update</string>
 
     <!-- Update starting -->

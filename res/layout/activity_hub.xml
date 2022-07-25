@@ -45,15 +45,40 @@
             android:gravity="center_horizontal"
             android:visibility="gone" />
 
-        <ProgressBar
-            android:id="@+id/system_update_progress"
-            style="@style/Widget.Hub.ProgressBar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="24dp"
-            android:visibility="gone" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ProgressBar
+                android:id="@+id/system_update_download_progress"
+                style="@style/Widget.Hub.ProgressBar"
+                android:layout_width="122dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="4dp"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/system_update_install_progress"
+                style="@style/Widget.Hub.ProgressBar"
+                android:layout_width="122dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="4dp"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/system_update_finalize_progress"
+                style="@style/Widget.Hub.ProgressBar"
+                android:layout_width="122dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="24dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/header_system_update_step"
@@ -61,6 +86,23 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:gravity="center_horizontal"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="360dp"
+        android:layout_height="360dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:id="@+id/system_update_progress"
+            style="@style/Widget.Hub.ProgressBar.Circular"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top|center_vertical|center_horizontal|center"
             android:visibility="gone" />
     </LinearLayout>
 
