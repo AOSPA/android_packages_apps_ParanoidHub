@@ -67,8 +67,13 @@ public class Version {
             return true;
         }
 
+        if (isAndroidUpgrade()) {
+            Log.d(TAG, mName + " is available for upgrade");
+            return true;
+        }
+
         if (isNewUpdate()) {
-            if (isBetaUpdate() && !mAllowBetaUpdates) {
+            if (isBetaUpdate() && !mAllowBetaUpdates && !getBuildType().equals(TYPE_BETA)) {
                 Log.d(TAG, mName + " is a beta but the user is not opted in");
                 return false;
             }
@@ -93,6 +98,11 @@ public class Version {
         return mAllowDowngrading && 
                 Float.parseFloat(mVersionNumber) < Float.parseFloat(getMinor())
                 && mTimestamp < getCurrentTimestamp();
+    }
+
+    public boolean isAndroidUpgrade() {
+        return (Float.parseFloat(mAndroidVersion) > getAndroidVersion() && mBuildType.equals(getBuildType())) 
+                || (Float.parseFloat(mAndroidVersion) > getAndroidVersion() && !mBuildType.equals(getBuildType()) && mAllowBetaUpdates);
     }
 
     public static float getAndroidVersion() {
@@ -126,5 +136,9 @@ public class Version {
 
     public boolean isBetaUpdate() {
         return mBuildType.equals(TYPE_BETA);
+    }
+
+    public boolean isReleaseUpdate() {
+        return mBuildType.equals(TYPE_RELEASE);
     }
 }
