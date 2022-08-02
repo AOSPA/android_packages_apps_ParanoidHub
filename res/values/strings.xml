@@ -92,7 +92,7 @@
     <string name="update_found_warning_and_desc">Downloading updates over a cellular network or while roaming may cause additional charges. \n\nThis update requires your device to restart</string>
     <string name="update_found_notification_title">System update available</string>
     <string name="update_found_notification_text">Paranoid Android %1$s %2$s</string>
-    <string name="update_found_notification_text_beta">Paranoid Android %1$s %2$s Beta</string>
+    <string name="update_found_notification_text_no_release">Paranoid Android %1$s Beta %2$s</string>
     <string name="update_on_mobile_data_title">Warning</string>
     <string name="update_on_mobile_data_message">You\'re about to download an update package using mobile data which is likely going to cause high data usage. Would you like to proceed?</string>
     <string name="update_found_snack">New updates found</string>

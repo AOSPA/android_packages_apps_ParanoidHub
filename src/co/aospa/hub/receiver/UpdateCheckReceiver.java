@@ -95,12 +95,12 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
 
     private static void showNotification(Context context, Update update) {
         Version version = new Version(context, update);
-        boolean isBetaUpdate = version.isBetaUpdate();
+        boolean isReleaseUpdate = version.isReleaseUpdate();
         Intent notificationIntent = new Intent(context, HubActivity.class);
         PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        String buildInfo = String.format(isBetaUpdate ?
-                context.getResources().getString(R.string.update_found_notification_text_beta) :
+        String buildInfo = String.format(!isReleaseUpdate ?
+                context.getResources().getString(R.string.update_found_notification_text_no_release) :
                 context.getResources().getString(R.string.update_found_notification_text),
                 update.getVersion(), update.getVersionNumber());
         NotificationContractor contractor = new NotificationContractor(context);
