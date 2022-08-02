@@ -67,14 +67,31 @@ public class Version {
             return true;
         }
 
-        if (isNewUpdate()) {
-            if (isTestersUpdate() && !mAllowTestersUpdates) {
-                Log.d(TAG, mName + " is a testers update but the user is not opted in");
-                return false;
-            }
-            Log.d(TAG, mName + " is available for update");
+        if (isAndroidUpgrade()) {
+            Log.d(TAG, mName + " is available for upgrade");
             return true;
         }
+
+        // IF SAME TYPE UPDATE DIRECTLY
+        if (isSameBuildType()) return isNewUpdate();
+
+        // IF IT'S ALPHA OR BETA BUT WE DON'T HAVE THE TOGGLE ENABLED DON'T UPDATE
+        // THIS AVOID FLASHING ALPHAS OVER BETAS AND OTHERWISE.
+        if (isTestersUpdate() && !mAllowTestersUpdates) {
+            Log.d(TAG, mName + " is a testers update but the user is not opted in");
+            return false;
+        }
+
+        // IF WE ARE ON A RELEASE BUILD, THE TOGGLE IS ENABLED AND IS AN ALPHA OR BETA THEN UPDATE.
+        if (isTestersUpdate() && mAllowTestersUpdates && getBuildType().equals(TYPE_RELEASE)) {
+            return isNewUpdate();
+        }
+
+        // IF THE NEXT BUILD IS STABLE AND WE HAVE THE TOGGLE DISABLED THEN FLASH IT.
+        if (!isTestersUpdate() && !mAllowTestersUpdates) {
+            return true;
+        }
+    
         Log.d(TAG, mName + " Version: " + mVersion + " " + mVersionNumber
                 + " Build: " + mTimestamp
                 + " is older than current Paranoid Android version");
@@ -84,8 +101,6 @@ public class Version {
     public boolean isNewUpdate() {
         if (Float.parseFloat(mAndroidVersion) < getAndroidVersion()) return false;
 
-        if (!mBuildType.equals(getBuildType())) return false;
-
         return (Float.parseFloat(mVersionNumber) > Float.parseFloat(getMinor()) || (mTimestamp > getCurrentTimestamp()));
     }
 
@@ -93,6 +108,11 @@ public class Version {
         return mAllowDowngrading && 
                 Float.parseFloat(mVersionNumber) < Float.parseFloat(getMinor())
                 && mTimestamp < getCurrentTimestamp();
+    }
+
+    public boolean isAndroidUpgrade() {
+        return (Float.parseFloat(mAndroidVersion) > getAndroidVersion() && mBuildType.equals(getBuildType()))
+                || (Float.parseFloat(mAndroidVersion) > getAndroidVersion() && !mBuildType.equals(getBuildType()) && mAllowTestersUpdates);
     }
 
     public static float getAndroidVersion() {
@@ -126,5 +146,13 @@ public class Version {
 
     public boolean isTestersUpdate() {
         return mBuildType.equals(TYPE_ALPHA) || mBuildType.equals(TYPE_BETA);
+    }
+
+    public boolean isReleaseUpdate() {
+        return mBuildType.equals(TYPE_RELEASE);
+    }
+
+    public boolean isSameBuildType() {
+        return mBuildType.equals(getBuildType());
     }
 }
