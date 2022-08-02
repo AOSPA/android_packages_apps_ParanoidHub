@@ -21,6 +21,7 @@ public class UpdateBase implements UpdateBaseInfo {
     private String mDownloadUrl;
     private String mDownloadId;
     private long mTimestamp;
+    private String mAndroidVersion;
     private String mVersion;
     private String mVersionNumber;
     private String mBuildType;
@@ -34,6 +35,7 @@ public class UpdateBase implements UpdateBaseInfo {
         mDownloadUrl = update.getDownloadUrl();
         mDownloadId = update.getDownloadId();
         mTimestamp = update.getTimestamp();
+        mAndroidVersion = update.getAndroidVersion();
         mVersion = update.getVersion();
         mVersionNumber = update.getVersionNumber();
         mBuildType = update.getBuildType();
@@ -65,6 +67,15 @@ public class UpdateBase implements UpdateBaseInfo {
 
     public void setTimestamp(long timestamp) {
         mTimestamp = timestamp;
+    }
+
+    @Override
+    public String getAndroidVersion() {
+        return mAndroidVersion;
+    }
+
+    public void setAndroidVersion(String androidVersion) {
+        mAndroidVersion = androidVersion;
     }
 
     @Override
