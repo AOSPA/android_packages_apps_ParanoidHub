@@ -46,6 +46,7 @@ public class UpdateBuilder {
     private static UpdateInfo buildUpdate(Context context, JSONObject object) throws JSONException {
         Update update = new Update(context);
         update.setName(object.getString("filename"));
+        update.setAndroidVersion(object.getString("android_version"));
         update.setVersion(object.getString("version"));
         update.setVersionNumber(object.getString("number"));
         update.setBuildType(object.getString("romtype"));
@@ -65,6 +66,7 @@ public class UpdateBuilder {
 
     private static Changelog buildChangelog(JSONObject object) throws JSONException {
         Changelog changelog = new Changelog();
+        changelog.setAndroidVersion(object.getString("android_version"));
         changelog.setVersion(object.getString("version"));
         changelog.setVersionNumber(object.getString("number"));
         changelog.setBuildType(object.getString("romtype"));
