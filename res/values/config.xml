@@ -22,7 +22,7 @@
     <bool name="config_autoDeleteUpdatesDefault">true</bool>
 
     <!-- Speeds up installation on A/B devices by default -->
-    <bool name="config_abPerformanceModeDefault">false</bool>
+    <bool name="config_abPerformanceModeDefault">true</bool>
 
     <!-- Allows downgrading the older system versions -->
     <bool name="config_allowDowngradingDefault">false</bool>
