@@ -67,7 +67,7 @@
     <string name="update_found_warning_and_desc">La descarga de actualizaciones a través de una red celular o en itinerancia puede causar cargos adicionales. \n\nEsta actualización requiere que su dispositivo se reinicie</string>
     <string name="update_found_notification_title">Actualización del sistema disponible</string>
     <string name="update_found_notification_text">Paranoid Android %1$s %2$s</string>
-    <string name="update_found_notification_text_beta">Paranoid Android %1$s %2$s Beta</string>
+    <string name="update_found_notification_text_no_release">Paranoid Android %1$s Beta %2$s</string>
     <string name="update_on_mobile_data_title">Advertencia</string>
     <string name="update_on_mobile_data_message">Está a punto de descargar un paquete de actualización utilizando datos móviles que probablemente causará un alto uso de datos. ¿Te gustaría continuar?</string>
     <string name="update_found_snack">Nuevas actualizaciones encontradas</string>
