@@ -17,6 +17,7 @@ package co.aospa.hub.model;
 
 public class Changelog {
 
+    private String mAndroidVersion;
     private String mVersion;
     private String mVersionNumber;
     private String mBuildType;
@@ -26,6 +27,8 @@ public class Changelog {
 
     public Changelog() {
     }
+
+    public void setAndroidVersion(String androidVersion) {mAndroidVersion = androidVersion;}
 
     public void setVersion(String version) {mVersion = version;}
 
