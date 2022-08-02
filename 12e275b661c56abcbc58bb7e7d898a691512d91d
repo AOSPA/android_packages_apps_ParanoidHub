@@ -16,6 +16,24 @@
       "message": "don\u0027t enable performance mode by default. we might have A only devices too.",
       "revId": "12e275b661c56abcbc58bb7e7d898a691512d91d",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "551ff251_f171321d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000055
+      },
+      "writtenOn": "2022-08-02T21:16:27Z",
+      "side": 1,
+      "message": "then we disable on those\n\nbut there are way more A/B devices than A-only",
+      "parentUuid": "043fa200_dafd04f4",
+      "revId": "12e275b661c56abcbc58bb7e7d898a691512d91d",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     }
   ]
 }
