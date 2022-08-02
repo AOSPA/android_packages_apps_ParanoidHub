@@ -20,7 +20,9 @@ public interface UpdateBaseInfo {
 
     String getDownloadId();
 
-    long getTimestamp();
+    String getTimestamp();
+
+    String getAndroidVersion();
 
     String getVersion();
 
