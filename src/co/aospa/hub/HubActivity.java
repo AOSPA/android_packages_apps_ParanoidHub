@@ -479,10 +479,15 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             mVersionContainer.setVisibility(View.VISIBLE);
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             long lastChecked = prefs.getLong(Constants.PREF_LAST_UPDATE_CHECK, -1) / 1000;
+            boolean isReleaseUpdate = Version.isReleaseUpdate();
             mVersionHeader.setTypeface(mVersionHeader.getTypeface(), Typeface.NORMAL);
             mVersionHeader.setText(String.format(
-                    getResources().getString(R.string.no_updates_text), 
-                    Version.getMajor(), Version.getMinor(), 
+                    !isReleaseUpdate ?
+                    getResources().getString(R.string.no_updates_text_no_release),
+                    Version.getMajor(), Version.getBuildType(), Version.getMinor(),
+                    StringGenerator.getTimeLocalized(this, lastChecked) :
+                    getResources().getString(R.string.no_updates_text),
+                    Version.getMajor(), Version.getMinor(),
                     StringGenerator.getTimeLocalized(this, lastChecked)));
         }
     }
