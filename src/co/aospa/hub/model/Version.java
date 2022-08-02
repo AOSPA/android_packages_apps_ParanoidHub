@@ -53,6 +53,7 @@ public class Version {
         mAllowDowngrading = prefs.getBoolean(Constants.PREF_ALLOW_DOWNGRADING, 
                 context.getResources().getBoolean(R.bool.config_allowDowngradingDefault));
         mName = update.getName();
+        mAndroidVersion = update.getAndroidVersion();
         mVersion = update.getVersion();
         mVersionNumber = update.getVersionNumber();
         mBuildType = update.getBuildType();
@@ -65,8 +66,13 @@ public class Version {
             return true;
         }
 
+        if (isAndroidUpgrade()) {
+            Log.d(TAG, mName + " is available for upgrade");
+            return true;
+        }
+
         if (isNewUpdate()) {
-            if (isBetaUpdate() && !mAllowBetaUpdates) {
+            if (isBetaUpdate() && !mAllowBetaUpdates && getBuildType().!equals(TYPE_BETA)) {
                 Log.d(TAG, mName + " is a beta but the user is not opted in");
                 return false;
             }
@@ -80,17 +86,25 @@ public class Version {
     }
 
     public boolean isNewUpdate() {
-        if (Float.parseFloat(mVersionNumber) > Float.parseFloat(getMinor())) {
-            return true;
-        }
-        // If the version numbers are the same, but the timestamps are different, trigger an update anyway
-        return Float.parseFloat(mVersionNumber) == (Float.parseFloat(getMinor())) && mTimestamp > getCurrentTimestamp();
+        if (mAndroidVersion < getAndroidVersion()) return false;
+
+        if (mBuildType.!equals(getBuildType())) return false;
+
+        return Float.parseFloat(mVersionNumber) > Float.parseFloat(getMinor() || mTimestamp > getCurrentTimestamp());
     }
 
     public boolean isDowngrade() {
         return mAllowDowngrading && 
                 Float.parseFloat(mVersionNumber) < Float.parseFloat(getMinor())
                 && mTimestamp < getCurrentTimestamp();
+    }
+
+    public boolean isAndroidUpgrade() {
+        return (mAndroidVersion > getAndroidVersion() && mBuildType.equals(getBuildType())) || (mAndroidVersion > getAndroidVersion() && mBuildType.!equals(getBuildType()) && mAllowBetaUpdates);
+    }
+
+    public static String getAndroidVersion() {
+        return SystemProperties.get(Constants.PROP_VERSION_ANDROID);
     }
 
     public static String getMajor() {
@@ -102,10 +116,7 @@ public class Version {
     }
 
     public static long getCurrentTimestamp() {
-        String version = SystemProperties.get(Constants.PROP_VERSION);
-        String[] split = version.split("-");
-        String date = split[4];
-        return Long.parseLong(date);
+        return SystemProperties.get(Constants.PROP_BUILD_DATE);
     }
 
     public static String getBuildType() {
