@@ -66,31 +66,25 @@ public class Version {
         }
 
         if (isNewUpdate()) {
-            if (isBetaUpdate() && !mAllowBetaUpdates) {
-                Log.d(TAG, mName + " is a beta but the user is not opted in");
-                return false;
-            }
             Log.d(TAG, mName + " is available for update");
             return true;
         }
         Log.d(TAG, mName + " Version: " + mVersion + " " + mVersionNumber
-                + " Build: " + mTimestamp
                 + " is older than current Paranoid Android version");
         return false;
     }
 
     public boolean isNewUpdate() {
-        if (Float.parseFloat(mVersionNumber) > Float.parseFloat(getMinor())) {
-            return true;
-        }
-        // If the version numbers are the same, but the timestamps are different, trigger an update anyway
-        return Float.parseFloat(mVersionNumber) == (Float.parseFloat(getMinor())) && mTimestamp > getCurrentTimestamp();
+        if (isBetaUpdate() && getBuildType().!equals(TYPE_BETA) && mAllowBetaUpdates && mTimestamp > getCurrentTimestamp()) return true;
+
+        if (mBuildType.!equals(getBuildType())) return false;
+
+        return Float.parseFloat(mVersionNumber) > Float.parseFloat(getMinor());
     }
 
     public boolean isDowngrade() {
         return mAllowDowngrading && 
-                Float.parseFloat(mVersionNumber) < Float.parseFloat(getMinor())
-                && mTimestamp < getCurrentTimestamp();
+                Float.parseFloat(mVersionNumber) < Float.parseFloat(getMinor());
     }
 
     public static String getMajor() {
@@ -102,10 +96,7 @@ public class Version {
     }
 
     public static long getCurrentTimestamp() {
-        String version = SystemProperties.get(Constants.PROP_VERSION);
-        String[] split = version.split("-");
-        String date = split[4];
-        return Long.parseLong(date);
+        return SystemProperties.get(Constants.PROP_BUILD_DATE);
     }
 
     public static String getBuildType() {

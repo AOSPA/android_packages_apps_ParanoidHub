@@ -49,7 +49,7 @@ public class UpdateBuilder {
         update.setVersion(object.getString("version"));
         update.setVersionNumber(object.getString("number"));
         update.setBuildType(object.getString("romtype"));
-        update.setTimestamp(object.getLong("datetime"));
+        update.setTimestamp(object.getString("datetime"));
         update.setFileSize(object.getLong("size"));
         update.setDownloadUrl(object.getString("url"));
         update.setDownloadId(object.getString("id"));
