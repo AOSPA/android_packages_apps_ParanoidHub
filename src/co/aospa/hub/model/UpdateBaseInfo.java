@@ -22,6 +22,8 @@ public interface UpdateBaseInfo {
 
     long getTimestamp();
 
+    String getAndroidVersion();
+
     String getVersion();
 
     String getVersionNumber();
