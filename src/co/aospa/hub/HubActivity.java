@@ -97,7 +97,9 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     private static final int CHECK_LOCAL = 1;
 
     private boolean mRefreshUi = false;
-    private int mProgress = -1;
+    private int mProgressDownload = -1;
+    private int mProgressInstall = -1;
+    private int mProgressFinalize = -1;
     private String mDownloadId;
     private boolean mIsLocalUpdate = false;
 
@@ -109,6 +111,9 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     private Button mButton;
     private ImageView mInfoIcon;
     private ProgressBar mProgressBar;
+    private ProgressBar mProgressBarDownload;
+    private ProgressBar mProgressBarInstall;
+    private ProgressBar mProgressBarFinalize;
     private View mVersionContainer;
     private TextView mVersionHeader;
     private TextView mHeaderStatus;
@@ -129,6 +134,9 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         mVersionHeader = findViewById(R.id.system_update_version_header);
         mHeaderStatus = findViewById(R.id.header_system_update_status);
         mProgressBar = findViewById(R.id.system_update_progress);
+        mProgressBarDownload = findViewById(R.id.system_update_download_progress);
+        mProgressBarInstall = findViewById(R.id.system_update_install_progress);
+        mProgressBarFinalize = findViewById(R.id.system_update_finalize_progress);
         mUpdateDescription = findViewById(R.id.system_update_desc);
         mUpdateSize = findViewById(R.id.system_update_size);
         mHeaderStatusMessage = findViewById(R.id.header_system_update_status_message);
@@ -335,9 +343,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case PAUSED:
                 mHeaderStatus.setText(getResources().getString(R.string.downloading_paused_title));
-                mHeaderStatusStep.setText(!Version.isBuild(TYPE_RELEASE) ? 
-                        getResources().getString(R.string.updating_step_downloading_paused_title) :
-                        getResources().getString(R.string.updating_step_downloading_paused_verify_title));
+                mHeaderStatusStep.setText(getResources().getString(R.string.updating_step_downloading_paused_title));
                 mButton.setText(R.string.button_resume_update);
                 mButton.setVisibility(View.VISIBLE);
                 break;
@@ -394,13 +400,9 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case INSTALLING:
                 mHeaderStatus.setText(getResources().getString(R.string.installing_title));
-                mHeaderStatusStep.setText(!Version.isBuild(TYPE_RELEASE) ?
-                        getResources().getString(update.getFinalizing() ?
+                mHeaderStatusStep.setText(getResources().getString(update.isFinalizing() ?
                         R.string.updating_step_installing_finalizing_title :
-                        R.string.updating_step_installing_title) :
-                        getResources().getString(update.getFinalizing() ?
-                        R.string.updating_step_installing_finalizing_verify_title :
-                        R.string.updating_step_installing_verify_title));
+                        R.string.updating_step_installing_title));
                 mButton.setText(R.string.button_pause_update);
                 mButton.setVisibility(View.VISIBLE);
                 mInfoDescription.setText(getResources().getString(R.string.installing_warning_and_desc_ab));
@@ -408,9 +410,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case INSTALLATION_SUSPENDED:
                 mHeaderStatus.setText(getResources().getString(R.string.installing_title));
-                mHeaderStatusStep.setText(!Version.isBuild(TYPE_RELEASE) ? 
-                        getResources().getString(R.string.updating_step_installing_paused_title) :
-                        getResources().getString(R.string.updating_step_installing_paused_verify_title));
+                mHeaderStatusStep.setText(getResources().getString(R.string.updating_step_installing_paused_title));
                 mButton.setText(R.string.button_resume_update);
                 mButton.setVisibility(View.VISIBLE);
                 mInfoDescription.setText(getResources().getString(R.string.installing_suspended_warning_and_desc_ab));
@@ -488,24 +488,42 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void updateProgressForState(Update update, int state) {
-        if (state == HubController.STATE_DOWNLOAD_PROGRESS 
-                || state == HubController.STATE_INSTALL_PROGRESS) {
-            mProgress = state == HubController.STATE_INSTALL_PROGRESS 
-                    ? update.getInstallProgress() : update.getProgress();
+        if (update != null) {
+            if (state == HubController.STATE_INSTALL_PROGRESS) {
+                if (update.isFinalizing()) {
+                    mProgressFinalize = update.getInstallProgress();
+                } else {
+                    mProgressInstall = update.getInstallProgress();
+                }
+            } else if (state == HubController.STATE_DOWNLOAD_PROGRESS) {
+                mProgressDownload = update.getProgress();
+            } else {
+                updateProgress(update, CHECK_NONE);
+            }
         }
-        updateProgress(update, CHECK_NONE);
     }
 
     private void updateProgress(Update update, int checkForUpdates) {
         boolean isChecking = (checkForUpdates == CHECK_LOCAL || checkForUpdates == CHECK_NORMAL);
-        boolean progressAllowed = update != null && (update.getStatus() == DOWNLOADING 
-                || update.getStatus() == STARTING || update.getStatus() == PAUSED 
-                || update.getStatus() == VERIFYING || update.getStatus() == PREPARING
-                || update.getStatus() == INSTALLING);
-        mProgressBar.setVisibility((isChecking || progressAllowed) ? View.VISIBLE : View.GONE);
-        if (mProgress != -1) {
-            mProgressBar.setIndeterminate(false);
-            mProgressBar.setProgress(mProgress, true);
+        boolean isStarting = (update != null && update.getStatus() == STARTING);
+        boolean progressAllowed = update != null && (update.getStatus() == DOWNLOADING
+                ||update.getStatus() == PAUSED || update.getStatus() == VERIFYING
+                        || update.getStatus() == PREPARING
+                        || update.getStatus() == INSTALLING);
+        mProgressBar.setVisibility((isChecking || isStarting) ? View.VISIBLE : View.GONE);
+        mProgressBarDownload.setVisibility(progressAllowed ? View.VISIBLE : View.GONE);
+        mProgressBarInstall.setVisibility(progressAllowed ? View.VISIBLE : View.GONE);
+        mProgressBarFinalize.setVisibility(progressAllowed ? View.VISIBLE : View.GONE);
+        if (mProgressDownload != -1) {
+            mProgressBarDownload.setProgress(mProgressDownload, true);
+        }
+
+        if (mProgressInstall != -1) {
+            mProgressBarInstall.setProgress(mProgressInstall, true);
+        }
+
+        if (mProgressFinalize != -1) {
+            mProgressBarFinalize.setProgress(mProgressFinalize, true);
         }
     }
 
