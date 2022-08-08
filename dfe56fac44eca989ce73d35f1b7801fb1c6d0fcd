@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8a17015_0c7a5bef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-08-08T16:57:01Z",
+      "side": 1,
+      "message": "This commit should adding the Android version to the mix only, A separate commit can be made for performance mode. The other changes are up for debate",
+      "revId": "dfe56fac44eca989ce73d35f1b7801fb1c6d0fcd",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dde31686_f1ac4b82",
