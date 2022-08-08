@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dde31686_f1ac4b82",
+        "filename": "res/values-es/strings.xml",
+        "patchSetId": 10
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-08-08T16:54:52Z",
+      "side": 1,
+      "message": "I still don\u0027t see the reason to change strings, It\u0027s a beta string, just leave it as _beta",
+      "revId": "dfe56fac44eca989ce73d35f1b7801fb1c6d0fcd",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d641184_05535f69",
+        "filename": "res/values/strings.xml",
+        "patchSetId": 10
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-08-08T16:54:52Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "dfe56fac44eca989ce73d35f1b7801fb1c6d0fcd",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "751733c0_14668caa",
+        "filename": "src/co/aospa/hub/model/Version.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-08-08T16:54:52Z",
+      "side": 1,
+      "message": "This is gonna break upgrading Android versions. If we\u0027re on Sapphire (Stable) and release a T Beta, The current build type is gonna be official, while the new is Beta. So this is gonna prevent Alpha/Official \u003e Beta",
+      "revId": "dfe56fac44eca989ce73d35f1b7801fb1c6d0fcd",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "899d5e08_2a4e51db",
+        "filename": "src/co/aospa/hub/model/Version.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-08-08T16:54:52Z",
+      "side": 1,
+      "message": "I\u0027m not understanding this, the first condition is fine without the rest",
+      "revId": "dfe56fac44eca989ce73d35f1b7801fb1c6d0fcd",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53ef4270_260f7898",
+        "filename": "src/co/aospa/hub/receiver/UpdateCheckReceiver.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-08-08T16:54:52Z",
+      "side": 1,
+      "message": "Again, this change doesn\u0027t do anything. It\u0027s just name changes and reversing the condition. Should be fine how it was",
+      "revId": "dfe56fac44eca989ce73d35f1b7801fb1c6d0fcd",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    }
+  ]
+}
