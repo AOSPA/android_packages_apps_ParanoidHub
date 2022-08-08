@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8cae92e3_07fa083f",
+        "filename": "src/co/aospa/hub/model/Version.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-08-08T16:55:54Z",
+      "side": 1,
+      "message": "\u003e This is gonna break upgrading Android versions. If we\u0027re on Sapphire (Stable) and release a T Beta, The current build type is gonna be official, while the new is Beta. So this is gonna prevent Alpha/Official \u003e Beta\n\nRelease* not Official I meant",
+      "parentUuid": "751733c0_14668caa",
+      "revId": "dfe56fac44eca989ce73d35f1b7801fb1c6d0fcd",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "899d5e08_2a4e51db",
         "filename": "src/co/aospa/hub/model/Version.java",
         "patchSetId": 10
