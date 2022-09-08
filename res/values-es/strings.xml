@@ -47,6 +47,7 @@
     <!-- Up To Date -->
     <string name="no_updates_title">Tu sistema está actualizado</string>
     <string name="no_updates_text">Versión de Paranoid Android: %1$s %2$s \nactualización de seguridad de Android: %3$s \n\nÚltima comprobación: %4$s</string>
+    <string name="no_updates_text_no_release">Versión de Paranoid Android: %1$s %2$s %3$s \nactualización de seguridad de Android: %4$s \n\nÚltima comprobación: %5$s</string>
     <string name="no_updates_last_checked">Última comprobación: %1$s</string>
     <string name="no_updates_current_version">Versión: %1$s %2$s</string>
     <string name="no_updates_check_dialog_message">La búsqueda de actualizaciones requiere una conexión activa y el uso de datos. Si desea actualizar sin conexión, toque "Actualización local"</string>
