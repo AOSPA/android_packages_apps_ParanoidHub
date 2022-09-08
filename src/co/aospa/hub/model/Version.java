@@ -36,6 +36,7 @@ public class Version {
     public static final String TYPE_UNOFFICIAL = "Unofficial";
 
     private String mName;
+    private String mAndroidVersion;
     private String mVersion;
     private String mVersionNumber;
     private String mBuildType;
@@ -53,6 +54,7 @@ public class Version {
         mAllowDowngrading = prefs.getBoolean(Constants.PREF_ALLOW_DOWNGRADING, 
                 context.getResources().getBoolean(R.bool.config_allowDowngradingDefault));
         mName = update.getName();
+        mAndroidVersion = update.getAndroidVersion();
         mVersion = update.getVersion();
         mVersionNumber = update.getVersionNumber();
         mBuildType = update.getBuildType();
@@ -80,17 +82,21 @@ public class Version {
     }
 
     public boolean isNewUpdate() {
-        if (Float.parseFloat(mVersionNumber) > Float.parseFloat(getMinor())) {
-            return true;
-        }
-        // If the version numbers are the same, but the timestamps are different, trigger an update anyway
-        return Float.parseFloat(mVersionNumber) == (Float.parseFloat(getMinor())) && mTimestamp > getCurrentTimestamp();
+        if (Float.parseFloat(mAndroidVersion) < getAndroidVersion()) return false;
+
+        if (!mBuildType.equals(getBuildType())) return false;
+
+        return (Float.parseFloat(mVersionNumber) > Float.parseFloat(getMinor()) || (mTimestamp > getCurrentTimestamp()));
     }
 
     public boolean isDowngrade() {
         return mAllowDowngrading && 
                 Float.parseFloat(mVersionNumber) < Float.parseFloat(getMinor())
                 && mTimestamp < getCurrentTimestamp();
+    }
+
+    public static float getAndroidVersion() {
+        return Float.parseFloat(SystemProperties.get(Constants.PROP_ANDROID_VERSION));
     }
 
     public static String getMajor() {
