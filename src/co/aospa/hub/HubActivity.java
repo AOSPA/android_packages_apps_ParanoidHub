@@ -480,11 +480,20 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             mVersionContainer.setVisibility(View.VISIBLE);
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             long lastChecked = prefs.getLong(Constants.PREF_LAST_UPDATE_CHECK, -1) / 1000;
+            Version version = new Version(getApplicationContext(), update);
+            boolean isTestersUpdate = version.isTestersUpdate();
             mVersionHeader.setTypeface(mVersionHeader.getTypeface(), Typeface.NORMAL);
-            mVersionHeader.setText(String.format(
-                    getResources().getString(R.string.no_updates_text), 
-                    Version.getMajor(), Version.getMinor(),
-                    getAndroidSpl(), StringGenerator.getTimeLocalized(this, lastChecked)));
+            mVersionHeader.setText(
+                isTestersUpdate ?
+                String.format(
+                getResources().getString(R.string.no_updates_text_no_release),
+                Version.getMajor(), Version.getBuildType(), Version.getMinor(),
+                getAndroidSpl(), StringGenerator.getTimeLocalized(this, lastChecked)) :
+                String.format(
+                getResources().getString(R.string.no_updates_text_no_release),
+                Version.getMajor(), Version.getMinor(),
+                getAndroidSpl(), StringGenerator.getTimeLocalized(this, lastChecked)
+            ));
         }
     }
 
