@@ -26,8 +26,6 @@ public class Configuration {
 
     private boolean mEnabled;
     private boolean mWhitelistOnly;
-    private String mChangelog;
-    private String mBetaChangelog;
 
     public Configuration() {
     }
