@@ -64,7 +64,6 @@
     <string name="no_updates_title">Your system is up to date</string>
     <string name="no_updates_text">Paranoid Android version: %1$s %2$s \nAndroid security update: %3$s \n\nLast successful check for update: %4$s</string>
     <string name="no_updates_current_version">Version: %1$s %2$s</string>
-    <string name="no_updates_found_snack">No new updates found</string>
     <string name="no_updates_check_dialog_message">Checking for updates require an active connection and usage of data. If you want to update offline, tap "Local upgrade"</string>
     <string name="no_updates_check_dialog_button_text">Continue</string>
     <string name="no_updates_check_local_dialog_button_text">Local upgrade</string>

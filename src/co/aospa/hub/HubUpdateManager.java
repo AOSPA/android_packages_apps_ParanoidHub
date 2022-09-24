@@ -195,9 +195,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         if (update != null) {
             boolean mIsUpdateAvailable = mController.isUpdateAvailable(update, mRolloutContractor.isReady(), false);
             if (mUserInitiated && !mIsUpdateAvailable) {
-                if (mHub != null) {
-                    mMainThread.post(() -> mHub.reportMessage(R.string.no_updates_found_snack));
-                }
+                Log.d(TAG, "No update available");
             }
         } else {
             mController.notifyUpdateStatusChanged(null, HubController.STATE_STATUS_CHANGED);
@@ -227,13 +225,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
             UpdateInfo localUpdate = controller.setUpdate(update);
             Log.d(TAG, "Checking if " + localUpdate.getName() + " is available for local upgrade");
             updateAvailable = mController.isUpdateAvailable(localUpdate, true, true);
-            if (!updateAvailable) {
-                if (mHub != null) {
-                    mMainThread.post(() -> mHub.reportMessage(R.string.no_updates_found_snack));
-                }
-            } else {
-                Log.d(TAG, "Local update: " + localUpdate.getName() + " is available");
-            }
+            if (updateAvailable) Log.d(TAG, "Local update: " + localUpdate.getName() + " is available");
         } else {
             Log.d(TAG, "No valid local update found");
             mController.notifyUpdateStatusChanged(null, HubController.STATE_STATUS_CHANGED);
@@ -250,9 +242,6 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         mController.notifyUpdateStatusChanged(null, HubController.STATE_STATUS_CHANGED);
         if (mHub != null && mUserInitiated) {
             mMainThread.post(() -> {
-                if (!cancelled) {
-                    mHub.reportMessage(R.string.no_updates_found_snack);
-                }
                 mHub.getProgressBar().setVisibility(View.GONE);
                 mHub.getProgressBar().setIndeterminate(false);
             });
