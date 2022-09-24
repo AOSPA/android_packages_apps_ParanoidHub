@@ -99,20 +99,22 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     }
 
     public void beginMatchMaker() {
-        if (mUserInitiated) {
-            if (mHub != null) {
-                mMainThread.post(() -> {
-                    mHub.getProgressBar().setVisibility(View.VISIBLE);
-                    mHub.getProgressBar().setIndeterminate(true);
-                });
-            }
-            if (!Utils.isNetworkAvailable(mContext)){
-                mThread.postDelayed(this::cancelUpdate, 2000);
-            }
-            mThread.postDelayed(() -> mConnector.start(), 5000);
-        } else {
-            mConnector.start();
+        if (mHub != null) {
+            mMainThread.post(this::updateUiForMatchMaker);
         }
+        if (!Utils.isNetworkAvailable(mContext)){
+            mThread.postDelayed(this::cancelUpdate, mUserInitiated ? 2000 : 200);
+        }
+        mThread.postDelayed(() -> mConnector.start(), mUserInitiated ? 5000 : 500);
+    }
+
+    private void updateUiForMatchMaker() {
+        mHub.getHeaderStatus().setVisibility(View.VISIBLE);
+        mHub.getHeaderStatus().setText(mContext.getResources().getString(R.string.update_checking_title));
+        mHub.getVersionHeader().setVisibility(View.GONE);
+        mHub.getButton().setVisibility(View.GONE);
+        mHub.getProgressBar().setVisibility(View.VISIBLE);
+        mHub.getProgressBar().setIndeterminate(true);
     }
 
     public void beginLocalMatchMaker() {
@@ -188,6 +190,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         UpdateInfo update = UpdateBuilder.matchMakeJson(mContext, json);
         if (mHub != null) {
             mMainThread.post(() -> {
+                mHub.getVersionHeader().setVisibility(View.VISIBLE);
                 mHub.getProgressBar().setVisibility(View.GONE);
                 mHub.getProgressBar().setIndeterminate(false);
             });
@@ -207,6 +210,7 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
         mController.notifyUpdateStatusChanged(null, HubController.STATE_STATUS_CHECK_FAILED);
         if (mHub != null) {
             mMainThread.post(() -> {
+                mHub.getVersionHeader().setVisibility(View.VISIBLE);
                 mHub.getProgressBar().setVisibility(View.GONE);
                 mHub.getProgressBar().setIndeterminate(false);
             });
@@ -240,8 +244,9 @@ public class HubUpdateManager implements ClientConnector.ConnectorListener {
     public void onClientStatusFailure(boolean cancelled) {
         Log.d(TAG, "Could not download updates");
         mController.notifyUpdateStatusChanged(null, HubController.STATE_STATUS_CHANGED);
-        if (mHub != null && mUserInitiated) {
+        if (mHub != null) {
             mMainThread.post(() -> {
+                mHub.getVersionHeader().setVisibility(View.VISIBLE);
                 mHub.getProgressBar().setVisibility(View.GONE);
                 mHub.getProgressBar().setIndeterminate(false);
             });

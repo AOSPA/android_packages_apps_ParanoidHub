@@ -507,8 +507,8 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     private void updateProgress(Update update, int checkForUpdates) {
         boolean isChecking = (checkForUpdates == CHECK_LOCAL || checkForUpdates == CHECK_NORMAL);
         boolean isStarting = (update != null && update.getStatus() == STARTING);
-        boolean progressAllowed = update != null && (update.getStatus() == DOWNLOADING
-                ||update.getStatus() == PAUSED || update.getStatus() == VERIFYING
+        boolean progressAllowed = update != null && mProgressBar.getVisibility() != View.VISIBLE
+                && (update.getStatus() == DOWNLOADING || update.getStatus() == PAUSED || update.getStatus() == VERIFYING
                         || update.getStatus() == PREPARING
                         || update.getStatus() == INSTALLING);
         mProgressBar.setVisibility((isChecking || isStarting) ? View.VISIBLE : View.GONE);
@@ -748,6 +748,18 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100));
         int required = getResources().getInteger(R.integer.battery_ok_percentage);
         return percent >= required;
+    }
+
+    public TextView getHeaderStatus() {
+        return mHeaderStatus;
+    }
+
+    public TextView getVersionHeader() {
+        return mVersionHeader;
+    }
+
+    public Button getButton() {
+        return mButton;
     }
 
     public ProgressBar getProgressBar() {
