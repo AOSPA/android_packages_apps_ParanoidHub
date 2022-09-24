@@ -38,7 +38,6 @@ import static co.aospa.hub.model.Version.TYPE_RELEASE;
 
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -54,7 +53,6 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
-import android.service.dreams.DreamService;
 import android.service.dreams.IDreamManager;
 import android.text.Html;
 import android.text.format.Formatter;
@@ -86,6 +84,9 @@ import co.aospa.hub.service.UpdateService;
 import co.aospa.hub.views.ChangelogDialog;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 public class HubActivity extends AppCompatActivity implements View.OnClickListener, StatusListener {
@@ -482,8 +483,8 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
             mVersionHeader.setTypeface(mVersionHeader.getTypeface(), Typeface.NORMAL);
             mVersionHeader.setText(String.format(
                     getResources().getString(R.string.no_updates_text), 
-                    Version.getMajor(), Version.getMinor(), 
-                    StringGenerator.getTimeLocalized(this, lastChecked)));
+                    Version.getMajor(), Version.getMinor(),
+                    getAndroidSpl(), StringGenerator.getTimeLocalized(this, lastChecked)));
         }
     }
 
@@ -713,6 +714,22 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
                 showDetailedChangelog(v, mManager.getChangelog());
             }
         }
+    }
+
+    private String getAndroidSpl() {
+        String dataIn = SystemProperties.get(Constants.PROP_ANDROID_SPL);
+        String dataOut;
+
+        SimpleDateFormat oldFormat = new SimpleDateFormat("yyyy-M-dd");
+        SimpleDateFormat newFormat = new SimpleDateFormat("MMMM d, yyyy");
+        Date date = null;
+        try {
+            date = oldFormat.parse(dataIn);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        dataOut = newFormat.format(Objects.requireNonNull(date));
+        return dataOut;
     }
 
     public void reportMessage(int message) {

@@ -66,5 +66,6 @@ public final class Constants {
     public static final String PROP_BUILD_TYPE = "ro.aospa.build.variant";
     public static final String PROP_DEVICE_MODEL = "ro.product.model";
     public static final String PROP_BUILD_DATE = "ro.build.date.utc";
+    public static final String PROP_ANDROID_SPL = "ro.build.version.security_patch";
     public static final String UNCRYPT_FILE_EXT = ".uncrypt";
 }
