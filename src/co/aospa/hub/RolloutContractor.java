@@ -227,7 +227,7 @@ public class RolloutContractor implements ClientConnector.ConnectorListener {
 
     public boolean isReady() {
         if (Version.isBuild(TYPE_ALPHA) || Version.isBuild(TYPE_UNOFFICIAL)) {
-            Log.d(TAG, "Staged rollouts are disabled on non official and non beta builds, marking as ready");
+            Log.d(TAG, "Staged rollouts are disabled on non official and non testers builds, marking as ready");
             return true;
         }
         if (Constants.IS_STAGED_ROLLOUT_ENABLED) {

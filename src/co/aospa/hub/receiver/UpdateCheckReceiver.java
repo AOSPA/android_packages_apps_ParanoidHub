@@ -22,13 +22,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import co.aospa.hub.HubActivity;
 import co.aospa.hub.HubUpdateManager;
 import co.aospa.hub.RolloutContractor;
 import co.aospa.hub.R;
+import co.aospa.hub.activities.OptInTestersActivity;
 import co.aospa.hub.download.ClientConnector;
 import co.aospa.hub.download.DownloadClient;
 import co.aospa.hub.misc.Constants;
@@ -67,6 +69,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
         }
         mRolloutContractor = new RolloutContractor(context);
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            Log.d(TAG, "onReceive: Boot completed");
             Utils.cleanupDownloadsDir(context);
             updateConfigurations();
             // Set a repeating alarm on boot to check for new updates once per day
@@ -91,18 +94,19 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
             return;
         }
         updateDeviceConfiguration();
+        updateTestersEligibility();
     }
 
-    private static void showNotification(Context context, Update update) {
+    private static void showUpdateNotification(Context context, Update update) {
         Version version = new Version(context, update);
-        boolean isBetaUpdate = version.isBetaUpdate();
+        boolean isTestersUpdate = version.isTestersUpdate();
         Intent notificationIntent = new Intent(context, HubActivity.class);
         PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        String buildInfo = String.format(isBetaUpdate ?
-                context.getResources().getString(R.string.update_found_notification_text_beta) :
-                context.getResources().getString(R.string.update_found_notification_text),
-                update.getVersion(), update.getVersionNumber());
+        String buildInfo = isTestersUpdate ? String.format(context.getResources().getString(R.string.update_found_notification_text_testers),
+                update.getVersion(), update.getVersionNumber(), update.getBuildType()) :
+                String.format(context.getResources().getString(R.string.update_found_notification_text),
+                        update.getVersion(), update.getVersionNumber());
         NotificationContractor contractor = new NotificationContractor(context);
         NotificationContract contract = contractor.create(NotificationContractor.NEW_UPDATES_NOTIFICATION_CHANNEL, true);
         contract.setTitle(context.getResources().getString(R.string.update_found_notification_title));
@@ -111,6 +115,24 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
         contract.setIcon(R.drawable.ic_system_update);
         contract.setColor(R.color.theme_accent);
         contract.setDismissible(false);
+        contract.setIntent(intent);
+        contractor.present(NotificationContractor.ID);
+    }
+
+    private void showTestersEnrollNotification(Context context) {
+        Intent notificationIntent = new Intent(context, OptInTestersActivity.class);
+        PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        String testersInfo = context.getResources().getString(R.string.testers_opt_in_enroll_notification_info);
+        NotificationContractor contractor = new NotificationContractor(context);
+        contractor.retract(NotificationContractor.ID);
+        NotificationContract contract = contractor.create(NotificationContractor.NEW_UPDATES_NOTIFICATION_CHANNEL, true);
+        contract.setTitle(context.getResources().getString(R.string.testers_opt_in_enroll_notification));
+        contract.setTextStyle(testersInfo);
+        contract.setText(testersInfo);
+        contract.setIcon(R.drawable.ic_system_update);
+        contract.setColor(R.color.theme_accent);
+        contract.setDismissible(true);
         contract.setIntent(intent);
         contractor.present(NotificationContractor.ID);
     }
@@ -183,6 +205,16 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
         mConnector.start();
     }
 
+    private void updateTestersEligibility() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        boolean isEnrolledInTesters = prefs.getBoolean(Constants.PREF_ALLOW_TESTERS_UPDATES, false);
+        Log.d("ParanoidHub", "Testers eligibility: " + isEnrolledInTesters);
+        if (!isEnrolledInTesters) {
+            Log.d("ParanoidHub", "Not enrolled in testers, show notification");
+            showTestersEnrollNotification(mContext);
+        }
+    }
+
     @Override
     public void onClientStatusFailure(boolean cancelled) {
         Log.e(TAG, "Could not download updates list, scheduling new check");
@@ -198,7 +230,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver implements ClientConn
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
             if (oldFile.exists() && UpdateBuilder.isNewUpdate(mContext, oldFile, newFile, mRolloutContractor.isReady())) {
                 Update update = UpdateBuilder.getUpdate();
-                showNotification(mContext, update);
+                showUpdateNotification(mContext, update);
                 updateRepeatingUpdatesCheck(mContext);
             }
             newFile.renameTo(oldFile);

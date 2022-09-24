@@ -79,9 +79,9 @@
     <string name="update_found_title_local">Local update available</string>
     <string name="update_found_subtitle">%1$s %2$s</string>
     <string name="update_found_changelog_header"><![CDATA[%1$s %2$s %3$s]]></string>
-    <string name="update_found_changelog_header_beta"><![CDATA[%1$s %2$s %3$s %4$s]]></string>
+    <string name="update_found_changelog_header_testers"><![CDATA[%1$s %2$s %3$s %4$s]]></string>
     <string name="update_found_changelog"><![CDATA[%1$s]]></string>
-    <string name="update_found_changelog_beta"><![CDATA[%1$s]]></string>
+    <string name="update_found_changelog_testers"><![CDATA[%1$s]]></string>
     <string name="update_found_changelog_brief"><![CDATA[Improves the security and performance of your %1$s <br/><br/>%2$s]]></string>
     <string name="update_found_changelog_default">A new version of Paranoid Android is ready to install. No changes for this update were found.</string>
     <string name="update_found_changelog_default_brief">A new version of Paranoid Android is ready to install. This update fixes critical bugs and improves the performance and stability of your device. \nAdditional charges may apply when updates are downloaded over cellular network or while roaming.</string>
@@ -92,7 +92,7 @@
     <string name="update_found_warning_and_desc">Downloading updates over a cellular network or while roaming may cause additional charges. \n\nThis update requires your device to restart</string>
     <string name="update_found_notification_title">System update available</string>
     <string name="update_found_notification_text">Paranoid Android %1$s %2$s</string>
-    <string name="update_found_notification_text_beta">Paranoid Android %1$s %2$s Beta</string>
+    <string name="update_found_notification_text_testers">Paranoid Android %1$s %2$s %3$s</string>
     <string name="update_on_mobile_data_title">Warning</string>
     <string name="update_on_mobile_data_message">You\'re about to download an update package using mobile data which is likely going to cause high data usage. Would you like to proceed?</string>
     <string name="update_found_snack">New updates found</string>
@@ -177,6 +177,13 @@
     <string name="installed_update_notification_title">Update successful</string>
     <string name="installed_update_notification_text">Please restart you\'re device</string>
 
+    <!-- Testers Program -->
+    <string name="testers_opt_in_header">Become a Paranoid Tester</string>
+    <string name="testers_opt_in_message">Enroll, by tapping the button below, to become an early adopter and tester of unreleased Paranoid Android software. \n\nEnrolling grants you full access to quicker updates, features to be, and a sneak peek into what\'s cooking. It also gives you the ability to report any issues to the team, which in return, help\'s shape Paranoid Android into what it\'s meant to be. \n\nOnce you\'ve enrolled, you will receive an update labelled \"Alpha\" or \"Beta\", where you can begin installing. You can un-enroll at anytime and return to the latest public release.</string>
+    <string name="testers_opt_in_enroll">Enroll</string>
+    <string name="testers_opt_in_enroll_notification">@string/testers_opt_in_header</string>
+    <string name="testers_opt_in_enroll_notification_info">Tap to learn more about Paranoid Testers Program</string>
+
     <!-- Restart -->
     <string name="restart_title">Your device is updated</string>
 
@@ -191,17 +198,6 @@
     <string name="error_update_not_installable_snack">This update can\'t be installed on top of the current build.</string>
 
     <!-- Preferences -->
-    <string name="preferences_button_text">Preferences</string>
-    <string name="auto_delete_updates_title">Auto delete updates</string>
-    <string name="auto_delete_updates_summary">Automatically delete updates after they are installed</string>
-    <string name="ab_perf_mode_title">Performance mode</string>
-    <string name="ab_perf_mode_summary">Speed\'s up the installation process</string>
-    <string name="allow_downgrading_title">Allow downgrading</string>
-    <string name="allow_downgrading_summary">Allow\'s installing older system versions</string>
     <string name="local_update_title">Allow local upgrade</string>
     <string name="local_update_summary">Prompt for updating from storage when checking for updates</string>
-    <string name="allow_beta_updates_title">Opt-in to beta updates</string>
-    <string name="allow_beta_updates_summary">Turning this on allows your device to receive updates for beta releases</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

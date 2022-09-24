@@ -68,21 +68,21 @@ public class ChangelogDialog extends AlertDialog {
 
     private void createView() {
         mUpdateDescription.setMovementMethod(LinkMovementMethod.getInstance());
-        boolean isBetaUpdate = mClBuildType.equals(Version.TYPE_BETA);
+        boolean isTestersUpdate = mClBuildType.equals(Version.TYPE_ALPHA) || mClBuildType.equals(Version.TYPE_BETA);
 
         if (mClLog != null) {
             String osName = mContext.getResources().getString(R.string.os_name);
             String header = String.format(mContext.getResources().getString(
                     R.string.update_found_changelog_header), osName, mClVersion, mClVersionNumber);
-            String headerBeta = String.format(mContext.getResources().getString(
-                    R.string.update_found_changelog_header_beta), osName, mClVersion, mClVersionNumber, mClBuildType);
-            mHeaderStatus.setText(Html.fromHtml(isBetaUpdate ? headerBeta : header, Html.FROM_HTML_MODE_COMPACT));
+            String headerTesters = String.format(mContext.getResources().getString(
+                    R.string.update_found_changelog_header_testers), osName, mClVersion, mClVersionNumber, mClBuildType);
+            mHeaderStatus.setText(Html.fromHtml(isTestersUpdate ? headerTesters : header, Html.FROM_HTML_MODE_COMPACT));
 
             String description = String.format(mContext.getResources().getString(
                     R.string.update_found_changelog), mClLog);
-            String descriptionBeta = String.format(mContext.getResources().getString(
-                    R.string.update_found_changelog_beta), mClLog);
-            mUpdateDescription.setText(Html.fromHtml(isBetaUpdate ? descriptionBeta : description, Html.FROM_HTML_MODE_COMPACT));
+            String descriptionTesters = String.format(mContext.getResources().getString(
+                    R.string.update_found_changelog_testers), mClLog);
+            mUpdateDescription.setText(Html.fromHtml(isTestersUpdate ? descriptionTesters : description, Html.FROM_HTML_MODE_COMPACT));
         } else {
             String defaultRes = mContext.getResources().getString(R.string.update_found_changelog_default);
             mUpdateDescription.setText(defaultRes);
