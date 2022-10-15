@@ -66,6 +66,10 @@
         <item name="android:src">@drawable/header_system_update_dark</item>
     </style>
 
+    <style name="Theme.Hub.HeaderTestersProgram">
+        <item name="android:src">@drawable/header_testers_program_dark</item>
+    </style>
+
     <style name="Theme.Hub.HeaderChangelog">
         <item name="android:src">@drawable/header_changelog_dark</item>
     </style>
