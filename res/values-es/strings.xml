@@ -67,7 +67,7 @@
     <string name="update_found_warning_and_desc">La descarga de actualizaciones a través de una red celular o en itinerancia puede causar cargos adicionales. \n\nEsta actualización requiere que su dispositivo se reinicie</string>
     <string name="update_found_notification_title">Actualización del sistema disponible</string>
     <string name="update_found_notification_text">Paranoid Android %1$s %2$s</string>
-    <string name="update_found_notification_text_beta">Paranoid Android %1$s %2$s Beta</string>
+    <string name="update_found_notification_text_testers">Paranoid Android %1$s %2$s %3$s</string>
     <string name="update_on_mobile_data_title">Advertencia</string>
     <string name="update_on_mobile_data_message">Está a punto de descargar un paquete de actualización utilizando datos móviles que probablemente causará un alto uso de datos. ¿Te gustaría continuar?</string>
     <string name="update_found_snack">Nuevas actualizaciones encontradas</string>
@@ -166,15 +166,6 @@
     <string name="error_update_not_installable_snack">Esta actualización no se puede instalar encima de la versión actual.</string>
 
     <!-- Preferences -->
-    <string name="preferences_button_text">Preferencias</string>
-    <string name="auto_delete_updates_title">Eliminar actualizaciones automáticamente</string>
-    <string name="auto_delete_updates_summary">Eliminar automáticamente las actualizaciones después de instalarlas</string>
-    <string name="ab_perf_mode_title">Modo de rendimiento</string>
-    <string name="ab_perf_mode_summary">Acelera el proceso de instalación</string>
-    <string name="allow_downgrading_title">Permitir instalación versiones anteriores</string>
-    <string name="allow_downgrading_summary">Permitir instalar versiones anteriores del sistema</string>
     <string name="local_update_title">Permitir actualización local</string>
     <string name="local_update_summary">Solicitud de actualización desde el almacenamiento al buscar actualizaciones</string>
-    <string name="allow_beta_updates_title">Participar en el programa beta</string>
-    <string name="allow_beta_updates_summary">Activar esto permite que su dispositivo reciba actualizaciones de versiones beta</string>
 </resources>

@@ -41,7 +41,7 @@ public class Version {
     private String mBuildType;
     public long mTimestamp;
 
-    private boolean mAllowBetaUpdates;
+    private boolean mAllowTestersUpdates;
     private boolean mAllowDowngrading;
 
     public Version() {
@@ -49,7 +49,7 @@ public class Version {
 
     public Version(Context context, Update update) {
         SharedPreferences prefs = context.getSharedPreferences(Utils.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
-        mAllowBetaUpdates = prefs.getBoolean(Constants.PREF_ALLOW_BETA_UPDATES, false);
+        mAllowTestersUpdates = prefs.getBoolean(Constants.PREF_ALLOW_TESTERS_UPDATES, false);
         mAllowDowngrading = prefs.getBoolean(Constants.PREF_ALLOW_DOWNGRADING, 
                 context.getResources().getBoolean(R.bool.config_allowDowngradingDefault));
         mName = update.getName();
@@ -66,8 +66,8 @@ public class Version {
         }
 
         if (isNewUpdate()) {
-            if (isBetaUpdate() && !mAllowBetaUpdates) {
-                Log.d(TAG, mName + " is a beta but the user is not opted in");
+            if (isTestersUpdate() && !mAllowTestersUpdates) {
+                Log.d(TAG, mName + " is a testers update but the user is not opted in");
                 return false;
             }
             Log.d(TAG, mName + " is available for update");
@@ -118,7 +118,7 @@ public class Version {
         return false;
     }
 
-    public boolean isBetaUpdate() {
-        return mBuildType.equals(TYPE_BETA);
+    public boolean isTestersUpdate() {
+        return mBuildType.equals(TYPE_ALPHA) || mBuildType.equals(TYPE_BETA);
     }
 }
