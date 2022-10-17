@@ -39,7 +39,7 @@ public final class Constants {
     public static final String PREF_ALLOW_TESTERS_UPDATES = "allow_testers_updates";
 
     // Rollout Configuration
-    public static final boolean IS_STAGED_ROLLOUT_ENABLED = true;
+    public static final boolean IS_STAGED_ROLLOUT_ENABLED = false;
     public static final String IS_ROLLOUT_READY = "is_staged_rollout_ready";
     public static final String IS_ROLLOUT_SCHEDULED = "is_staged_rollout_scheduled";
 
