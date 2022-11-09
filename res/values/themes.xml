@@ -1,128 +1,32 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">
-    <!-- Base application theme. -->
-    <style name="Theme.Hub" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
-        <item name="android:background">@color/theme_background</item>
-        <item name="colorPrimary">@color/theme_primary</item>
-        <item name="colorPrimaryDark">@color/theme_primary_dark</item>
-        <item name="colorPrimaryVariant">@color/theme_primary</item>
-        <item name="colorOnPrimary">@color/theme_primary</item>
-        <item name="colorAccent">@color/theme_accent</item>
-        <item name="androidprv:colorAccentPrimary">@color/theme_accent_primary</item>
-        <item name="androidprv:colorAccentSecondary">@color/theme_accent_secondary</item>
-        <item name="androidprv:colorAccentTertiary">@color/theme_accent_tertiary</item>
-        <item name="androidprv:colorAccentPrimaryVariant">@color/theme_accent_primary_variant</item>
-        <item name="androidprv:colorAccentSecondaryVariant">@color/theme_accent_secondary_variant</item>
-        <item name="androidprv:colorAccentTertiaryVariant">@color/theme_accent_tertiary_variant</item>
-        <item name="colorSecondary">@color/theme_accent_200</item>
-        <item name="colorSecondaryVariant">@color/theme_accent_700</item>
-        <item name="colorOnSecondary">@color/theme_accent_200</item>
-        <item name="colorSurface">@androidprv:color/surface_light</item>
-        <item name="android:windowLightStatusBar">@bool/theme_is_light</item>
-        <item name="android:windowLightNavigationBar">@bool/theme_is_light</item>
-        <item name="android:textColorLink">@color/theme_primary</item>
-        <item name="materialAlertDialogTheme">@style/Theme.Hub.Dialog</item>
-    </style>
-
-    <style name="Theme.Hub.NoActionBar" parent="Theme.Hub">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/theme_primary</item>
-        <item name="android:navigationBarColor">@color/theme_primary</item>
-    </style>
-
-    <style name="Theme.Hub.Dialog.Rounded.Overlay" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">8dp</item>
-    </style>
-
-    <style name="Theme.Hub.Dialog.Button" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="backgroundTint">@android:color/transparent</item>
-        <item name="rippleColor">@color/theme_accent</item>
-        <item name="android:textColor">@color/theme_accent</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textAllCaps">false</item>
-    </style>
-
-    <style name="Theme.Hub.DayNightDialog" parent="@android:style/Theme.DeviceDefault.Light.Dialog"/>
-
-    <style name="Theme.Hub.Dialog" parent="@style/Theme.Hub.DayNightDialog">
-        <item name="android:buttonCornerRadius">28dp</item>
-        <item name="buttonBarPositiveButtonStyle">@style/Theme.Hub.Dialog.Button</item>
-        <item name="buttonBarNegativeButtonStyle">@style/Theme.Hub.Dialog.Button</item>
-        <item name="buttonBarNeutralButtonStyle">@style/Theme.Hub.Dialog.Button</item>
-        <item name="android:colorBackground">?androidprv:attr/colorSurface</item>
-    </style>
-
-    <style name="Theme.Hub.Dialog.Text">
-        <item name="android:lineSpacingExtra">8dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="Theme.Hub.HeaderSystemUpdate">
-        <item name="android:src">@drawable/header_system_update</item>
-    </style>
-
-    <style name="Theme.Hub.HeaderChangelog">
-        <item name="android:src">@drawable/header_changelog</item>
-    </style>
-
-    <style name="Theme.Hub.HeaderChangelog.Status">
-        <item name="android:textSize">24sp</item>
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-    </style>
-
-    <style name="Widget.Hub.Button" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="enforceTextAppearance">false</item>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Hub.Button" parent="Widget.AppCompat.Button.Colored">
         <item name="android:maxWidth">320dp</item>
+        <item name="android:buttonStyle">@style/Hub.Button</item>
+        <item name="android:theme">@style/Hub.Button</item>
+        <item name="buttonStyle">@style/Hub.Button</item>
         <item name="backgroundTint">@color/theme_accent</item>
         <item name="android:padding">14dp</item>
         <item name="android:insetTop">6dp</item>
         <item name="android:insetBottom">6dp</item>
-        <item name="android:textAppearance">@style/Hub.TextAppearance.LabelLarge</item>
-        <item name="rippleColor">@color/button_ripple_color_selector</item>
-        <item name="cornerRadius">24dp</item>
-    </style>
-
-    <style name="Widget.Hub.Button.Borderless" parent="Widget.Hub.Button">
-        <item name="backgroundTint">@color/theme_primary</item>
-        <item name="android:padding">0dp</item>
-        <item name="android:textAppearance">@style/Hub.TextAppearance.LabelLarge</item>
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-        <item name="rippleColor">@color/button_ripple_color_selector</item>
-        <item name="cornerRadius">0dp</item>
-    </style>
-
-    <style name="Widget.Hub.Button.Small" parent="Widget.Hub.Button">
-        <item name="android:backgroundTint">@color/theme_accent_500</item>
-        <item name="android:padding">12dp</item>
-        <item name="android:insetTop">6dp</item>
-        <item name="android:insetBottom">6dp</item>
-        <item name="android:textAppearance">@style/Hub.TextAppearance.LabelLarge</item>
-        <item name="rippleColor">@color/button_ripple_color_selector</item>
-        <item name="cornerRadius">24dp</item>
-    </style>
-
-    <style name="Hub.TextAppearance.LabelLarge" parent="TextAppearance.MaterialComponents.Body2">
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">?android:attr/fontFamily</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">0.00714286</item>
+        <item name="android:buttonCornerRadius">24dp</item>
+        <item name="rippleColor">@color/material_button_ripple_color</item>
     </style>
 
-    <style name="Widget.Hub.ProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal">
-        <item name="colorControlActivated">@color/theme_accent</item>
-    </style>
-
-    <style name="Widget.Hub.ProgressBar.Circular" parent="@android:style/Widget.Material.ProgressBar.Large">
+    <style name="Hub.ProgressBar.Circular" parent="@android:style/Widget.Material.ProgressBar.Large">
         <item name="android:layout_gravity">center</item>
         <item name="android:indeterminate">true</item>
-        <item name="android:indeterminateDrawable">@drawable/circle_progress_indicator_m3_animator</item>
+        <item name="android:indeterminateDrawable">@drawable/ic_circular_progress_animator</item>
         <item name="android:indeterminateTint">@null</item>
         <item name="android:indeterminateTintMode">@null</item>
     </style>
 
+    <style name="SetupWizardPartnerResource">
+        <item name="sucUsePartnerResource">@bool/config_suc_use_partner_resource</item>
+        <item name="sudUsePartnerHeavyTheme">true</item>
+    </style>
 </resources>
