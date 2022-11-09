@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c955fbc1_aa7b423a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-09T06:54:55Z",
+      "side": 1,
+      "message": "Only \"Checking for updates\" and \"No updates\" tasks are verified working, as well as server connection and json parsing",
+      "revId": "3d01b8d546ea7dd12e7b4feca9c40a6badd6574a",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    }
+  ]
+}
