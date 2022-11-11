@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <bool name="theme_is_light">true</bool>
+    <bool name="config_suc_use_partner_resource">true</bool>
 </resources>
