@@ -1,36 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-     Copyright (C) 2017 The LineageOS Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="hub_name">Paranoid Android Updates</string>
-    <string name="hub_display_name">System update</string>
-    <string name="os_name">Paranoid Android</string>
-    <string name="join_two_unrelated_items"><xliff:g id="first_item">%1$s</xliff:g>, <xliff:g id="second_item">%2$s</xliff:g></string>
+    <string name="app_name">System Update</string>
 
-    <string name="app_preferences_class">co.aospa.hub.HubPreferencesActivity$HubSettingsFragment</string>
-
+    <!-- System related conigs -->
+    <!-- The server that hosts the update files -->
+    <string name="system_update_server_url" translatable="false">"https://raw.githubusercontent.com/Sirhc95/ota_test/master/"</string>
     <!-- Directory where the update files will be downloaded and stored.
          WARNING: The application can and will delete any unknown file. -->
-    <string name="download_path" translatable="false">/hub_updates</string>
+    <string name="system_update_download_path" translatable="false">/data/hub_updates/</string>
 
-    <!-- Directory where the downloads will be exported to.
-         The path is relative to the root of the external storage.-->
-    <string name="export_path" translatable="false">/ParanoidHub</string>
+    <!-- Update to date -->
+    <string name="system_update_update_to_date">Your system is up to date</string>
+    <string name="system_update_update_to_date_desc">Paranoid Android version: %1$s %2$s \nLast successful check for update: %3$s</string>
+    <string name="system_update_update_to_date_button">Check for update</string>
 
-    <!-- The server that hosts the update files -->
-    <string name="hub_server_url" translatable="false">"https://raw.githubusercontent.com/AOSPA/ota/master/"</string>
+    <!-- Checking -->
+    <string name="system_update_checking_for_update">Checking for update…</string>
+
+    <!-- Update available -->
+    <string name="system_update_update_available">System update available</string>
+    <string name="system_update_update_available_desc"><![CDATA[%1$s %2$s Update size: %3$s]]></string>
+    <string name="system_update_update_available_button">Download and install</string>
+
+    <!-- Update download and install -->
+    <string name="system_update_update_download_install">Installing system update…</string>
+    <string name="system_update_update_download_install_desc">@string/system_update_update_available_desc</string>
+    <string name="system_update_update_download_install_step">Downloading and installing update</string>
+    <string name="system_update_update_download_install_verify">Verifying system update…</string>
+    <string name="system_update_update_download_install_complete">Download complete</string>
+    <string name="system_update_update_download_install_complete_desc">Tap restart to apply the update</string>
+    <string name="system_update_update_download_install_complete_restart_button">Restart</string>
+    <string name="system_update_update_download_install_paused">Download paused</string>
+    <string name="system_update_update_download_install_pause_button">Pause</string>
+    <string name="system_update_update_download_install_resume_button">Resume</string>
+    <string name="system_update_update_download_install_error">Could\'nt update</string>
+    <string name="system_update_update_download_install_error_step_download_issue">Download problem</string>
+    <string name="system_update_update_download_install_error_step_verify_issue">Verification problem</string>
+    <string name="system_update_update_download_install_error_step_install_issue">Installation problem</string>
+    <string name="system_update_update_download_install_error_button">Try again</string>
 
     <plurals name="eta_seconds">
         <item quantity="one">1 second left</item>
@@ -44,164 +50,4 @@
         <item quantity="one">1 hour left</item>
         <item quantity="other"><xliff:g id="count">%d</xliff:g> hours left</item>
     </plurals>
-
-    <string name="channel_progress_title">Ongoing update</string>
-    <string name="channel_new_updates_title">New updates</string>
-    <string name="channel_ongoing_title">Ongoing downloads</string>
-    <string name="channel_update_failed_title">Update failed</string>
-
-    <!-- Button actions -->
-    <string name="button_check_for_update">Check for update</string>
-    <string name="button_update_found">Download and install</string>
-    <string name="button_update_found_local">Continue</string>
-    <string name="button_pause_update">Pause update</string>
-    <string name="button_resume_update">Resume update</string>
-    <string name="button_install_update">Restart and install</string>
-    <string name="button_try_again">Try again</string>
-    <string name="button_restart">Restart device</string>
-
-    <!-- Up To Date -->
-    <string name="no_updates_title">Your system is up to date</string>
-    <string name="no_updates_text">Paranoid Android version: %1$s %2$s \nLast successful check for update: %3$s</string>
-    <string name="no_updates_current_version">Version: %1$s %2$s</string>
-    <string name="no_updates_found_snack">No new updates found</string>
-    <string name="no_updates_check_dialog_message">Checking for updates require an active connection and usage of data. If you want to update offline, tap "Local upgrade"</string>
-    <string name="no_updates_check_dialog_button_text">Continue</string>
-    <string name="no_updates_check_local_dialog_button_text">Local upgrade</string>
-
-    <!-- Checking for update -->
-    <string name="update_checking_title">Checking for update...</string>
-    <string name="update_checking_local_title">Checking for local update...</string>
-    <string name="update_checking_no_network_snack">Updates are temporarily unavailable. Try again later.</string>
-
-    <!-- Update available -->
-    <string name="update_found_title">System update available</string>
-    <string name="update_found_title_local">Local update available</string>
-    <string name="update_found_subtitle">%1$s %2$s</string>
-    <string name="update_found_changelog_header"><![CDATA[%1$s %2$s %3$s]]></string>
-    <string name="update_found_changelog_header_beta"><![CDATA[%1$s %2$s %3$s %4$s]]></string>
-    <string name="update_found_changelog"><![CDATA[%1$s]]></string>
-    <string name="update_found_changelog_beta"><![CDATA[%1$s]]></string>
-    <string name="update_found_changelog_brief"><![CDATA[Improves the security and performance of your %1$s <br/><br/>%2$s]]></string>
-    <string name="update_found_changelog_default">A new version of Paranoid Android is ready to install. No changes for this update were found.</string>
-    <string name="update_found_changelog_default_brief">A new version of Paranoid Android is ready to install. This update fixes critical bugs and improves the performance and stability of your device. \nAdditional charges may apply when updates are downloaded over cellular network or while roaming.</string>
-    <string name="update_found_changelog_default_local">A new local update has been found, this version is %1$s (%2$s). By tapping continue, you agree to install this update.</string>
-    <string name="update_found_changelog_view_detail">View all changes</string>
-    <string name="update_found_changelog_view_detail_finish">Go back</string>
-    <string name="update_found_size">Update size: %1$s</string>
-    <string name="update_found_warning_and_desc">Downloading updates over a cellular network or while roaming may cause additional charges. \n\nThis update requires your device to restart</string>
-    <string name="update_found_notification_title">System update available</string>
-    <string name="update_found_notification_text">Paranoid Android %1$s %2$s</string>
-    <string name="update_found_notification_text_beta">Paranoid Android %1$s %2$s Beta</string>
-    <string name="update_on_mobile_data_title">Warning</string>
-    <string name="update_on_mobile_data_message">You\'re about to download an update package using mobile data which is likely going to cause high data usage. Would you like to proceed?</string>
-    <string name="update_found_snack">New updates found</string>
-    <string name="update_found_notification_snooze">Later</string>
-
-    <!-- Updating Steps -->
-    <string name="updating_title">Updating your device...</string>
-    <string name="updating_failed_title">Couldn\'t update</string>
-    <string name="updating_step_downloading_title">Step 1 of 3 - Downloading</string>
-    <string name="updating_step_downloading_paused_title">Step 1 of 3 - Download paused</string>
-    <string name="updating_step_downloading_verify_title">Step 1 of 3 - Downloading</string>
-    <string name="updating_step_verifying_title">Step 1 of 3 - Verifying</string>
-    <string name="updating_step_installing_title">Step 2 of 3 - Installing</string>
-    <string name="updating_step_installing_paused_title">Step 2 of 3 - Installation paused</string>
-    <string name="updating_step_installing_finalizing_title">Step 3 of 3 - Finalizing</string>
-    <string name="updating_step_installed_title">Restart to finish the update</string>
-
-    <!-- Update starting -->
-    <string name="starting_update_notification_title">Starting update</string>
-    <string name="starting_update_notification_text">Preparing to download the update</string>
-    <string name="starting_update_title">@string/starting_update_notification_title</string>
-
-    <!-- Downloading update -->
-    <string name="downloading_title">@string/updating_title</string>
-    <string name="downloading_paused_title">@string/updating_title</string>
-    <string name="downloading_notification_title">Downloading update</string>
-    <string name="downloading_notification_text">%1$s, %2$s/s</string>
-    <string name="downloading_donut_text_completed">completed</string>
-    <string name="downloading_error_update_title">Download problem</string>
-    <string name="downloading_performance_mode_warning_and_desc">Performance mode is currently enabled and might limit performance in other areas during the installation process. To avoid this, you can opt-out from the settings menu.</string>
-
-    <!-- Update paused -->
-    <string name="paused_update_notification_title">Download paused</string>
-    <string name="paused_update_notification_text">Resume at anytime</string>
-    <string name="paused_error_update_notification_title">Problem pausing update</string>
-    <string name="paused_error_update_notification_text">Start the download again when you\'re ready</string>
-
-    <!-- Verifying update -->
-    <string name="verifying_update_title">@string/updating_title</string>
-    <string name="verifying_update_notification_title">@string/verifying_update_title</string>
-    <string name="verifying_update_notification_text">This won\'t take long</string>
-    <string name="verified_update_notification_title">Update verified</string>
-    <string name="verified_update_notification_text">Install the update when you\'re ready</string>
-    <string name="verifying_error_update_notification_title">Verification problem</string>
-    <string name="verifying_error_update_notification_text">Try downloading the update again</string>
-
-    <!-- Verified update -->
-    <string name="verified_download_snack">Update verified</string>
-
-    <!-- Preparing -->
-    <string name="preparing_title">Preparing update...</string>
-
-    <!-- Install -->
-    <string name="install_title">Install update</string>
-    <string name="install_warning_and_desc">Tap the restart button below to apply the update. This process can take 5-10 minutes.</string>
-    <string name="install_warning_and_desc_ab">While the update is being applied, you can use your phone as normal. \nWhen it\'s finished, tap the restart button to finalize the update.</string>
-    <string name="install_update_notification_title">Ready to update</string>
-    <string name="install_update_notification_text">Tap to finish applying the update</string>
-    <string name="install_low_battery_warning_title">Can\'t update right now</string>
-    <string name="install_low_battery_warning_text">Your device is too low on battery. At least <xliff:g id="percent_discharging">%1$d</xliff:g>%% is required to continue.</string>
-    <string name="install_update_dialog_title">Apply update</string>
-    <string name="install_update_dialog_message">You are about to upgrade to <xliff:g id="update_name">%1$s</xliff:g>.\n\nIf you press <xliff:g id="ok">%2$s</xliff:g>, the device will restart itself in recovery mode to install the update.\n\nNote: This feature requires a compatible Recovery or updates will need to be installed manually.</string>
-    <string name="install_update_dialog_message_ab">You are about to upgrade to <xliff:g id="update_name">%1$s</xliff:g>.\n\nIf you press <xliff:g id="ok">%2$s</xliff:g>, the device will begin installing in the background.\n\nOnce completed, you will be prompted to reboot.</string>
-    <string name="install_update_dialog_message_info">%1$s %2$s</string>
-    <string name="install_update_dialog_cancel">Cancel</string>
-    <string name="installing_title">@string/updating_title</string>
-    <string name="installing_warning_and_desc_ab">The update is being applied, do not power off your device during this process. \nYou can pause the update by tapping below.</string>
-    <string name="installing_suspended_text">Update paused</string>
-    <string name="installing_update_notification_title">Preparing update</string>
-    <string name="installing_update_notification_title_ab">Applying update</string>
-    <string name="installing_update_notification_text">Tap to read more</string>
-    <string name="installing_error_update_notification_title">Installation problem</string>
-    <string name="installing_error_update_notification_text">Tap to read more</string>
-    <string name="installing_suspended_update_notification_title">@string/installing_suspended_text</string>
-    <string name="installing_suspended_update_notification_text">Resume the update at any time</string>
-    <string name="installing_suspended_warning_and_desc_ab">The update is currently suspended, you can resume the update at anytime.</string>
-    <string name="installing_finalizing_update_notification_text">Finalizing Update</string>
-    <string name="installing_finalizing_update_title">@string/installing_finalizing_update_notification_text</string>
-    <string name="installing_preparing_update_notification_text">Preparing for next boot</string>
-    <string name="installing_cancel_dialog_message">Cancel the update?</string>
-    <string name="installed_text">Update successfully installed. Restart your device to apply</string>
-    <string name="installed_update_notification_title">Update successful</string>
-    <string name="installed_update_notification_text">Please restart you\'re device</string>
-
-    <!-- Restart -->
-    <string name="restart_title">Your device is updated</string>
-
-    <!-- Errors -->
-    <string name="error_update_refreshing_hub">Resetting...</string>
-    <string name="error_update_refreshing_hub_header_status">Update data is corrupted</string>
-    <string name="error_update_refreshing_hub_desc">Paranoid Android Updates ran into a problem, all configurations and data will be reset.</string>
-    <string name="error_update_check_failed">Can\'t check for update</string>
-    <string name="error_update_check_failed_snack">Updates are temporarily unavailable. Try again later.</string>
-    <string name="error_download_failed_snack">The download failed. Please check your internet connection and try again later.</string>
-    <string name="error_verification_failed_snack">The update verification failed.</string>
-    <string name="error_update_not_installable_snack">This update can\'t be installed on top of the current build.</string>
-
-    <!-- Preferences -->
-    <string name="preferences_button_text">Preferences</string>
-    <string name="auto_delete_updates_title">Auto delete updates</string>
-    <string name="auto_delete_updates_summary">Automatically delete updates after they are installed</string>
-    <string name="ab_perf_mode_title">Performance mode</string>
-    <string name="ab_perf_mode_summary">Speed\'s up the installation process</string>
-    <string name="allow_downgrading_title">Allow downgrading</string>
-    <string name="allow_downgrading_summary">Allow\'s installing older system versions</string>
-    <string name="local_update_title">Allow local upgrade</string>
-    <string name="local_update_summary">Prompt for updating from storage when checking for updates</string>
-    <string name="allow_beta_updates_title">Opt-in to beta updates</string>
-    <string name="allow_beta_updates_summary">Turning this on allows your device to receive updates for beta releases</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
