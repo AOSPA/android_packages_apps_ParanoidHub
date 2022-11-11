@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a837839_0e59cbc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-11T20:47:59Z",
+      "side": 1,
+      "message": "- Removed sharedUID on this PS",
+      "revId": "c1c8ace75dd06834510ae89c8d08a2ea5c66701e",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    }
+  ]
+}
