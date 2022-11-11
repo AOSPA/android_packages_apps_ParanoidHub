@@ -1,0 +1,338 @@
+package co.aospa.hub.controllers;
+
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Handler;
+import android.util.Log;
+
+import org.json.JSONException;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import co.aospa.hub.UpdateStateService;
+import co.aospa.hub.client.ClientConnector;
+import co.aospa.hub.components.ChangelogComponent;
+import co.aospa.hub.components.Component;
+import co.aospa.hub.components.ComponentBuilder;
+import co.aospa.hub.components.OtaConfigComponent;
+import co.aospa.hub.components.UpdateComponent;
+import co.aospa.hub.ui.State;
+import co.aospa.hub.ui.state.UpdateAvailableState;
+import co.aospa.hub.ui.state.UpdateCheckingState;
+import co.aospa.hub.ui.state.UpdateDownloadErrorState;
+import co.aospa.hub.ui.state.UpdateDownloadInstallState;
+import co.aospa.hub.ui.state.UpdateDownloadPausedState;
+import co.aospa.hub.ui.state.UpdateDownloadVerificationState;
+import co.aospa.hub.ui.state.UpdateInstallErrorState;
+import co.aospa.hub.ui.state.UpdateRebootState;
+import co.aospa.hub.ui.state.UpdateUnavailableState;
+import co.aospa.hub.ui.state.UpdateVerificationErrorState;
+import co.aospa.hub.util.Constants;
+import co.aospa.hub.util.PreferenceHelper;
+import co.aospa.hub.util.Update;
+import co.aospa.hub.util.Version;
+
+public class UpdateStateController implements ClientConnector.ClientListener, UpdateController.UpdateListener {
+
+    private static final String TAG = "UpdateStateController";
+
+    private final Context mContext;
+    private final ClientConnector mClientConnector;
+    private static UpdateController mUpdateController;
+    @SuppressLint("StaticFieldLeak")
+    private static UpdateStateController mStateController;
+    private final List<StateListener> mListeners = new ArrayList<>();
+
+    private OtaConfigComponent mOtaComponent;
+    private ChangelogComponent mChangelogComponent;
+    private UpdateComponent mUpdateComponent;
+
+    public static synchronized UpdateStateController get(Context context) {
+        if (mStateController == null) {
+            mStateController = new UpdateStateController(context);
+        }
+        return mStateController;
+    }
+
+    public UpdateStateController(Context context) {
+        mContext = context;
+        mClientConnector = new ClientConnector(context);
+        mClientConnector.addClientStatusListener(this);
+
+        mUpdateController = UpdateController.get(context);
+        mUpdateController.addUpdateListener(this);
+    }
+
+    public void getComponentFromServer(String component, boolean userRequested) {
+        switch (component) {
+            case ComponentBuilder.COMPONENT_UPDATES:
+                if (userRequested) {
+                    long millis = System.currentTimeMillis();
+                    PreferenceHelper preferenceHelper = new PreferenceHelper(mContext);
+                    preferenceHelper.saveLongValue(Constants.KEY_LAST_UPDATE_CHECK, millis);
+                    State state = new UpdateCheckingState();
+                    updateState(state);
+                    mClientConnector.initComponent(component);
+                }
+                break;
+            case ComponentBuilder.COMPONENT_CHANGELOG:
+                mClientConnector.initComponent(component);
+                break;
+            default:
+                State state = new UpdateCheckingState();
+                updateState(state);
+                mClientConnector.initComponent(component);
+                break;
+        }
+        if (!userRequested) {
+            queueCachedUpdateRequest();
+        }
+    }
+
+    private void updateComponent(File data, int task) {
+        switch (task) {
+            case ClientConnector.TASK_UPDATES:
+                mUpdateComponent = (UpdateComponent) ComponentBuilder.buildComponent(data, task);
+                queueUpdateRequestState();
+                break;
+            case ClientConnector.TASK_CHANGELOG:
+                mChangelogComponent = (ChangelogComponent) ComponentBuilder.buildComponent(data, task);
+                queueUpdateRequestStateInCycle();
+                break;
+            default:
+                mOtaComponent = (OtaConfigComponent) ComponentBuilder.buildComponent(data, task);
+                updateComponentInCycle(Constants.INTENT_ACTION_UPDATE_CHANGELOG);
+                break;
+
+        }
+    }
+
+    private void queueUpdateRequestState() {
+        if (mOtaComponent != null) {
+            if (!mOtaComponent.isEnabledFromServer()) {
+                State state = new UpdateUnavailableState();
+                updateState(state);
+                Log.d(TAG, "Updates are disabled from server, ignoring request");
+                return;
+            }
+            Log.d(TAG, ":queueUpdateRequest");
+            UpdateRequestStateTask requestTask = new UpdateRequestStateTask(this);
+            requestTask.start(mUpdateComponent != null ? mUpdateComponent : null);
+        }
+    }
+
+    private void queueCachedUpdateRequest() {
+        if (mUpdateComponent == null) {
+            UpdateRequestStateTask requestTask = new UpdateRequestStateTask(this);
+            requestTask.startCached(mContext);
+        }
+    }
+
+    private void queueUpdateRequestStateInCycle() {
+        queueUpdateRequestState();
+    }
+
+    private void updateComponentInCycle(String action) {
+        Intent intent = new Intent(mContext, UpdateStateService.class);
+        intent.setAction(action);
+        mContext.startService(intent);
+    }
+
+    private void updateState(State state, int progress) {
+        notifyStateListeners(state, progress);
+    }
+
+    private void updateState(State state) {
+        notifyStateListeners(state, -1);
+    }
+
+    public Component getComponentForTask(int task) {
+        Component component;
+        if (task == ClientConnector.TASK_UPDATES) {
+            component = mUpdateComponent;
+        } else if (task == ClientConnector.TASK_CHANGELOG) {
+            component = mChangelogComponent;
+        } else {
+            component = mOtaComponent;
+        }
+        return component;
+    }
+
+    public void startDownloadTask() {
+        UpdateComponent component = (UpdateComponent)
+                getComponentForTask(ClientConnector.TASK_UPDATES);
+        if (mUpdateController != null) {
+            mUpdateController.startDownload(component);
+            return;
+        }
+        Log.d(TAG, "Could start download task because update component is null");
+    }
+
+    public void pauseDownloadTask() {
+        UpdateComponent component = (UpdateComponent)
+                getComponentForTask(ClientConnector.TASK_UPDATES);
+        if (mUpdateController != null) {
+            mUpdateController.pauseDownload(component);
+            return;
+        }
+        Log.d(TAG, "Could pause download task because update component is null");
+    }
+
+    public void resumeDownloadTask() {
+        UpdateComponent component = (UpdateComponent)
+                getComponentForTask(ClientConnector.TASK_UPDATES);
+        if (mUpdateController != null) {
+            mUpdateController.resumeDownload(component);
+            return;
+        }
+        Log.d(TAG, "Could resume download task because update component is null");
+    }
+
+    public void startLegacyInstallTaskIfPossible() {
+        UpdateComponent component = (UpdateComponent)
+                getComponentForTask(ClientConnector.TASK_UPDATES);
+        mUpdateController.installRecoveryUpdateIfPossible(component);
+    }
+
+    public UpdateController getUpdateController() {
+        return mUpdateController;
+    }
+
+    public void addUpdateStateListener(StateListener listener) {
+        mListeners.add(listener);
+    }
+
+    public void removeUpdateStateListener(StateListener listener) {
+        mListeners.remove(listener);
+    }
+
+    private void notifyStateListeners(State state, int progress) {
+        Handler handler = new Handler(mContext.getMainLooper());
+        handler.post(() -> {
+            for (StateListener listener : mListeners) {
+                listener.onUpdateStateChanged(state, progress);
+            }
+        });
+    }
+
+    @Override
+    public void onClientStatusSuccess(File data, int task) {
+        Log.d(TAG, ":onClientStatusSuccess - updating component");
+        updateComponent(data, task);
+    }
+
+    @Override
+    public void onUpdateStatusChanged(int status, int progress) {
+        ChangelogComponent changelogComponent = (ChangelogComponent)
+                getComponentForTask(ClientConnector.TASK_CHANGELOG);
+        UpdateComponent updateComponent = (UpdateComponent)
+                getComponentForTask(ClientConnector.TASK_UPDATES);
+        State state = null;
+        switch (status) {
+            case UpdateController.StatusType.DOWNLOAD:
+            case UpdateController.StatusType.INSTALL:
+                state = new UpdateDownloadInstallState(updateComponent, changelogComponent);
+                break;
+            case UpdateController.StatusType.VERIFY:
+                state = new UpdateDownloadVerificationState(updateComponent, changelogComponent);
+                break;
+            case UpdateController.StatusType.PAUSE:
+                state = new UpdateDownloadPausedState(updateComponent, changelogComponent);
+                break;
+            case UpdateController.StatusType.DOWNLOAD_ERROR:
+                state = new UpdateDownloadErrorState(updateComponent, changelogComponent);
+                break;
+            case UpdateController.StatusType.VERIFY_ERROR:
+                state = new UpdateVerificationErrorState(updateComponent, changelogComponent);
+                break;
+            case UpdateController.StatusType.INSTALL_ERROR:
+                state = new UpdateInstallErrorState(updateComponent, changelogComponent);
+                break;
+            case UpdateController.StatusType.REBOOT:
+                state = new UpdateRebootState();
+                break;
+        }
+        updateState(state, progress);
+    }
+
+    public interface StateListener {
+        void onUpdateStateChanged(State state, int progress);
+    }
+
+    private static final class UpdateRequestStateTask {
+        private final UpdateStateController mController;
+
+
+        public UpdateRequestStateTask(UpdateStateController controller) {
+            mController = controller;
+        }
+
+        public void start(UpdateComponent component) {
+            boolean available = isUpdateAvailable(component);
+            int updateStatus = getUpdateStatus();
+            State state;
+            ChangelogComponent changelogComponent = (ChangelogComponent)
+                    mController.getComponentForTask(ClientConnector.TASK_CHANGELOG);
+            switch (updateStatus) {
+                case UpdateController.StatusType.COMPLETED:
+                    state = new UpdateRebootState();
+                    break;
+                case UpdateController.StatusType.VERIFY:
+                    state = new UpdateUnavailableState();
+                    break;
+                case UpdateController.StatusType.PAUSE:
+                    state = component != null
+                            ? new UpdateDownloadVerificationState(component, changelogComponent)
+                            : new UpdateUnavailableState();
+                    break;
+                case UpdateController.StatusType.INSTALL:
+                    state = component != null
+                            ? new UpdateDownloadPausedState(component, changelogComponent)
+                            : new UpdateUnavailableState();
+                    break;
+                case UpdateController.StatusType.DOWNLOAD:
+                    state = component != null
+                            ? new UpdateDownloadInstallState(component, changelogComponent)
+                            : new UpdateUnavailableState();
+                    break;
+                default:
+                    state = available
+                            ? new UpdateAvailableState(component, changelogComponent)
+                            : new UpdateUnavailableState();
+
+            }
+            compileState(state);
+            Log.d(TAG, "UpdateRequestStateTask - state: " + state);
+        }
+
+        public void startCached(Context context) {
+            File data = Update.getCachedUpdate(context);
+            if (data.exists()) {
+                mController.updateComponent(data, ClientConnector.TASK_UPDATES);
+                Log.d(TAG, "Updating update component with cached update");
+            } else {
+                Log.d(TAG, "No cached updates found, setting unavailable state");
+                compileState(new UpdateUnavailableState());
+            }
+        }
+
+        private void compileState(State state) {
+            mController.updateState(state);
+        }
+
+        public boolean isUpdateAvailable(
+                UpdateComponent component) {
+            return component != null && component.getTimestamp() > Version.getCurrentTimestamp();
+        }
+
+        public int getUpdateStatus() {
+            return mUpdateController.getUpdateStatus();
+        }
+    }
+}
