@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a496238_2f7ff5eb",
+        "filename": "src/co/aospa/hub/HubApp.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000012
+      },
+      "writtenOn": "2022-11-11T07:59:37Z",
+      "side": 1,
+      "message": "why a couple random kotlin classes and the rest Java?",
+      "revId": "c6f24f362bb55a51cdc5eb0fa968932f0c6d4042",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d38eccd9_aa524593",
+        "filename": "src/co/aospa/hub/HubApp.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000012
+      },
+      "writtenOn": "2022-11-11T07:59:37Z",
+      "side": 1,
+      "message": "nope",
+      "revId": "c6f24f362bb55a51cdc5eb0fa968932f0c6d4042",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    }
+  ]
+}
