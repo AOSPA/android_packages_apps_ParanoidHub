@@ -1,0 +1,126 @@
+package co.aospa.hub.util;
+
+import android.content.Context;
+import android.os.SystemProperties;
+import android.os.storage.StorageManager;
+import android.text.format.Formatter;
+import android.util.Log;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import co.aospa.hub.R;
+import co.aospa.hub.client.ClientConnector;
+import co.aospa.hub.components.ChangelogComponent;
+import co.aospa.hub.components.UpdateComponent;
+
+public class Update {
+
+    private final ChangelogComponent mChangelogComponent;
+    private final UpdateComponent mUpdateComponent;
+
+    public Update(UpdateComponent updateComponent,
+                  ChangelogComponent changelogComponent) {
+        mChangelogComponent = changelogComponent;
+        mUpdateComponent = updateComponent;
+
+    }
+
+    public static File getDownloadPath(Context context) {
+        return new File(context.getString(R.string.system_update_download_path));
+    }
+
+    public static File getCachedUpdate(Context context) {
+        return new File(context.getCacheDir(), ClientConnector.TARGET_DEVICE);
+    }
+
+    public String getUpdateDescriptionText(Context context) {
+        return mUpdateComponent != null ? String.format(context.getResources().getString(
+                        R.string.system_update_update_available_desc),
+                mChangelogComponent.getChangelogBrief(),
+                mChangelogComponent.getChangelog(),
+                Formatter.formatShortFileSize(context, mUpdateComponent.getFileSize()))
+                : "error";
+    }
+
+    public boolean isSecurityUpdate() {
+        return mUpdateComponent != null
+                && !mUpdateComponent.getAndroidSpl().equals(Version.getRawAndroidSpl());
+    }
+
+    public static boolean isABDevice() {
+        return SystemProperties.getBoolean(Constants.PROP_AB_DEVICE, false);
+    }
+
+    public static boolean isABUpdate(File file) throws IOException {
+        ZipFile zipFile = new ZipFile(file);
+        boolean isABUpdate = isABUpdate(zipFile);
+        zipFile.close();
+        return isABUpdate;
+    }
+
+    public static boolean isABUpdate(ZipFile zipFile) {
+        return zipFile.getEntry(Constants.AB_PAYLOAD_BIN_PATH) != null &&
+                zipFile.getEntry(Constants.AB_PAYLOAD_PROPERTIES_PATH) != null;
+    }
+
+    public static boolean isEncrypted(Context context, File file) {
+        StorageManager sm = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+        return sm.isEncrypted(file);
+    }
+
+    /**
+     * Get the offset to the compressed data of a file inside the given zip
+     *
+     * @param zipFile input zip file
+     * @param entryPath full path of the entry
+     * @return the offset of the compressed, or -1 if not found
+     * @throws IllegalArgumentException if the given entry is not found
+     */
+    public static long getZipEntryOffset(ZipFile zipFile, String entryPath) {
+        // Each entry has an header of (30 + n + m) bytes
+        // 'n' is the length of the file name
+        // 'm' is the length of the extra field
+        final int FIXED_HEADER_SIZE = 30;
+        Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
+        long offset = 0;
+        while (zipEntries.hasMoreElements()) {
+            ZipEntry entry = zipEntries.nextElement();
+            int n = entry.getName().length();
+            int m = entry.getExtra() == null ? 0 : entry.getExtra().length;
+            int headerSize = FIXED_HEADER_SIZE + n + m;
+            offset += headerSize;
+            if (entry.getName().equals(entryPath)) {
+                return offset;
+            }
+            offset += entry.getCompressedSize();
+        }
+        Log.e("Update", "Entry " + entryPath + " not found");
+        throw new IllegalArgumentException("The given entry was not found");
+    }
+
+
+    public static File appendSequentialNumber(final File file) {
+        String name;
+        String extension;
+        int extensionPosition = file.getName().lastIndexOf(".");
+        if (extensionPosition > 0) {
+            name = file.getName().substring(0, extensionPosition);
+            extension = file.getName().substring(extensionPosition);
+        } else {
+            name = file.getName();
+            extension = "";
+        }
+        final File parent = file.getParentFile();
+        for (int i = 1; i < Integer.MAX_VALUE; i++) {
+            File newFile = new File(parent, name + "-" + i + extension);
+            if (!newFile.exists()) {
+                return newFile;
+            }
+        }
+        throw new IllegalStateException();
+    }
+}
