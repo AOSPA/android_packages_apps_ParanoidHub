@@ -17,6 +17,7 @@ public class UpdateComponent extends Component {
     private String androidSpl;
     private String id;
     private File file;
+    private String deviceChangelog;
 
     public String getFileName() {
         return this.fileName;
@@ -118,5 +119,15 @@ public class UpdateComponent extends Component {
     @Override
     public void setFile(File file) {
         this.file = file;
+    }
+
+    @Override
+    public String getDeviceChangelog() {
+        return this.deviceChangelog;
+    }
+
+    @Override
+    public void setDeviceChangelog(String deviceChangelog) {
+        this.deviceChangelog = deviceChangelog;
     }
 }
