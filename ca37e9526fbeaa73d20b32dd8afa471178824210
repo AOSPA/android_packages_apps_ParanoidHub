@@ -88,6 +88,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "831cc866_67c2c841",
+        "filename": "src/co/aospa/hub/UpdateReceiver.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:19:26Z",
+      "side": 1,
+      "message": "what.",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "03d21f4b_69c0605f",
         "filename": "src/co/aospa/hub/components/UpdateComponent.java",
         "patchSetId": 15
@@ -303,6 +320,91 @@
       "writtenOn": "2022-11-17T03:14:04Z",
       "side": 1,
       "message": "import statustype",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9608b701_00777438",
+        "filename": "src/co/aospa/hub/util/App.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:19:26Z",
+      "side": 1,
+      "message": "this seems like it should be a generic utilities class, like AppUtils or something.",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeb5eb82_df7e8836",
+        "filename": "src/co/aospa/hub/util/PreferenceHelper.kt",
+        "patchSetId": 15
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:19:26Z",
+      "side": 1,
+      "message": "chain",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e214ed6_ae591bc5",
+        "filename": "src/co/aospa/hub/util/PreferenceHelper.kt",
+        "patchSetId": 15
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:19:26Z",
+      "side": 1,
+      "message": "chain these together",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "675791a6_1b72e987",
+        "filename": "src/co/aospa/hub/util/PreferenceHelper.kt",
+        "patchSetId": 15
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:19:26Z",
+      "side": 1,
+      "message": "same, for the rest of the file.",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7c65142_5df9b7cb",
+        "filename": "src/co/aospa/hub/util/Update.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:19:26Z",
+      "side": 1,
+      "message": "just generate a random number with Long.MAX_VALUE as a cap, or sha256 the file and set that as the name if you\u0027re that paranoid but don\u0027t do this.",
       "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     }
