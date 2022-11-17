@@ -99,4 +99,14 @@ public class OtaConfigComponent extends Component {
 
     @Override
     public void setFile(File file) { }
+
+    @Override
+    public String getDeviceChangelog() {
+        return null;
+    }
+
+    @Override
+    public void setDeviceChangelog(String deviceChangelog) {
+
+    }
 }
