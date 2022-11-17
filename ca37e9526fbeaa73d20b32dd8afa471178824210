@@ -1,0 +1,310 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fc310b3_4a0be3e1",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 15
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "what is this needed for?",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "269b3fd6_68480abf",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 15
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "this as well",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbfba7e2_eb6d4448",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 15
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "i don\u0027t think we need this since we\u0027re not exporting updates.",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5271f69a_3382689e",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 15
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "what for?",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4624c030_293a2e1d",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 15
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "?",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03d21f4b_69c0605f",
+        "filename": "src/co/aospa/hub/components/UpdateComponent.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "we should use m to prefix to indicate class members",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "314dd6a8_7f90e96d",
+        "filename": "src/co/aospa/hub/controllers/ABUpdateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "why not make sure this succeeds?",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c204757_c24696b0",
+        "filename": "src/co/aospa/hub/controllers/ABUpdateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "why not have this runtime configurable?",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1659b0f_ae4aeedd",
+        "filename": "src/co/aospa/hub/controllers/ABUpdateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "we should handle an error status here too, in case the user wants to try a manual downgrade or something sketchy",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "176ec7c4_c735fe84",
+        "filename": "src/co/aospa/hub/controllers/NotificationController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "is this a constant in Android somewhere?",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62abaaa3_0ef43dfa",
+        "filename": "src/co/aospa/hub/controllers/UpdateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "rename to sController for static variable",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b0228a2_e19b81f0",
+        "filename": "src/co/aospa/hub/controllers/UpdateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "make this private",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da027fc2_b3eaff91",
+        "filename": "src/co/aospa/hub/controllers/UpdateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "can we make this a static set",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "993860ea_1194f570",
+        "filename": "src/co/aospa/hub/controllers/UpdateStateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "not sure this is supposed to be static, meaning it\u0027s shared by all instances of the class.",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6407f167_c64ed306",
+        "filename": "src/co/aospa/hub/controllers/UpdateStateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "sStateController",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4003730_805b9eab",
+        "filename": "src/co/aospa/hub/controllers/UpdateStateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "private",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5b8ae99_dd2b378b",
+        "filename": "src/co/aospa/hub/controllers/UpdateStateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "why the extra colon",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d6ae9a2_321e869c",
+        "filename": "src/co/aospa/hub/controllers/UpdateStateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:14:04Z",
+      "side": 1,
+      "message": "import statustype",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    }
+  ]
+}
