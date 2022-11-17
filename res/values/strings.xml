@@ -19,6 +19,7 @@
     <string name="system_update_update_available">System update available</string>
     <string name="system_update_update_available_security_update">Security update available</string>
     <string name="system_update_update_available_desc"><![CDATA[%1$s Update size: %2$s]]></string>
+    <string name="system_update_update_available_device_desc"><![CDATA[%1$s %2$s %3$s <br><br>This update adds stability improvements, as well as fixes critical bugs. Learn more at <a href=\"https://paranoidandroid.co/changelog\">paranoidandroid.co/changelog</a><br><br><b>Important updates</b>: <br>%4$s <br><br>Update size: %5$s]]></string>
     <string name="system_update_update_available_button">Download and install</string>
 
     <!-- Update download and install -->
