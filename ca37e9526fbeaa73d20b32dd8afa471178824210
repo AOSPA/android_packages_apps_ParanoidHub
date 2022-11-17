@@ -138,6 +138,24 @@
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6e243f2_9065d1f6",
+        "filename": "src/co/aospa/hub/components/UpdateComponent.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:29:53Z",
+      "side": 1,
+      "message": "i guess not, fair enough. kotlin refactor would be good then i guess",
+      "parentUuid": "020ecf7d_6206f0c7",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "314dd6a8_7f90e96d",
@@ -210,6 +228,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e9b78d71_8f7e59fe",
+        "filename": "src/co/aospa/hub/controllers/ABUpdateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:29:53Z",
+      "side": 1,
+      "message": "why not? haven\u0027t seen any cases of excessive issues when using a/b perf",
+      "parentUuid": "17491412_ad4459dd",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f1659b0f_ae4aeedd",
         "filename": "src/co/aospa/hub/controllers/ABUpdateController.java",
         "patchSetId": 15
@@ -274,6 +310,24 @@
       "side": 1,
       "message": "No",
       "parentUuid": "176ec7c4_c735fe84",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7efcfc29_084059f9",
+        "filename": "src/co/aospa/hub/controllers/NotificationController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:29:53Z",
+      "side": 1,
+      "message": "can we make it a constant locally then",
+      "parentUuid": "906e1e83_77b3633e",
       "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
@@ -531,6 +585,24 @@
       "side": 1,
       "message": "Meant to delete this function, it\u0027s not used anyway",
       "parentUuid": "e7c65142_5df9b7cb",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c60ba38_30456b8f",
+        "filename": "src/co/aospa/hub/util/Update.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-17T03:29:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d2dc776c_369b12f8",
       "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     }
