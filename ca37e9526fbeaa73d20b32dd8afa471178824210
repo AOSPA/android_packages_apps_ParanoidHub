@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "83ef2701_fd25653c",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 15
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T03:38:10Z",
+      "side": 1,
+      "message": "https://github.com/AOSPA/android_packages_apps_ParanoidHub/commit/e998f90e0a514175444dd15f71a31f42ece9f051",
+      "parentUuid": "269b3fd6_68480abf",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbfba7e2_eb6d4448",
         "filename": "AndroidManifest.xml",
         "patchSetId": 15
