@@ -18,6 +18,24 @@
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5da100c4_bcb42a92",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 15
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6fc310b3_4a0be3e1",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "269b3fd6_68480abf",
@@ -70,6 +88,24 @@
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9bd114d_21291a5b",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 15
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dbfba7e2_eb6d4448",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5271f69a_3382689e",
@@ -83,6 +119,24 @@
       "writtenOn": "2022-11-17T03:14:04Z",
       "side": 1,
       "message": "what for?",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29862e85_9b593d6e",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 15
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5271f69a_3382689e",
       "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
@@ -104,6 +158,24 @@
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a369cbfa_ddde05e9",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 15
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4624c030_293a2e1d",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "831cc866_67c2c841",
@@ -117,6 +189,24 @@
       "writtenOn": "2022-11-17T03:19:26Z",
       "side": 1,
       "message": "what.",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bb55dfa_51833762",
+        "filename": "src/co/aospa/hub/UpdateReceiver.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "831cc866_67c2c841",
       "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
@@ -262,6 +352,24 @@
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad875084_a50cd522",
+        "filename": "src/co/aospa/hub/controllers/ABUpdateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e9b78d71_8f7e59fe",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1659b0f_ae4aeedd",
@@ -350,6 +458,24 @@
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba8aa763_e6d646e8",
+        "filename": "src/co/aospa/hub/controllers/NotificationController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7efcfc29_084059f9",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62abaaa3_0ef43dfa",
@@ -363,6 +489,24 @@
       "writtenOn": "2022-11-17T03:14:04Z",
       "side": 1,
       "message": "rename to sController for static variable",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecef59d3_920bcb79",
+        "filename": "src/co/aospa/hub/controllers/UpdateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "62abaaa3_0ef43dfa",
       "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
@@ -384,6 +528,24 @@
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "371dca90_e82d9c63",
+        "filename": "src/co/aospa/hub/controllers/UpdateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4b0228a2_e19b81f0",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da027fc2_b3eaff91",
@@ -397,6 +559,24 @@
       "writtenOn": "2022-11-17T03:14:04Z",
       "side": 1,
       "message": "can we make this a static set",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfca4fd2_933a4b3e",
+        "filename": "src/co/aospa/hub/controllers/UpdateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "da027fc2_b3eaff91",
       "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
@@ -418,6 +598,24 @@
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7c703ed_0eac878f",
+        "filename": "src/co/aospa/hub/controllers/UpdateStateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "993860ea_1194f570",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6407f167_c64ed306",
@@ -431,6 +629,24 @@
       "writtenOn": "2022-11-17T03:14:04Z",
       "side": 1,
       "message": "sStateController",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7572d06c_4db8fc4d",
+        "filename": "src/co/aospa/hub/controllers/UpdateStateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6407f167_c64ed306",
       "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
@@ -452,6 +668,24 @@
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bf49775_73a7cc6a",
+        "filename": "src/co/aospa/hub/controllers/UpdateStateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a4003730_805b9eab",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5b8ae99_dd2b378b",
@@ -469,6 +703,24 @@
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e46898ab_6fc9490c",
+        "filename": "src/co/aospa/hub/controllers/UpdateStateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b5b8ae99_dd2b378b",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d6ae9a2_321e869c",
@@ -482,6 +734,24 @@
       "writtenOn": "2022-11-17T03:14:04Z",
       "side": 1,
       "message": "import statustype",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fe038ac_e8abea7a",
+        "filename": "src/co/aospa/hub/controllers/UpdateStateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2d6ae9a2_321e869c",
       "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
@@ -538,6 +808,24 @@
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e603d0b9_66234e3f",
+        "filename": "src/co/aospa/hub/util/PreferenceHelper.kt",
+        "patchSetId": 15
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aeb5eb82_df7e8836",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e214ed6_ae591bc5",
@@ -555,6 +843,24 @@
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "645712cc_5badc4a4",
+        "filename": "src/co/aospa/hub/util/PreferenceHelper.kt",
+        "patchSetId": 15
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8e214ed6_ae591bc5",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "675791a6_1b72e987",
@@ -568,6 +874,24 @@
       "writtenOn": "2022-11-17T03:19:26Z",
       "side": 1,
       "message": "same, for the rest of the file.",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a325b1f_ad1b5606",
+        "filename": "src/co/aospa/hub/util/PreferenceHelper.kt",
+        "patchSetId": 15
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T04:04:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "675791a6_1b72e987",
       "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
