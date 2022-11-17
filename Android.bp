@@ -5,7 +5,10 @@ android_app {
     privileged: true,
     certificate: "platform",
     system_ext_specific: true,
-    required: ["privapp_whitelist_co.aospa.hub.xml"],
+    required: [
+        "privapp_whitelist_co.aospa.hub.xml",
+        "default-permissions_co.aospa.hub.xml"
+    ],
     optimize: {
         proguard_flags_files: ["proguard.flags"],
     },
@@ -36,3 +39,12 @@ prebuilt_etc {
     sub_dir: "permissions",
     system_ext_specific: true,
 }
+
+prebuilt_etc {
+    name: "default-permissions_co.aospa.hub.xml",
+    system_ext_specific: true,
+    sub_dir: "default-permissions",
+    src: "default-permissions_co.aospa.hub.xml",
+    filename_from_src: true,
+}
+
