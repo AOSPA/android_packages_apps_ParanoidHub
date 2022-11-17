@@ -433,6 +433,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5a85735_81b580c4",
+        "filename": "src/co/aospa/hub/util/App.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T03:28:14Z",
+      "side": 1,
+      "message": "util dir holds different classes that are have their functions based on relevance, just easier to find things in this case",
+      "parentUuid": "9608b701_00777438",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aeb5eb82_df7e8836",
         "filename": "src/co/aospa/hub/util/PreferenceHelper.kt",
         "patchSetId": 15
@@ -495,6 +513,24 @@
       "writtenOn": "2022-11-17T03:19:26Z",
       "side": 1,
       "message": "just generate a random number with Long.MAX_VALUE as a cap, or sha256 the file and set that as the name if you\u0027re that paranoid but don\u0027t do this.",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2dc776c_369b12f8",
+        "filename": "src/co/aospa/hub/util/Update.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000178
+      },
+      "writtenOn": "2022-11-17T03:28:14Z",
+      "side": 1,
+      "message": "Meant to delete this function, it\u0027s not used anyway",
+      "parentUuid": "e7c65142_5df9b7cb",
       "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     }
