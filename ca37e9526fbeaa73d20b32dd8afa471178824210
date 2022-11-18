@@ -71,6 +71,24 @@
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60f0d6ee_e1a38ec0",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 15
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-18T04:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83ef2701_fd25653c",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbfba7e2_eb6d4448",
@@ -295,6 +313,24 @@
       "side": 1,
       "message": "There\u0027s nothing indicating it won\u0027t",
       "parentUuid": "314dd6a8_7f90e96d",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c0e9124_58d8cda4",
+        "filename": "src/co/aospa/hub/controllers/ABUpdateController.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-18T04:23:14Z",
+      "side": 1,
+      "message": "still feels like we should handle it maybe, but yea probably unlikely to fail unless sepolicy is wrong.",
+      "parentUuid": "8c8b24de_5a8a5b62",
       "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
@@ -787,6 +823,24 @@
       "side": 1,
       "message": "util dir holds different classes that are have their functions based on relevance, just easier to find things in this case",
       "parentUuid": "9608b701_00777438",
+      "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fedb352_9ed7426c",
+        "filename": "src/co/aospa/hub/util/App.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-11-18T04:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5a85735_81b580c4",
       "revId": "ca37e9526fbeaa73d20b32dd8afa471178824210",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     },
