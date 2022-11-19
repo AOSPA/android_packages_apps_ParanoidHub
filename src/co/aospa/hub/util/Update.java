@@ -25,6 +25,8 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -54,11 +56,45 @@ public class Update {
     }
 
     public String getUpdateDescriptionText(Context context) {
-        return mUpdateComponent != null ? String.format(context.getResources().getString(
-                        R.string.system_update_update_available_desc),
-                mChangelogComponent.getChangelog(),
-                Formatter.formatShortFileSize(context, mUpdateComponent.getFileSize()))
-                : "error";
+        String updateDescription = "error";
+        if (mUpdateComponent != null) {
+            String deviceChangelog = getDeviceChangelog();
+            if (isDeviceIncrementalUpdate()) {
+                updateDescription = String.format(context.getResources().getString(
+                                R.string.system_update_update_available_device_incremental_desc),
+                        mUpdateComponent.getVersion(),
+                        mUpdateComponent.getBuildType(),
+                        mUpdateComponent.getVersionNumber(),
+                        deviceChangelog != null ? deviceChangelog : "No updates found",
+                        Formatter.formatShortFileSize(context, mUpdateComponent.getFileSize()));
+            } else {
+                updateDescription = String.format(context.getResources().getString(deviceChangelog != null
+                                ? R.string.system_update_update_available_with_device_desc
+                                : R.string.system_update_update_available_desc),
+                        mChangelogComponent.getChangelog(),
+                        deviceChangelog,
+                        Formatter.formatShortFileSize(context, mUpdateComponent.getFileSize()));
+            }
+        }
+        return updateDescription;
+    }
+
+    private String getDeviceChangelog() {
+        String changelog = null;
+        if (mUpdateComponent != null) {
+            String severText = mUpdateComponent.getDeviceChangelog();
+            if (!severText.isEmpty()) {
+                changelog = severText.replaceAll(",", "<br>-");
+            }
+        }
+        return changelog;
+    }
+
+    public boolean isDeviceIncrementalUpdate() {
+        Version version = new Version(mUpdateComponent);
+        boolean isAndroidUpgrade = version.isAndroidUpgrade();
+        return !isAndroidUpgrade && (Float.parseFloat(mUpdateComponent.getVersionNumber())
+                > Float.parseFloat(mChangelogComponent.getVersionNumber()));
     }
 
     public boolean isSecurityUpdate() {
