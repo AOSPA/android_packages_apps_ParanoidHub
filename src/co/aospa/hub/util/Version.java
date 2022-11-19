@@ -62,9 +62,9 @@ public class Version {
         return false;
     }
 
-    private boolean isAndroidUpgrade() {
+    public boolean isAndroidUpgrade() {
         return mComponent != null &&
-                Long.parseLong(mComponent.getAndroidVersion()) > getAndroidVersion();
+                Float.parseFloat(mComponent.getAndroidVersion()) > getAndroidVersion();
     }
 
     private boolean isValidatedDowngraded() {
@@ -77,8 +77,8 @@ public class Version {
         return false;
     }
 
-    public static long getAndroidVersion() {
-        return Long.parseLong(SystemProperties.get(Constants.PROP_ANDROID_VERSION));
+    public static float getAndroidVersion() {
+        return Float.parseFloat(SystemProperties.get(Constants.PROP_ANDROID_VERSION));
     }
 
     public static String getCurrentVersion() {
