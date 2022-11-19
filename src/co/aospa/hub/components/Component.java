@@ -33,4 +33,6 @@ public abstract class Component {
     public abstract void setId(String id);
     public abstract File getFile();
     public abstract void setFile(File file);
+    public abstract String getDeviceChangelog();
+    public abstract void setDeviceChangelog(String deviceChangelog);
 }

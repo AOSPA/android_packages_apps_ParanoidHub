@@ -25,6 +25,8 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -54,11 +56,41 @@ public class Update {
     }
 
     public String getUpdateDescriptionText(Context context) {
-        return mUpdateComponent != null ? String.format(context.getResources().getString(
-                        R.string.system_update_update_available_desc),
-                mChangelogComponent.getChangelog(),
-                Formatter.formatShortFileSize(context, mUpdateComponent.getFileSize()))
-                : "error";
+        String updateDescription = "error";
+        if (mUpdateComponent != null) {
+            if (isDeviceIncrementalUpdate()) {
+                updateDescription = String.format(context.getResources().getString(
+                                R.string.system_update_update_available_device_desc),
+                        mUpdateComponent.getVersion(),
+                        mUpdateComponent.getBuildType(),
+                        mUpdateComponent.getVersionNumber(),
+                        getDeviceChangelog(),
+                        Formatter.formatShortFileSize(context, mUpdateComponent.getFileSize()));
+            } else {
+                updateDescription = String.format(context.getResources().getString(
+                                R.string.system_update_update_available_desc),
+                        mUpdateComponent.getDeviceChangelog(),
+                        Formatter.formatShortFileSize(context, mUpdateComponent.getFileSize()));
+            }
+
+        }
+        return updateDescription;
+    }
+
+    private String getDeviceChangelog() {
+        String changelog = "error";
+        if (mUpdateComponent != null) {
+            String severText = mUpdateComponent.getDeviceChangelog();
+            changelog = severText.replaceAll(",", "<br>-");
+        }
+        return changelog;
+    }
+
+    public boolean isDeviceIncrementalUpdate() {
+        Version version = new Version(mUpdateComponent);
+        boolean isAndroidUpgrade = version.isAndroidUpgrade();
+        return !isAndroidUpgrade && (Float.parseFloat(mUpdateComponent.getVersionNumber())
+                > Float.parseFloat(mChangelogComponent.getVersionNumber()));
     }
 
     public boolean isSecurityUpdate() {

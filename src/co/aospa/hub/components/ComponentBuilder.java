@@ -116,6 +116,7 @@ public class ComponentBuilder {
         component.setDownloadUrl(object.getString("url"));
         component.setAndroidVersion(object.getString("android_version"));
         component.setAndroidSpl(object.getString("android_spl"));
+        component.setDeviceChangelog(object.getString("changelog_device"));
         return buildSharedComponent(component, object);
     }
 
