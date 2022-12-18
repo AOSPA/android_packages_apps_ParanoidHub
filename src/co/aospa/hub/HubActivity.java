@@ -585,7 +585,7 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
         ChangelogDialog dialog = new ChangelogDialog(HubActivity.this, changelog);
         IDreamManager dreamService = IDreamManager.Stub.asInterface(ServiceManager.getService("dreams"));
         DialogLaunchAnimator dialogLaunchAnimator = new DialogLaunchAnimator(dreamService);
-        dialogLaunchAnimator.showFromView(dialog, view, true);
+        dialogLaunchAnimator.showFromView(dialog, view, null, true);
     }
 
     private void warmUpCheckForUpdates() {
