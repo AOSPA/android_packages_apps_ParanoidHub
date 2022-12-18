@@ -584,8 +584,28 @@ public class HubActivity extends AppCompatActivity implements View.OnClickListen
     private void showDetailedChangelog(View view, Changelog changelog) {
         ChangelogDialog dialog = new ChangelogDialog(HubActivity.this, changelog);
         IDreamManager dreamService = IDreamManager.Stub.asInterface(ServiceManager.getService("dreams"));
-        DialogLaunchAnimator dialogLaunchAnimator = new DialogLaunchAnimator(dreamService);
-        dialogLaunchAnimator.showFromView(dialog, view, true);
+        DialogLaunchAnimator dialogLaunchAnimator = new DialogLaunchAnimator(new DialogLaunchAnimator.Callback() {
+            @Override
+            public boolean isDreaming() {
+                try {
+                    return dreamService.isDreaming();
+                } catch (java.lang.Exception e) {
+                    Log.e("DialogLaunchAnimator.Callback", "dreamService.isDreaming failed", e);
+                    return false;
+                }
+            }
+
+            @Override
+            public boolean isUnlocked() {
+                return true;
+            }
+
+            @Override
+            public boolean isShowingAlternateAuthOnUnlock() {
+                return false;
+            }
+        }, null);
+        dialogLaunchAnimator.showFromView(dialog, view, null, true);
     }
 
     private void warmUpCheckForUpdates() {
