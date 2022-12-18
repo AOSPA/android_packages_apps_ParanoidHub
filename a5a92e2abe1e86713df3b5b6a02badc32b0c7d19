@@ -16,6 +16,24 @@
       "message": "shouldn\u0027t this always be false if this dialog is only visible while unlocked?",
       "revId": "a5a92e2abe1e86713df3b5b6a02badc32b0c7d19",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00c48b4c_02f06a06",
+        "filename": "src/co/aospa/hub/HubActivity.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000427
+      },
+      "writtenOn": "2022-12-18T15:08:20Z",
+      "side": 1,
+      "message": "unlocked and in the app, we are not supporting this via a dream",
+      "parentUuid": "ed3a4f53_815d7ad2",
+      "revId": "a5a92e2abe1e86713df3b5b6a02badc32b0c7d19",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     }
   ]
 }
