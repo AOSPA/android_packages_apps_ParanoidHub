@@ -1,5 +1,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">System Update</string>
+    <string name="app_name">Paranoid Hub</string>
 
     <!-- The server that hosts the update files -->
     <string name="system_update_server_url" translatable="false">"https://raw.githubusercontent.com/AOSPA/ota/master/"</string>
