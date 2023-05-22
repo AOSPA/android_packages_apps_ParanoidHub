@@ -64,6 +64,8 @@ public class UpdateController {
 
     private int mActiveDownloads = 0;
 
+    private static String sInstallingUpdate = null;
+
     public @interface StatusType {
         int STARTING = 0;
         int DOWNLOAD = 1;
@@ -95,7 +97,7 @@ public class UpdateController {
 
     @SuppressLint("WakelockTimeout")
     public void startDownload(UpdateComponent updateComponent) {
-        if (ABUpdateController.isInstalling(mContext)) {
+        if (isInstallingUpdate()) {
             notifyUpdateListener(StatusType.INSTALL, -1);
             return;
         }
@@ -164,7 +166,7 @@ public class UpdateController {
 
     @SuppressLint("WakelockTimeout")
     public void resumeDownload(UpdateComponent updateComponent) {
-        if (ABUpdateController.isInstalling(mContext)) {
+        if (isInstallingUpdate()) {
             notifyUpdateListener(StatusType.INSTALL, -1);
             return;
         }
@@ -435,6 +437,7 @@ public class UpdateController {
                 }
             }
         });
+        sInstallingUpdate = mDownloads.get(downloadId);
         thread.start();
         notifyUpdateListener(StatusType.INSTALL, 0);
     }
@@ -455,6 +458,15 @@ public class UpdateController {
 
     public Map<String, DownloadEntry> getDownloads() {
         return mDownloads;
+    }
+
+    static synchronized boolean isNonAbInstalling() {
+        return sInstallingUpdate != null;
+    }
+
+    public boolean isInstallingUpdate() {
+        return isNonAbInstalling() ||
+                ABUpdateInstaller.isInstalling(mContext);
     }
 
     public boolean isVerifyingUpdate() {
