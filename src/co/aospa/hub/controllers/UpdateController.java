@@ -192,8 +192,8 @@ public class UpdateController {
                 notifyUpdateListener(StatusType.VERIFY, 0);
             } else {
                 Log.d(TAG, "Skipping pre-existing download verification because it is disabled");
-                installUpdate(entry.mComponent);
                 notifyUpdateListener(StatusType.INSTALL, 0);
+                installUpdate(entry.mComponent);
             }
         } else {
             DownloadClient downloadClient;
@@ -284,8 +284,8 @@ public class UpdateController {
                         notifyUpdateListener(StatusType.VERIFY, 0);
                     } else {
                         Log.d(TAG, "Skipping download verification because it is disabled");
-                        installUpdate(entry.mComponent);
                         notifyUpdateListener(StatusType.INSTALL, -1);
+                        installUpdate(entry.mComponent);
                     }
                     tryReleaseWakelock();
                 }
@@ -368,8 +368,8 @@ public class UpdateController {
                 if (file.exists() && verifyPackage(file)) {
                     //noinspection ResultOfMethodCallIgnored
                     file.setReadable(true, false);
-                    installUpdate(component);
                     notifyUpdateListener(StatusType.INSTALL, 0);
+                    installUpdate(component);
                 } else {
                     notifyUpdateListener(StatusType.VERIFY_ERROR, -1);
                 }
