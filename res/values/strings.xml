@@ -2,7 +2,7 @@
     <string name="app_name">System Update</string>
 
     <!-- The server that hosts the update files -->
-    <string name="system_update_server_url" translatable="false">"https://raw.githubusercontent.com/AOSPA/ota/master/"</string>
+    <string name="system_update_server_url" translatable="false">"https://api.paranoidandroid.co/"</string>
     <!-- Directory where the update files will be downloaded and stored.
          WARNING: The application can and will delete any unknown file. -->
     <string name="system_update_download_path" translatable="false">/data/hub_updates/</string>
