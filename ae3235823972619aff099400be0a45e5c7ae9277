@@ -16,6 +16,24 @@
       "message": "is the github link still valid as well? else we\u0027ll break OTA to the next build",
       "revId": "ae3235823972619aff099400be0a45e5c7ae9277",
       "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed7d2ddc_3c32a6e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000668
+      },
+      "writtenOn": "2023-06-04T13:39:41Z",
+      "side": 1,
+      "message": "It is still valid, github link is the source. New address is a proxy of it.",
+      "parentUuid": "c0ab63d5_28010789",
+      "revId": "ae3235823972619aff099400be0a45e5c7ae9277",
+      "serverId": "3162e3d8-d894-470e-abd9-724f7b0effad"
     }
   ]
 }
