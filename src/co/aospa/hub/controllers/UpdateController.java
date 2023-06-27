@@ -192,8 +192,7 @@ public class UpdateController {
                 notifyUpdateListener(StatusType.VERIFY, 0);
             } else {
                 Log.d(TAG, "Skipping pre-existing download verification because it is disabled");
-                notifyUpdateListener(StatusType.INSTALL, 0);
-                installUpdate(entry.mComponent);
+                installUpdate(entry.mComponent, 0);
             }
         } else {
             DownloadClient downloadClient;
@@ -284,8 +283,7 @@ public class UpdateController {
                         notifyUpdateListener(StatusType.VERIFY, 0);
                     } else {
                         Log.d(TAG, "Skipping download verification because it is disabled");
-                        notifyUpdateListener(StatusType.INSTALL, -1);
-                        installUpdate(entry.mComponent);
+                        installUpdate(entry.mComponent, -1);
                     }
                     tryReleaseWakelock();
                 }
@@ -308,7 +306,7 @@ public class UpdateController {
         };
     }
 
-    private void installUpdate(UpdateComponent component) {
+    private void installUpdate(UpdateComponent component, int progress) {
         try {
             if (Update.isABDevice() && Update.isABUpdate(component.getFile())) {
                 ABUpdateController controller = ABUpdateController.getInstance(mContext,
@@ -317,6 +315,8 @@ public class UpdateController {
             } else {
                 notifyUpdateListener(StatusType.REBOOT, -1);
             }
+            notifyUpdateListener(StatusType.INSTALL, progress);
+
         } catch (IOException e) {
             Log.e(TAG, "Could not install update", e);
             notifyUpdateListener(StatusType.INSTALL_ERROR, -1);
@@ -368,8 +368,7 @@ public class UpdateController {
                 if (file.exists() && verifyPackage(file)) {
                     //noinspection ResultOfMethodCallIgnored
                     file.setReadable(true, false);
-                    notifyUpdateListener(StatusType.INSTALL, 0);
-                    installUpdate(component);
+                    installUpdate(component, 0);
                 } else {
                     notifyUpdateListener(StatusType.VERIFY_ERROR, -1);
                 }
