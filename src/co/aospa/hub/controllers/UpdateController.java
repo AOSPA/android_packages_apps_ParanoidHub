@@ -37,6 +37,7 @@ import java.util.Set;
 import co.aospa.hub.R;
 import co.aospa.hub.client.DownloadClient;
 import co.aospa.hub.components.UpdateComponent;
+import co.aospa.hub.controllers.UpdateController.StatusType;
 import co.aospa.hub.util.App;
 import co.aospa.hub.util.Constants;
 import co.aospa.hub.util.FileUtils;
@@ -192,8 +193,7 @@ public class UpdateController {
                 notifyUpdateListener(StatusType.VERIFY, 0);
             } else {
                 Log.d(TAG, "Skipping pre-existing download verification because it is disabled");
-                notifyUpdateListener(StatusType.INSTALL, 0);
-                installUpdate(entry.mComponent);
+                installUpdate(entry.mComponent, 0);
             }
         } else {
             DownloadClient downloadClient;
@@ -284,8 +284,7 @@ public class UpdateController {
                         notifyUpdateListener(StatusType.VERIFY, 0);
                     } else {
                         Log.d(TAG, "Skipping download verification because it is disabled");
-                        notifyUpdateListener(StatusType.INSTALL, -1);
-                        installUpdate(entry.mComponent);
+                        installUpdate(entry.mComponent, -1);
                     }
                     tryReleaseWakelock();
                 }
@@ -308,15 +307,18 @@ public class UpdateController {
         };
     }
 
-    private void installUpdate(UpdateComponent component) {
+    private void installUpdate(UpdateComponent component, int progress) {
         try {
             if (Update.isABDevice() && Update.isABUpdate(component.getFile())) {
                 ABUpdateController controller = ABUpdateController.getInstance(mContext,
                         sController);
                 controller.install(component);
+                notifyUpdateListener(StatusType.INSTALL, progress);
             } else {
+                notifyUpdateListener(StatusType.INSTALL, progress);
                 notifyUpdateListener(StatusType.REBOOT, -1);
             }
+
         } catch (IOException e) {
             Log.e(TAG, "Could not install update", e);
             notifyUpdateListener(StatusType.INSTALL_ERROR, -1);
@@ -368,8 +370,7 @@ public class UpdateController {
                 if (file.exists() && verifyPackage(file)) {
                     //noinspection ResultOfMethodCallIgnored
                     file.setReadable(true, false);
-                    notifyUpdateListener(StatusType.INSTALL, 0);
-                    installUpdate(component);
+                    installUpdate(component, 0);
                 } else {
                     notifyUpdateListener(StatusType.VERIFY_ERROR, -1);
                 }
