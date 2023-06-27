@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="85e19a26-b6bb-4da2-ba7b-82bddecce604" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/UpdateReceiver.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/UpdateStateService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/client/ClientConnector.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/client/DownloadClient.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/client/HttpURLConnectionClient.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/components/ChangelogComponent.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/components/ComponentBuilder.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/components/OtaConfigComponent.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/components/UpdateComponent.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/controllers/ABUpdateController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/controllers/NotificationController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/controllers/UpdateController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/controllers/UpdateStateController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/ui/State.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/ui/activities/HubActivity.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateAvailableState.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateCheckingState.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateDownloadErrorState.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateDownloadInstallState.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateDownloadPausedState.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateDownloadVerificationState.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateInstallErrorState.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateRebootState.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateUnavailableState.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateVerificationErrorState.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/util/App.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/util/Constants.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/util/FileUtils.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/util/Update.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/co/aospa/hub/util/Version.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/UpdateReceiver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/UpdateStateService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/client/ClientConnector.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/client/DownloadClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/client/HttpURLConnectionClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/client/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/co/aospa/hub/client/Server.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/components/ChangelogComponent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/components/Component.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/components/ComponentBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/components/OtaConfigComponent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/components/UpdateComponent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/controllers/ABUpdateController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/controllers/NotificationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/controllers/UpdateController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/controllers/UpdateStateController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/ui/State.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/co/aospa/hub/components/Component.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/ui/activities/HubActivity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateAvailableState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateCheckingState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateDownloadErrorState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateDownloadInstallState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateDownloadPausedState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateDownloadVerificationState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateInstallErrorState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateRebootState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateUnavailableState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/ui/state/UpdateVerificationErrorState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/util/App.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/util/Constants.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/util/FileUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/util/PreferenceHelper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/co/aospa/hub/util/PreferenceHelper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/util/Update.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/co/aospa/hub/util/Version.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2RmPOuUV6d5q4bPzBa02WTWFzmG" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="false" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "last_opened_file_path": "/Users/hernancastanonalvarez/Desktop/AOSPA/android_packages_apps_ParanoidHub",
+    "show.migrate.to.gradle.popup": "false"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="85e19a26-b6bb-4da2-ba7b-82bddecce604" name="Changes" comment="" />
+      <created>1687852255010</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1687852255010</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
