@@ -7,7 +7,8 @@ android_app {
     system_ext_specific: true,
     required: [
         "privapp_whitelist_co.aospa.hub.xml",
-        "default-permissions_co.aospa.hub.xml"
+        "default-permissions_co.aospa.hub.xml",
+        "init.aospa-hub.rc"
     ],
     optimize: {
         proguard_flags_files: ["proguard.flags"],
@@ -48,3 +49,8 @@ prebuilt_etc {
     filename_from_src: true,
 }
 
+prebuilt_etc {
+    name: "init.aospa-hub.rc",
+    src: "init.aospa-hub.rc",
+    sub_dir: "init",
+}
