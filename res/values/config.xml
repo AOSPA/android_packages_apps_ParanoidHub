@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Download zip verification, only works on release builds -->
-    <bool name="config_enableDownloadVerification">false</bool>
-</resources>

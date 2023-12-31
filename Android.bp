@@ -1,56 +1,31 @@
-android_app {
-    name: "ParanoidHub",
-    defaults: ["platform_app_defaults", "SettingsLibDefaults"],
-    platform_apis: true,
-    privileged: true,
-    certificate: "platform",
-    system_ext_specific: true,
-    required: [
-        "privapp_whitelist_co.aospa.hub.xml",
-        "default-permissions_co.aospa.hub.xml",
-        "init.aospa-hub.rc"
-    ],
-    optimize: {
-        proguard_flags_files: ["proguard.flags"],
-    },
-
-    srcs: [
-        "src/**/*.java",
-        "src/**/*.kt",
-    ],
-    resource_dirs: ["res"],
-
-    static_libs: [
-        "com.google.android.material_material",
-        "androidx.core_core",
-        "androidx.core_core-ktx",
-        "androidx.appcompat_appcompat",
-        "androidx.cardview_cardview",
-        "androidx-constraintlayout_constraintlayout",
-        "androidx.localbroadcastmanager_localbroadcastmanager",
-        "androidx.preference_preference",
-        "androidx.recyclerview_recyclerview",
-        "SystemUIAnimationLib",
+android_app_import {
+	name: "ParanoidHub",
+	owner: "AOSPA",
+	apk: "ParanoidHub.apk",
+	certificate: "platform",
+	dex_preopt: {
+		enabled: true,
+	},
+	privileged: true,
+	system_ext_specific: true,
+	required: [
+        "privapp_whitelist_co.aospa.hub",
+        "default-permissions_co.aospa.hub"
     ],
 }
 
 prebuilt_etc {
-    name: "privapp_whitelist_co.aospa.hub.xml",
-    src: "privapp_whitelist_co.aospa.hub.xml",
+    name: "privapp_whitelist_co.aospa.hub",
+    system_ext_specific: true,
     sub_dir: "permissions",
-    system_ext_specific: true,
-}
-
-prebuilt_etc {
-    name: "default-permissions_co.aospa.hub.xml",
-    system_ext_specific: true,
-    sub_dir: "default-permissions",
-    src: "default-permissions_co.aospa.hub.xml",
+    src: "privapp_whitelist_co.aospa.hub.xml",
     filename_from_src: true,
 }
 
 prebuilt_etc {
-    name: "init.aospa-hub.rc",
-    src: "init.aospa-hub.rc",
-    sub_dir: "init",
+    name: "default-permissions_co.aospa.hub",
+    system_ext_specific: true,
+    sub_dir: "default-permissions",
+    src: "default-permissions_co.aospa.hub.xml",
+    filename_from_src: true,
 }

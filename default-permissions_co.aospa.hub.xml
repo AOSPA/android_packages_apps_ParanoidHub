@@ -11,9 +11,9 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<permissions>
+<exceptions>
     <exception package="co.aospa.hub">
         <!-- Notifications -->
-        <permission name="android.permission.POST_NOTIFICATIONS" fixed="false"/>
+        <permission name="android.permission.POST_NOTIFICATIONS" fixed="true"/>
     </exception>
-</permissions>
+</exceptions>
