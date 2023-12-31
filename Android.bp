@@ -1,36 +1,14 @@
-android_app {
+android_app_import {
     name: "ParanoidHub",
-    defaults: ["platform_app_defaults", "SettingsLibDefaults"],
-    platform_apis: true,
+    owner: "aospa",
+    apk: "ParanoidHub.apk",
     privileged: true,
-    certificate: "platform",
+    //certificate: "platform",
+    presigned: true,
     system_ext_specific: true,
     required: [
         "privapp_whitelist_co.aospa.hub.xml",
         "default-permissions_co.aospa.hub.xml",
-        "init.aospa-hub.rc"
-    ],
-    optimize: {
-        proguard_flags_files: ["proguard.flags"],
-    },
-
-    srcs: [
-        "src/**/*.java",
-        "src/**/*.kt",
-    ],
-    resource_dirs: ["res"],
-
-    static_libs: [
-        "com.google.android.material_material",
-        "androidx.core_core",
-        "androidx.core_core-ktx",
-        "androidx.appcompat_appcompat",
-        "androidx.cardview_cardview",
-        "androidx-constraintlayout_constraintlayout",
-        "androidx.localbroadcastmanager_localbroadcastmanager",
-        "androidx.preference_preference",
-        "androidx.recyclerview_recyclerview",
-        "SystemUIAnimationLib",
     ],
 }
 
@@ -47,10 +25,4 @@ prebuilt_etc {
     sub_dir: "default-permissions",
     src: "default-permissions_co.aospa.hub.xml",
     filename_from_src: true,
-}
-
-prebuilt_etc {
-    name: "init.aospa-hub.rc",
-    src: "init.aospa-hub.rc",
-    sub_dir: "init",
 }
