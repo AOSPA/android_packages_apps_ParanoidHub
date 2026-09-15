@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: Paranoid Android
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+
+    <!-- Where update packages are downloaded. -->
+    <string name="config_downloadDirectory" translatable="false">/data/hub_updates/</string>
+
+    <!-- Update server to ask for this device's builds. Takes the device name. -->
+    <string name="config_updateServerUrl" translatable="false">https://api.paranoidandroid.co/updates/%1$s</string>
+
+</resources>

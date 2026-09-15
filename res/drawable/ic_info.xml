@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: Material Design Authors / Google LLC
+  ~ SPDX-FileCopyrightText: Paranoid Android
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960">
+
+    <group android:translateY="960">
+        <path
+            android:fillColor="@android:color/white"
+            android:pathData="M508.5,-291.5Q520,-303 520,-320L520,-480Q520,-497 508.5,-508.5Q497,-520 480,-520Q463,-520 451.5,-508.5Q440,-497 440,-480L440,-320Q440,-303 451.5,-291.5Q463,-280 480,-280Q497,-280 508.5,-291.5ZM508.5,-611.5Q520,-623 520,-640Q520,-657 508.5,-668.5Q497,-680 480,-680Q463,-680 451.5,-668.5Q440,-657 440,-640Q440,-623 451.5,-611.5Q463,-600 480,-600Q497,-600 508.5,-611.5ZM480,-80Q397,-80 324,-111.5Q251,-143 197,-197Q143,-251 111.5,-324Q80,-397 80,-480Q80,-563 111.5,-636Q143,-709 197,-763Q251,-817 324,-848.5Q397,-880 480,-880Q563,-880 636,-848.5Q709,-817 763,-763Q817,-709 848.5,-636Q880,-563 880,-480Q880,-397 848.5,-324Q817,-251 763,-197Q709,-143 636,-111.5Q563,-80 480,-80ZM480,-160Q614,-160 707,-253Q800,-346 800,-480Q800,-614 707,-707Q614,-800 480,-800Q346,-800 253,-707Q160,-614 160,-480Q160,-346 253,-253Q346,-160 480,-160Z" />
+    </group>
+</vector>

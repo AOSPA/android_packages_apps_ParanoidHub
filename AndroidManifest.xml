@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: Paranoid Android
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="co.aospa.hub"
+    android:versionCode="1">
+
+    <uses-permission android:name="android.permission.ACCESS_CACHE_FILESYSTEM" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.REBOOT" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECOVERY" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <queries>
+        <provider android:authorities="com.google.android.setupwizard.partner" />
+    </queries>
+
+    <application
+        android:name=".HubApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_label"
+        android:requestLegacyExternalStorage="true"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Hub"
+        android:usesCleartextTraffic="false">
+
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.HubSettings" />
+
+        <activity
+            android:name=".ui.UpdatesActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter android:priority="2">
+                <action android:name="android.settings.SYSTEM_UPDATE_SETTINGS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="com.android.settings.SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".UpdateService"
+            android:foregroundServiceType="specialUse">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="updater"/>
+        </service>
+
+        <receiver
+            android:name=".BootCompletedReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

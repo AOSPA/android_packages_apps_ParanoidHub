@@ -1,0 +1,66 @@
+//
+// SPDX-FileCopyrightText: Paranoid Android
+// SPDX-License-Identifier: Apache-2.0
+//
+
+package {
+    default_applicable_licenses: ["packages_apps_ParanoidHub_license"],
+}
+
+license {
+    name: "packages_apps_ParanoidHub_license",
+    visibility: [":__subpackages__"],
+    license_kinds: ["SPDX-license-identifier-Apache-2.0"],
+    license_text: ["LICENSE"],
+}
+
+android_app {
+    name: "ParanoidHub",
+
+    srcs: ["src/**/*.kt"],
+
+    static_libs: [
+        "SettingsLib",
+        "SettingsLibCollapsingToolbarBaseActivity",
+        "SettingsLibSettingsSpinner",
+        "SettingsLibSettingsTheme",
+        "androidx.activity_activity",
+        "androidx.appcompat_appcompat",
+        "androidx.core_core-ktx",
+        "androidx.datastore_datastore-preferences",
+        "androidx.lifecycle_lifecycle-runtime-ktx",
+        "androidx.lifecycle_lifecycle-viewmodel-ktx",
+        "androidx.preference_preference",
+        "androidx.work_work-runtime-ktx",
+        "com.google.android.material_material",
+        "kotlin-stdlib",
+        "kotlinx_serialization_json",
+        "setupdesign",
+    ],
+
+    kotlincflags: ["-Xjvm-default=all"],
+    kotlin_plugins: ["kotlin-serialize-compiler-plugin"],
+
+    platform_apis: true,
+    certificate: "platform",
+    privileged: true,
+    privapp_allowlist: "co.aospa.hub.xml",
+    system_ext_specific: true,
+
+    optimize: {
+        optimize: true,
+        shrink_resources: true,
+    },
+
+    init_rc: ["paranoidhub.rc"],
+
+    required: ["default-permissions_co.aospa.hub"],
+}
+
+prebuilt_etc {
+    name: "default-permissions_co.aospa.hub",
+    system_ext_specific: true,
+    sub_dir: "default-permissions",
+    src: "default-permissions_co.aospa.hub.xml",
+    filename_from_src: true,
+}

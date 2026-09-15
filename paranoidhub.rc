@@ -1,0 +1,6 @@
+# SPDX-FileCopyrightText: Paranoid Android
+# SPDX-License-Identifier: Apache-2.0
+
+on post-fs-data
+    # A package directory of our own, so nothing else clears a part-downloaded update.
+    mkdir /data/hub_updates 0770 system cache encryption=Require

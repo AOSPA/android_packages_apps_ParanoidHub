@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: Paranoid Android
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+
+    <style name="Theme.Hub" parent="SudThemeGlifExpressive.DayNight" />
+
+    <style name="Theme.HubSettings" parent="Theme.SubSettingsBase.Expressive" />
+
+    <style name="UpdateProgressIndicator" parent="Widget.Material3.LinearProgressIndicator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/settingslib_expressive_space_extrasmall4</item>
+        <item name="waveAmplitude">@dimen/sud_glif_expressive_progress_indicator_waveAmplitude</item>
+        <item name="wavelength">@dimen/sud_glif_expressive_progress_indicator_wavelength</item>
+        <item name="wavelengthIndeterminate">@dimen/sud_glif_expressive_progress_indicator_wavelength_indeterminate</item>
+        <item name="indeterminateAnimatorDurationScale">@dimen/sud_glif_expressive_progress_indicator_indeterminate_animator_duration_scale</item>
+    </style>
+
+    <style name="UpdateDescription">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/settingslib_expressive_space_extrasmall4</item>
+        <item name="android:paddingBottom">@dimen/settingslib_expressive_space_extrasmall4</item>
+        <item name="android:textAppearance">@style/TextAppearance.SettingsLib.BodyMedium</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="UpdateDescription.Warning">
+        <item name="android:layout_marginStart">@dimen/settingslib_expressive_space_small3</item>
+        <item name="android:accessibilityLiveRegion">polite</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:minHeight">@dimen/settingslib_expressive_space_small4</item>
+        <item name="android:paddingTop">@dimen/settingslib_expressive_space_none</item>
+        <item name="android:paddingBottom">@dimen/settingslib_expressive_space_none</item>
+    </style>
+
+    <style name="UpdateChangelog">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/settingslib_expressive_space_extrasmall4</item>
+        <item name="android:paddingBottom">@dimen/settingslib_expressive_space_extrasmall4</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:textAppearance">@style/TextAppearance.SettingsLib.BodySmall</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="UpdateBuild">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/settingslib_expressive_space_extrasmall2</item>
+        <item name="android:textAppearance">@style/TextAppearance.SettingsLib.TitleMedium.Emphasized</item>
+        <item name="android:textColor">@color/settingslib_materialColorPrimary</item>
+    </style>
+
+    <style name="UpdateStatus">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingBottom">@dimen/settingslib_expressive_space_extrasmall4</item>
+        <item name="android:textAppearance">@style/TextAppearance.SettingsLib.BodyMedium</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <style name="UpdateQualifier">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingBottom">@dimen/settingslib_expressive_space_extrasmall4</item>
+        <item name="android:textAppearance">@style/TextAppearance.SettingsLib.BodyMedium</item>
+        <item name="android:accessibilityLiveRegion">polite</item>
+        <item name="android:textColor">?android:attr/colorError</item>
+    </style>
+
+    <style name="UpdateInformation">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingTop">@dimen/settingslib_expressive_space_extrasmall6</item>
+        <item name="android:paddingBottom">@dimen/settingslib_expressive_space_extrasmall4</item>
+        <item name="android:textAppearance">@style/TextAppearance.SettingsLib.BodySmall</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="UpdateDetail">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.SettingsLib.BodyMedium</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="UpdateDetail.Spaced">
+        <item name="android:paddingTop">@dimen/settingslib_expressive_space_small1</item>
+    </style>
+
+</resources>

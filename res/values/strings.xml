@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: Paranoid Android
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Name of this application. [CHAR LIMIT=32] -->
+    <string name="app_label" translatable="false">ParanoidHub</string>
+
+    <!-- Update screen headline: nothing newer exists. [CHAR LIMIT=NONE] -->
+    <string name="update_up_to_date_title">Your system is up to date</string>
+    <!-- Update screen headline: asking the server. [CHAR LIMIT=NONE] -->
+    <string name="update_checking_title">Checking for update…</string>
+    <!-- Update screen headline: the server could not be reached. [CHAR LIMIT=NONE] -->
+    <string name="update_check_failed_title">Can\'t check for update</string>
+    <!-- Update screen headline: a build is on offer. [CHAR LIMIT=NONE] -->
+    <string name="update_available_title">System update available</string>
+    <!-- Update screen headline, and download notification title. [CHAR LIMIT=NONE] -->
+    <string name="update_downloading_title">Downloading system update…</string>
+    <!-- Update screen headline: the download is paused. [CHAR LIMIT=NONE] -->
+    <string name="update_download_paused_title">Download paused</string>
+    <!-- Update screen headline: the download failed. [CHAR LIMIT=NONE] -->
+    <string name="update_download_failed_title">Couldn\'t download</string>
+    <!-- Update screen headline: checking the package. [CHAR LIMIT=NONE] -->
+    <string name="update_verifying_title">Verifying…</string>
+    <!-- Update screen headline: the package failed its check. [CHAR LIMIT=NONE] -->
+    <string name="update_verification_failed_title">Verification failed</string>
+    <!-- Update screen headline: ready to install. [CHAR LIMIT=NONE] -->
+    <string name="update_ready_title">System update downloaded</string>
+    <!-- Update screen headline, and install notification title. [CHAR LIMIT=NONE] -->
+    <string name="update_installing_title">Installing system update…</string>
+    <!-- Update screen headline: the install did not finish. [CHAR LIMIT=NONE] -->
+    <string name="update_install_failed_title">Couldn\'t update</string>
+    <!-- Update screen headline: a restart will finish the update. [CHAR LIMIT=NONE] -->
+    <string name="update_almost_done_title">System update almost done</string>
+
+    <!-- Update screen, build name: version, type and version code. [CHAR LIMIT=NONE] -->
+    <string name="update_build"><xliff:g id="version" example="Calcite">%1$s</xliff:g> <xliff:g id="build_type" example="Unofficial">%2$s</xliff:g> <xliff:g id="version_code" example="21">%3$s</xliff:g></string>
+    <!-- Update screen, how large the package is. [CHAR LIMIT=NONE] -->
+    <string name="update_size">Update size: <xliff:g id="size" example="2.3 GB">%1$s</xliff:g></string>
+    <!-- Update screen, the Android release the device runs. [CHAR LIMIT=NONE] -->
+    <string name="update_android_version">Android version: <xliff:g id="version" example="17">%1$s</xliff:g></string>
+    <!-- Update screen, the security patch the device carries. [CHAR LIMIT=NONE] -->
+    <string name="update_security_patch">Android security update: <xliff:g id="date" example="Sept 2026">%1$s</xliff:g></string>
+    <!-- Update screen, how much has been downloaded. [CHAR LIMIT=NONE] -->
+    <string name="update_download_progress"><xliff:g id="downloaded" example="1.2 GB">%1$s</xliff:g> of <xliff:g id="total" example="2.3 GB">%2$s</xliff:g></string>
+    <!-- Update screen, how far the install has got. [CHAR LIMIT=16] -->
+    <string name="update_install_progress"><xliff:g id="percent" example="42">%1$d</xliff:g>%%</string>
+    <!-- Update screen, when the server was last reached. [CHAR LIMIT=NONE] -->
+    <string name="update_last_check">Last successful check for update: <xliff:g id="time" example="01:23">%1$s</xliff:g></string>
+
+    <!-- Spoken description of the warning icon. [CHAR LIMIT=NONE] -->
+    <string name="update_warning_content_description">Warning</string>
+    <!-- Update screen warning: too little charge to install. [CHAR LIMIT=NONE] -->
+    <string name="update_battery_low">Battery too low or in battery saving mode</string>
+    <!-- Update screen warning: the server could not be reached. [CHAR LIMIT=NONE] -->
+    <string name="update_check_failed_message">Updates are temporarily unavailable. Try again later.</string>
+    <!-- Update screen warning: the download failed. [CHAR LIMIT=NONE] -->
+    <string name="update_download_failed_message">There was a network error while downloading the update. Please try again later or connect to a different network.</string>
+    <!-- Update screen warning: the device is offline. [CHAR LIMIT=NONE] -->
+    <string name="update_no_internet_message">To continue, connect to Wi-Fi</string>
+
+    <!-- Update screen status: downloading over cellular. [CHAR LIMIT=48] -->
+    <string name="update_using_cellular">Using cellular</string>
+    <!-- Update screen status: on metered Wi-Fi. [CHAR LIMIT=48] -->
+    <string name="update_using_metered_wifi">Using metered Wi-Fi</string>
+    <!-- Update screen failure: the package failed its check. [CHAR LIMIT=48] -->
+    <string name="update_verification_problem">Verification problem</string>
+    <!-- Update screen failure: the install did not finish. [CHAR LIMIT=48] -->
+    <string name="update_installation_problem">Installation problem</string>
+
+    <!-- Button: ask the server for a newer build. [CHAR LIMIT=24] -->
+    <string name="button_check_for_updates">Check for update</string>
+    <!-- Button: download the build on offer. [CHAR LIMIT=24] -->
+    <string name="button_download">Download</string>
+    <!-- Button: pause the download. [CHAR LIMIT=24] -->
+    <string name="button_pause">Pause</string>
+    <!-- Button: continue a paused download. [CHAR LIMIT=24] -->
+    <string name="button_resume">Resume</string>
+    <!-- Button: install the downloaded package. [CHAR LIMIT=24] -->
+    <string name="button_install">Install</string>
+    <!-- Button: restart to finish the update. [CHAR LIMIT=24] -->
+    <string name="button_restart">Restart</string>
+    <!-- Button: confirm the downloaded package should be deleted. [CHAR LIMIT=24] -->
+    <string name="button_delete">Delete</string>
+
+    <!-- Dialog title: asks whether to delete what has been downloaded. [CHAR LIMIT=48] -->
+    <string name="delete_download_title">Delete download?</string>
+    <!-- Dialog body: says what deleting the download costs. [CHAR LIMIT=NONE] -->
+    <string name="delete_download_message">The update downloaded so far will be removed from this device.</string>
+
+    <!-- Update settings screen title. [CHAR LIMIT=32] -->
+    <string name="settings_title">System updates</string>
+    <!-- Settings category for the check interval. [CHAR LIMIT=32] -->
+    <string name="pref_category_automatic_checks">Automatic checks</string>
+    <!-- Settings item: how often to check. [CHAR LIMIT=48] -->
+    <string name="pref_check_interval_title">Check for updates</string>
+    <!-- Settings category for install options. [CHAR LIMIT=32] -->
+    <string name="pref_category_installation">Installation</string>
+    <!-- Settings switch title. [CHAR LIMIT=48] -->
+    <string name="pref_prioritize_install_speed_title">Prioritize install speed</string>
+    <!-- Settings switch summary. [CHAR LIMIT=NONE] -->
+    <string name="pref_prioritize_install_speed_summary">Install updates faster, using more of the device’s resources</string>
+
+    <!-- Check interval option: never. [CHAR LIMIT=24] -->
+    <string name="check_interval_never">Never</string>
+    <!-- Check interval option: once a day. [CHAR LIMIT=24] -->
+    <string name="check_interval_daily">Daily</string>
+    <!-- Check interval option: once a week. [CHAR LIMIT=24] -->
+    <string name="check_interval_weekly">Weekly</string>
+    <!-- Check interval option: once a month. [CHAR LIMIT=24] -->
+    <string name="check_interval_monthly">Monthly</string>
+
+    <!-- Notification title: a background check found a build. [CHAR LIMIT=NONE] -->
+    <string name="notification_new_update_title">System update available</string>
+    <!-- Notification body: a background check found a build. [CHAR LIMIT=NONE] -->
+    <string name="notification_new_update_text">Tap to learn more and download</string>
+    <!-- Notification title: the install did not finish. [CHAR LIMIT=NONE] -->
+    <string name="notification_install_failed_title">Couldn\'t install system update</string>
+
+    <!-- Notification channel: downloads and installs in progress. [CHAR LIMIT=48] -->
+    <string name="notification_channel_ongoing">Ongoing downloads</string>
+    <!-- Notification channel: builds found in the background. [CHAR LIMIT=48] -->
+    <string name="notification_channel_new_update">New updates</string>
+    <!-- Notification channel: updates that did not finish. [CHAR LIMIT=48] -->
+    <string name="notification_channel_update_failed">Update failures</string>
+
+</resources>

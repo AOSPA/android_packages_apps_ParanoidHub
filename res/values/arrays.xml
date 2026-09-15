@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: Paranoid Android
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+
+    <!-- How often to check, offered on the settings screen. -->
+    <string-array name="check_interval_entries">
+        <item>@string/check_interval_never</item>
+        <item>@string/check_interval_daily</item>
+        <item>@string/check_interval_weekly</item>
+        <item>@string/check_interval_monthly</item>
+    </string-array>
+
+    <!-- Values behind check_interval_entries. Must match CheckInterval. -->
+    <string-array name="check_interval_values" translatable="false">
+        <item>never</item>
+        <item>daily</item>
+        <item>weekly</item>
+        <item>monthly</item>
+    </string-array>
+
+</resources>

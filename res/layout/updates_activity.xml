@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: Paranoid Android
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<com.google.android.setupdesign.GlifLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/setup_wizard_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:icon="@drawable/ic_system_update"
+    android:layoutDirection="locale"
+    android:textDirection="locale"
+    app:sudUsePartnerHeavyTheme="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            app:lottie_loop="true" />
+
+        <LinearLayout
+            style="@style/SudContentFrame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/status"
+                style="@style/UpdateStatus"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/button_qualifier"
+                style="@style/UpdateQualifier"
+                android:visibility="gone" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progress"
+                style="@style/UpdateProgressIndicator"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/progress_information"
+                style="@style/UpdateInformation"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/build"
+                style="@style/UpdateBuild"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/description"
+                style="@style/UpdateChangelog"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/size"
+                style="@style/UpdateDescription"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/android_version"
+                style="@style/UpdateDetail"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/security_patch"
+                style="@style/UpdateDetail"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/last_check"
+                style="@style/UpdateDetail.Spaced"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/warning_frame"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:id="@+id/warning_container"
+                style="@style/SudContentFrame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+                <ImageView
+                    android:id="@+id/warning_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/update_warning_content_description"
+                    android:src="@drawable/ic_info"
+                    android:tint="?android:attr/textColorSecondary" />
+
+                <TextView
+                    android:id="@+id/warning"
+                    style="@style/UpdateDescription.Warning"
+                    android:layout_toEndOf="@id/warning_icon" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</com.google.android.setupdesign.GlifLayout>

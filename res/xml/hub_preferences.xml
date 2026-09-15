@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: Paranoid Android
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_category_automatic_checks">
+
+        <co.aospa.hub.ui.settings.HubDropDownPreference
+            android:defaultValue="weekly"
+            android:entries="@array/check_interval_entries"
+            android:entryValues="@array/check_interval_values"
+            android:key="check_interval"
+            android:summary="%s"
+            android:title="@string/pref_check_interval_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_category_installation">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="prioritize_install_speed"
+            android:summary="@string/pref_prioritize_install_speed_summary"
+            android:title="@string/pref_prioritize_install_speed_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
