@@ -5,6 +5,8 @@
 
 package co.aospa.hub.install
 
+import android.content.res.AssetFileDescriptor
+import android.os.ParcelFileDescriptor
 import android.os.ServiceSpecificException
 import android.os.UpdateEngine
 import android.os.UpdateEngineCallback
@@ -83,12 +85,12 @@ class AbUpdateInstaller(private val listener: UpdateInstaller.Listener) : Update
         }
 
         try {
-            updateEngine.applyPayload(
-                packageFile.toURI().toString(),
-                payload.offset,
-                payload.size,
-                payload.properties,
-            )
+            ParcelFileDescriptor.open(packageFile, ParcelFileDescriptor.MODE_READ_ONLY).use { fd ->
+                updateEngine.applyPayload(
+                    AssetFileDescriptor(fd, payload.offset, payload.size),
+                    payload.properties,
+                )
+            }
         } catch (e: Exception) {
             // update_engine throws when it is already applying a payload.
             Log.e(TAG, "Could not apply the payload", e)
