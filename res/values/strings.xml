@@ -32,6 +32,8 @@
     <string name="update_installing_title">Installing system update…</string>
     <!-- Update screen headline: the install did not finish. [CHAR LIMIT=NONE] -->
     <string name="update_install_failed_title">Couldn\'t update</string>
+    <!-- Why an install failed: it was still running when the app was stopped. [CHAR LIMIT=NONE] -->
+    <string name="update_install_interrupted">The install did not finish</string>
     <!-- Update screen headline: a restart will finish the update. [CHAR LIMIT=NONE] -->
     <string name="update_almost_done_title">System update almost done</string>
 

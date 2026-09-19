@@ -110,7 +110,10 @@ class UpdatesActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         lifecycleScope.launch {
-            if (viewModel.isWorkInterrupted()) UpdateService.download(this@UpdatesActivity)
+            when {
+                viewModel.isWorkInterrupted() -> UpdateService.download(this@UpdatesActivity)
+                viewModel.isInstallInterrupted() -> UpdateService.reattach(this@UpdatesActivity)
+            }
         }
     }
 

@@ -105,6 +105,10 @@ class UpdateRepository(
     suspend fun isWorkInterrupted(): Boolean =
         _progress.value == null && store.get().downloadState.needsAppRunning
 
+    /** Whether an install is recorded as running with nothing in this process following it. */
+    suspend fun isInstallInterrupted(): Boolean =
+        _progress.value == null && store.get().downloadState == DownloadState.INSTALLING
+
     /** Sets how far the package has got. */
     suspend fun setDownloadState(state: DownloadState) {
         if (state != DownloadState.DOWNLOADING && state != DownloadState.INSTALLING) {

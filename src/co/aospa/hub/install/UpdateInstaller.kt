@@ -29,6 +29,9 @@ interface UpdateInstaller {
     /** Applies [packageFile], which must be downloaded and verified. */
     fun install(packageFile: File)
 
+    /** Follows an install started before this process, reporting how it ended. */
+    fun reattach()
+
     /** Abandons the install. */
     fun cancel() = Unit
 
@@ -45,7 +48,7 @@ interface UpdateInstaller {
         /** Returns the installer this device can use. */
         fun forDevice(context: Context, listener: Listener): UpdateInstaller =
             if (BuildInfo.isAbDevice) {
-                AbUpdateInstaller(listener)
+                AbUpdateInstaller(context, listener)
             } else {
                 NonAbUpdateInstaller(context, listener)
             }

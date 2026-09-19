@@ -52,6 +52,9 @@ class UpdatesViewModel(application: Application) : AndroidViewModel(application)
     /** Whether work stopped with nothing left to carry it on. */
     suspend fun isWorkInterrupted(): Boolean = repository.isWorkInterrupted()
 
+    /** Whether an install stopped with nothing following it. */
+    suspend fun isInstallInterrupted(): Boolean = repository.isInstallInterrupted()
+
     /** Asks the server for the newest build. */
     fun check() {
         viewModelScope.launch {

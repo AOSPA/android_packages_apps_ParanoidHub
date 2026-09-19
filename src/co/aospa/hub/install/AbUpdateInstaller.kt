@@ -5,12 +5,14 @@
 
 package co.aospa.hub.install
 
+import android.content.Context
 import android.content.res.AssetFileDescriptor
 import android.os.ParcelFileDescriptor
 import android.os.ServiceSpecificException
 import android.os.UpdateEngine
 import android.os.UpdateEngineCallback
 import android.util.Log
+import co.aospa.hub.R
 import co.aospa.hub.data.model.Update
 import java.io.File
 import java.io.IOException
@@ -34,9 +36,13 @@ private class Payload(val offset: Long, val size: Long, val properties: Array<St
  * The payload is applied in place, so it is located by walking the zip and must be stored
  * uncompressed.
  */
-class AbUpdateInstaller(private val listener: UpdateInstaller.Listener) : UpdateInstaller {
+class AbUpdateInstaller(
+    private val context: Context,
+    private val listener: UpdateInstaller.Listener,
+) : UpdateInstaller {
     private val updateEngine = UpdateEngine()
     private var bound = false
+    private var reattached = false
 
     private val callback = object : UpdateEngineCallback() {
         override fun onStatusUpdate(status: Int, percent: Float) {
@@ -46,6 +52,10 @@ class AbUpdateInstaller(private val listener: UpdateInstaller.Listener) : Update
                     listener.onProgress((percent * 100).toInt())
 
                 UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT -> listener.onComplete()
+
+                UpdateEngine.UpdateStatusConstants.IDLE -> if (reattached) {
+                    listener.onError(context.getString(R.string.update_install_interrupted))
+                }
             }
         }
 
@@ -94,6 +104,14 @@ class AbUpdateInstaller(private val listener: UpdateInstaller.Listener) : Update
             // update_engine throws when it is already applying a payload.
             Log.e(TAG, "Could not apply the payload", e)
             listener.onError(e.message ?: "Could not apply the payload")
+        }
+    }
+
+    override fun reattach() {
+        reattached = true
+        if (!bound) {
+            bound = updateEngine.bind(callback)
+            if (!bound) listener.onError("Could not bind to update_engine")
         }
     }
 

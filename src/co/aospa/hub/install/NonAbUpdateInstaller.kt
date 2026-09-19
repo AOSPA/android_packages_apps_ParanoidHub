@@ -9,6 +9,7 @@ import android.content.Context
 import android.os.RecoverySystem
 import android.os.storage.StorageManager
 import android.util.Log
+import co.aospa.hub.R
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
@@ -67,6 +68,10 @@ class NonAbUpdateInstaller(
             Log.e(TAG, "Could not install the update", e)
             listener.onError(e.message ?: "Could not hand the update to recovery")
         }
+    }
+
+    override fun reattach() {
+        listener.onError(context.getString(R.string.update_install_interrupted))
     }
 
     override fun cancel() {

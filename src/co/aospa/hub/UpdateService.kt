@@ -64,6 +64,7 @@ class UpdateService : Service() {
             ACTION_PAUSE -> pauseDownload()
             ACTION_CANCEL -> cancelDownload()
             ACTION_INSTALL -> startInstall()
+            ACTION_REATTACH -> reattachInstall()
             else -> stopSelf()
         }
         return START_NOT_STICKY
@@ -162,10 +163,21 @@ class UpdateService : Service() {
             return@launch
         }
 
+        beginInstall { file ->
+            setPerformanceMode(hub.preferences.prioritizeInstallSpeed || battery.isAcCharging)
+            install(file)
+        }
+    }
+
+    private fun reattachInstall() = scope.launch {
+        if (installer == null) beginInstall { reattach() }
+    }
+
+    private suspend fun beginInstall(begin: UpdateInstaller.(File) -> Unit) {
         val update = beginForegroundWork(
             R.string.update_installing_title,
             DownloadState.INSTALLING,
-        ) ?: return@launch
+        ) ?: return
         val file = repository.fileFor(update)
 
         val listener = object : UpdateInstaller.Listener {
@@ -193,15 +205,9 @@ class UpdateService : Service() {
             }
         }
 
-        UpdateInstaller.forDevice(this@UpdateService, listener)
+        UpdateInstaller.forDevice(this, listener)
             .also { installer = it }
-            .apply {
-                setPerformanceMode(
-                    hub.preferences.prioritizeInstallSpeed ||
-                            battery.isAcCharging
-                )
-            }
-            .install(file)
+            .begin(file)
     }
 
     private fun goToForeground(title: String, percent: Int? = null) {
@@ -256,6 +262,7 @@ class UpdateService : Service() {
         private const val ACTION_PAUSE = "co.aospa.hub.action.PAUSE"
         private const val ACTION_CANCEL = "co.aospa.hub.action.CANCEL"
         private const val ACTION_INSTALL = "co.aospa.hub.action.INSTALL"
+        private const val ACTION_REATTACH = "co.aospa.hub.action.REATTACH"
 
         /** Starts, or resumes, downloading the update on offer. */
         fun download(context: Context) = start(context, ACTION_DOWNLOAD)
@@ -268,6 +275,9 @@ class UpdateService : Service() {
 
         /** Applies the downloaded and verified package. */
         fun install(context: Context) = start(context, ACTION_INSTALL)
+
+        /** Picks up an install that was running when the app was stopped. */
+        fun reattach(context: Context) = start(context, ACTION_REATTACH)
 
         private fun start(context: Context, action: String) {
             context.startService(Intent(context, UpdateService::class.java).setAction(action))
