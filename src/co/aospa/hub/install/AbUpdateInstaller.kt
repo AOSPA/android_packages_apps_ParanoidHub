@@ -51,8 +51,7 @@ class AbUpdateInstaller(private val listener: UpdateInstaller.Listener) : Update
 
         override fun onPayloadApplicationComplete(errorCode: Int) {
             when (errorCode) {
-                UpdateEngine.ErrorCodeConstants.SUCCESS,
-                UpdateEngine.ErrorCodeConstants.UPDATED_BUT_NOT_ACTIVE -> listener.onComplete()
+                UpdateEngine.ErrorCodeConstants.SUCCESS -> listener.onComplete()
 
                 else -> listener.onError(errorMessage(errorCode))
             }
@@ -179,6 +178,8 @@ class AbUpdateInstaller(private val listener: UpdateInstaller.Listener) : Update
         UpdateEngine.ErrorCodeConstants.POST_INSTALL_RUNNER_ERROR -> "Post-install step failed"
         UpdateEngine.ErrorCodeConstants.INSTALL_DEVICE_OPEN_ERROR -> "Could not open the partitions"
         UpdateEngine.ErrorCodeConstants.DOWNLOAD_TRANSFER_ERROR -> "Could not read the payload"
+        UpdateEngine.ErrorCodeConstants.UPDATED_BUT_NOT_ACTIVE ->
+            "The update was installed, but the device was not switched to it"
         else -> "Update failed (error $errorCode)"
     }
 }
