@@ -329,7 +329,9 @@ class UpdatesActivity : AppCompatActivity() {
     }
 
     private fun footerFor(state: UpdateState): Footer = when (state) {
-        is UpdateState.Checking -> Footer.NONE
+        is UpdateState.Checking,
+        is UpdateState.Installing,
+        is UpdateState.Verifying -> Footer.NONE
         is UpdateState.Available -> Footer.DOWNLOAD
         is UpdateState.Downloading -> Footer.PAUSE
         is UpdateState.DownloadPaused -> Footer.RESUME
