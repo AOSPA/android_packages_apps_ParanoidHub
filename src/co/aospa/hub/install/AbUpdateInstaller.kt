@@ -48,6 +48,7 @@ class AbUpdateInstaller(
         override fun onStatusUpdate(status: Int, percent: Float) {
             when (status) {
                 UpdateEngine.UpdateStatusConstants.DOWNLOADING,
+                UpdateEngine.UpdateStatusConstants.VERIFYING,
                 UpdateEngine.UpdateStatusConstants.FINALIZING ->
                     listener.onProgress((percent * 100).toInt())
 
