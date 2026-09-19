@@ -19,6 +19,7 @@ import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
+import kotlin.math.roundToInt
 
 private const val TAG = "AbUpdateInstaller"
 
@@ -29,6 +30,21 @@ private const val LOCAL_FILE_HEADER_SIZE = 30
 
 /** Where the payload sits in the package, and the properties update_engine needs. */
 private class Payload(val offset: Long, val size: Long, val properties: Array<String>)
+
+/** The stages update_engine reports while applying a payload, each with its share of the bar. */
+private enum class Phase(val status: Int, val weight: Int) {
+    WRITING(UpdateEngine.UpdateStatusConstants.DOWNLOADING, 40),
+    VERIFYING(UpdateEngine.UpdateStatusConstants.VERIFYING, 5),
+    FINALIZING(UpdateEngine.UpdateStatusConstants.FINALIZING, 55);
+
+    /** Places [percent] of this stage on a single 0 to 100 bar covering every stage. */
+    fun progressOf(percent: Float): Int =
+        entries.take(ordinal).sumOf { it.weight } + (percent * weight).roundToInt()
+
+    companion object {
+        fun of(status: Int): Phase? = entries.find { it.status == status }
+    }
+}
 
 /**
  * Installs an A/B package through update_engine.
@@ -47,16 +63,13 @@ class AbUpdateInstaller(
     private val callback = object : UpdateEngineCallback() {
         override fun onStatusUpdate(status: Int, percent: Float) {
             when (status) {
-                UpdateEngine.UpdateStatusConstants.DOWNLOADING,
-                UpdateEngine.UpdateStatusConstants.VERIFYING,
-                UpdateEngine.UpdateStatusConstants.FINALIZING ->
-                    listener.onProgress((percent * 100).toInt())
-
                 UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT -> listener.onComplete()
 
                 UpdateEngine.UpdateStatusConstants.IDLE -> if (reattached) {
                     listener.onError(context.getString(R.string.update_install_interrupted))
                 }
+
+                else -> Phase.of(status)?.let { listener.onProgress(it.progressOf(percent)) }
             }
         }
 
