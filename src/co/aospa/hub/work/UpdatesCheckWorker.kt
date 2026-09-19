@@ -36,7 +36,8 @@ class UpdatesCheckWorker(
             CheckResult.FAILED,
             CheckResult.OFFLINE -> Result.retry()
 
-            CheckResult.UP_TO_DATE -> Result.success()
+            CheckResult.UP_TO_DATE,
+            CheckResult.BUSY -> Result.success()
         }
     }
 

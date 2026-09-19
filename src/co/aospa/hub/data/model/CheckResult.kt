@@ -11,4 +11,5 @@ enum class CheckResult {
     UPDATE_AVAILABLE,
     OFFLINE,
     FAILED,
+    BUSY,
 }

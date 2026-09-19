@@ -53,6 +53,7 @@ class UpdateRepository(
     /** Asks the server what it has and remembers the answer. */
     suspend fun check(): CheckResult {
         if (!connectivityRepository.currentState.isOnline) return CheckResult.OFFLINE
+        if (store.get().downloadState.isInUse) return CheckResult.BUSY
 
         val update = try {
             withContext(Dispatchers.IO) { client.fetchLatest() }
@@ -65,27 +66,32 @@ class UpdateRepository(
         }
 
         val now = System.currentTimeMillis()
-        if (update == null) {
-            withContext(Dispatchers.IO) {
-                store.update { previous ->
-                    previous.update?.let { fileFor(it).delete() }
-                    UpdateData(lastCheckedAt = now)
-                }
-            }
-            return CheckResult.UP_TO_DATE
-        }
-
+        var busy = false
         withContext(Dispatchers.IO) {
             store.update { previous ->
-                if (previous.update?.id == update.id) {
-                    previous.copy(update = update, lastCheckedAt = now)
-                } else {
-                    previous.update?.let { fileFor(it).delete() }
-                    UpdateData(update = update, lastCheckedAt = now)
+                when {
+                    // Work may have started while the server was being asked.
+                    previous.downloadState.isInUse -> {
+                        busy = true
+                        previous
+                    }
+
+                    update != null && previous.update?.id == update.id ->
+                        previous.copy(update = update, lastCheckedAt = now)
+
+                    else -> {
+                        previous.update?.let { fileFor(it).delete() }
+                        UpdateData(update = update, lastCheckedAt = now)
+                    }
                 }
             }
         }
-        return CheckResult.UPDATE_AVAILABLE
+
+        return when {
+            busy -> CheckResult.BUSY
+            update == null -> CheckResult.UP_TO_DATE
+            else -> CheckResult.UPDATE_AVAILABLE
+        }
     }
 
     /** Returns where [update] is, or will be, on disk. */
