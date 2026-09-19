@@ -58,19 +58,26 @@ class AbUpdateInstaller(
 ) : UpdateInstaller {
     private val updateEngine = UpdateEngine()
     private var bound = false
-    private var reattached = false
+    @Volatile private var reattached = false
 
     private val callback = object : UpdateEngineCallback() {
         override fun onStatusUpdate(status: Int, percent: Float) {
-            when (status) {
-                UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT -> listener.onComplete()
+            if (reattached) {
+                reattached = false
+                when (status) {
+                    UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT -> {
+                        listener.onComplete()
+                        return
+                    }
 
-                UpdateEngine.UpdateStatusConstants.IDLE -> if (reattached) {
-                    listener.onError(context.getString(R.string.update_install_interrupted))
+                    UpdateEngine.UpdateStatusConstants.IDLE -> {
+                        listener.onError(context.getString(R.string.update_install_interrupted))
+                        return
+                    }
                 }
-
-                else -> Phase.of(status)?.let { listener.onProgress(it.progressOf(percent)) }
             }
+
+            Phase.of(status)?.let { listener.onProgress(it.progressOf(percent)) }
         }
 
         override fun onPayloadApplicationComplete(errorCode: Int) {
