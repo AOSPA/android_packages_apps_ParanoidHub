@@ -32,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 private const val TAG = "UpdateService"
@@ -153,6 +154,14 @@ class UpdateService : Service() {
     private fun cancelDownload() = stopDownload { repository.discardDownload() }
 
     private fun startInstall() = scope.launch {
+        val battery = hub.batteryRepository.state.first()
+        if (!battery.hasEnoughCharge) {
+            Log.w(TAG, "Not installing, the battery is too low")
+            notifier.showInstallFailed(getString(R.string.update_battery_low))
+            stopSelf()
+            return@launch
+        }
+
         val update = beginForegroundWork(
             R.string.update_installing_title,
             DownloadState.INSTALLING,
@@ -189,7 +198,7 @@ class UpdateService : Service() {
             .apply {
                 setPerformanceMode(
                     hub.preferences.prioritizeInstallSpeed ||
-                            hub.batteryRepository.currentState.isAcCharging
+                            battery.isAcCharging
                 )
             }
             .install(file)

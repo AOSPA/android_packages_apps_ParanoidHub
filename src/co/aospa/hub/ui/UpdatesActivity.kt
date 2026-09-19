@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import co.aospa.hub.R
 import co.aospa.hub.UpdateService
+import co.aospa.hub.data.model.BatteryState
 import co.aospa.hub.ui.model.UpdateState
 import co.aospa.hub.ui.settings.SettingsActivity
 import co.aospa.hub.util.BuildInfo
@@ -38,6 +39,7 @@ import com.google.android.setupcompat.template.FooterButton
 import com.google.android.setupdesign.GlifLayout
 import com.google.android.setupdesign.template.FloatingActionButtonMixin
 import com.google.android.setupdesign.util.LottieAnimationHelper
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 /** Shows the update screen, one [UpdateState] at a time. */
@@ -99,7 +101,8 @@ class UpdatesActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect { render(it) }
+                combine(viewModel.state, hub.batteryRepository.state, ::Pair)
+                    .collect { (state, battery) -> render(state, battery) }
             }
         }
     }
@@ -140,7 +143,7 @@ class UpdatesActivity : AppCompatActivity() {
         playAnimation()
     }
 
-    private fun render(state: UpdateState) {
+    private fun render(state: UpdateState, battery: BatteryState) {
         layout.setHeaderText(headerFor(state))
 
         val update = state.update
@@ -179,9 +182,9 @@ class UpdatesActivity : AppCompatActivity() {
         }
 
         renderProgress(state)
-        renderWarning(state)
+        renderWarning(state, battery)
         renderQualifier(state)
-        renderButtons(state)
+        renderButtons(state, battery)
     }
 
     private fun renderProgress(state: UpdateState) {
@@ -219,7 +222,7 @@ class UpdatesActivity : AppCompatActivity() {
         }
     }
 
-    private fun renderWarning(state: UpdateState) {
+    private fun renderWarning(state: UpdateState, battery: BatteryState) {
         val message = when {
             state is UpdateState.CheckFailed && state.offline ->
                 getString(R.string.update_no_internet_message)
@@ -229,7 +232,8 @@ class UpdatesActivity : AppCompatActivity() {
             state is UpdateState.DownloadPaused && state.failed ->
                 getString(R.string.update_download_failed_message)
 
-            state is UpdateState.Available && !hasEnoughBattery() ->
+            (state is UpdateState.Available || state is UpdateState.ReadyToInstall) &&
+                    !battery.hasEnoughCharge ->
                 getString(R.string.update_battery_low)
 
             else -> null
@@ -260,8 +264,8 @@ class UpdatesActivity : AppCompatActivity() {
         status.text = connection
     }
 
-    private fun renderButtons(state: UpdateState) {
-        val wanted = footerFor(state) to hasEnoughBattery()
+    private fun renderButtons(state: UpdateState, battery: BatteryState) {
+        val wanted = footerFor(state) to battery.hasEnoughCharge
         if (wanted == footerState) return
         footerState = wanted
 
@@ -306,10 +310,9 @@ class UpdatesActivity : AppCompatActivity() {
             }
 
             Footer.INSTALL -> {
-                footerBar.primaryButton =
-                    button(getString(R.string.button_install), hasBattery) {
-                        UpdateService.install(this)
-                    }
+                footerBar.primaryButton = button(getString(R.string.button_install), true) {
+                    UpdateService.install(this)
+                }.apply { isEnabled = hasBattery }
                 footerBar.secondaryButton = cancelButton()
             }
 
@@ -370,9 +373,6 @@ class UpdatesActivity : AppCompatActivity() {
     private fun themeColor(attr: Int): Int = TypedValue().also {
         theme.resolveAttribute(attr, it, true)
     }.data
-
-    private fun hasEnoughBattery() =
-        hub.batteryRepository.currentState.hasEnoughCharge
 
     private fun headerFor(state: UpdateState): String = when (state) {
         is UpdateState.Checking -> getString(R.string.update_checking_title)
